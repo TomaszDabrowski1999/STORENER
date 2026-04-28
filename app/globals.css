@@ -1,0 +1,148 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #f9fafb;
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  letter-spacing: -0.025em;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  transition: all 0.2s ease;
+}
+
+.container-app {
+  margin-inline: auto;
+  max-width: 72rem;
+  padding-inline: 1.5rem;
+}
+
+.card-ui {
+  border-radius: 1.5rem;
+  background: white;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  transition: 0.3s ease;
+}
+
+.card-ui:hover {
+  box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  background: black;
+  padding: 0.75rem 1.25rem;
+  font-weight: 500;
+  color: white;
+  transition: 0.2s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  border: 1px solid black;
+  padding: 0.75rem 1.25rem;
+  font-weight: 500;
+  color: black;
+  transition: 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: black;
+  color: white;
+}
+
+.btn-secondary:active {
+  transform: scale(0.98);
+}
+
+.input-ui {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  background: white;
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.input-ui:focus {
+  border-color: black;
+  box-shadow: 0 0 0 2px rgb(0 0 0 / 0.05);
+}
+
+.section-title {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.section-subtitle {
+  margin-top: 0.75rem;
+  max-width: 42rem;
+  color: #4b5563;
+}
+
+.fade-in {
+  animation: fadeIn 0.45s ease-out;
+}
+
+.slide-up {
+  animation: slideUp 0.45s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
