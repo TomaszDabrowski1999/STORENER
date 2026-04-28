@@ -52,7 +52,7 @@ export async function GET(request: Request) {
       },
     });
 
-    const normalizedProducts = products.map((product) => {
+    const normalizedProducts = products.map((product: { reviews: any[] }) => {
       const reviewsCount = product.reviews.length;
       const averageRating =
         reviewsCount > 0
