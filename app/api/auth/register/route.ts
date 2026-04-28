@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../../../lib/prisma";
+import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {

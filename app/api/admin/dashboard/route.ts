@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const runtime = "nodejs";
 
 export async function GET() {
   try {
+    const { prisma } = await import("@/lib/prisma");
+
     const [productsCount, usersCount, orders, recentOrders] = await Promise.all([
       prisma.product.count(),
       prisma.user.count(),
@@ -27,10 +32,10 @@ export async function GET() {
       }),
     ]);
 
-   const revenue = orders.reduce(
-  (sum: number, order: { total: number }) => sum + order.total,
-  0
-);
+    const revenue = orders.reduce(
+      (sum: number, order: { total: number }) => sum + order.total,
+      0
+    );
 
     return NextResponse.json({
       productsCount,

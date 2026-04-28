@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../../../../lib/prisma";
+import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 type RouteContext = {
   params: Promise<{
@@ -11,6 +14,7 @@ export async function PUT(request: Request, context: RouteContext) {
   try {
     const { id } = await context.params;
     const orderId = Number(id);
+
     const body = await request.json();
     const { status } = body;
 

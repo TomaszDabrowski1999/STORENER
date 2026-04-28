@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../../../lib/prisma";
-
+import { prisma } from "@/lib/prisma";
+export const revalidate = 0;
 function getStockStatus(stock: number) {
   if (stock <= 0) return "BRAK";
   if (stock <= 5) return "MALO_SZTUK";
   return "DOSTEPNY";
 }
-
+export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     const products = await prisma.product.findMany({
