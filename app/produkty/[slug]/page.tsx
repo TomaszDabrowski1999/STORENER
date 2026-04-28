@@ -76,7 +76,7 @@ export default async function ProductPage({ params }: Props) {
     },
   });
 
-  const similarProducts = similarProductsRaw.map((item) => {
+  const similarProducts = similarProductsRaw.map((item: any) => {
     const reviewsCount = item.reviews.length;
     const averageRating =
       reviewsCount > 0
