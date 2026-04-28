@@ -16,9 +16,9 @@ export const checkoutSchema = z.object({
   postalCode: z
     .string()
     .min(5, "Kod pocztowy jest za krótki"),
-  paymentMethod: z.enum(["BLIK", "KARTA", "PRZELEW", "POBRANIE"], {
-    errorMap: () => ({ message: "Wybierz metodę płatności" }),
-  }),
+ paymentMethod: z.enum(["BLIK", "KARTA", "PRZELEW", "POBRANIE"], {
+  message: "Wybierz metodę płatności",
+}),
 });
 
 export type CheckoutFormData = z.infer<typeof checkoutSchema>;
