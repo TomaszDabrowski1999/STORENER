@@ -27,7 +27,10 @@ export async function GET() {
       }),
     ]);
 
-    const revenue = orders.reduce((sum: number, order) => sum + order.total, 0);
+   const revenue = orders.reduce(
+  (sum: number, order: { total: number }) => sum + order.total,
+  0
+);
 
     return NextResponse.json({
       productsCount,
