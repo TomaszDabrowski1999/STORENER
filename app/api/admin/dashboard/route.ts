@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../../../lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
@@ -27,7 +27,7 @@ export async function GET() {
       }),
     ]);
 
-    const revenue = orders.reduce((sum, order) => sum + order.total, 0);
+    const revenue = orders.reduce((sum: number, order) => sum + order.total, 0);
 
     return NextResponse.json({
       productsCount,
