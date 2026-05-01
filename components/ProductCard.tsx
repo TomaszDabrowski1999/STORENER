@@ -144,13 +144,6 @@ export default function ProductCard({
             </div>
           </div>
 
-          <div className="mt-5">
-            <span
-              className={`inline-flex rounded-full border px-3 py-1.5 text-xs font-semibold ${getStockClasses()}`}
-            >
-              {getStockLabel()}
-            </span>
-          </div>
 
           <div className="mt-6 grid grid-cols-[1fr_auto] items-center gap-3 border-t border-gray-100 pt-5">
             <div>

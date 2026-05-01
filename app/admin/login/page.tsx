@@ -60,8 +60,6 @@ export default function AdminLoginPage() {
         {error && <p className="mt-4 font-semibold text-red-600">{error}</p>}
 
         <div className="mt-6 rounded-lg bg-gray-100 p-4 text-sm text-gray-700">
-          <p><strong>Login testowy:</strong> admin@sklep.pl</p>
-          <p><strong>Hasło testowe:</strong> admin123</p>
         </div>
       </div>
     </main>
