@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 
-export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 cloudinary.config({
@@ -13,36 +12,33 @@ cloudinary.config({
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
-    const file = formData.get("file") as File | null;
+    const file = formData.get("file") as File;
 
     if (!file) {
-      return NextResponse.json(
-        { error: "Nie wybrano pliku" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Brak pliku" }, { status: 400 });
     }
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const upload = await new Promise<any>((resolve, reject) => {
+    const result = await new Promise<any>((resolve, reject) => {
       cloudinary.uploader
-        .upload_stream({ folder: "produkty" }, (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
+        .upload_stream({ folder: "produkty" }, (err, res) => {
+          if (err) reject(err);
+          else resolve(res);
         })
         .end(buffer);
     });
 
     return NextResponse.json({
       success: true,
-      imageUrl: upload.secure_url,
+      imageUrl: result.secure_url,
     });
-  } catch (error) {
-    console.error(error);
+  } catch (err: any) {
+    console.error("UPLOAD ERROR:", err);
 
     return NextResponse.json(
-      { error: "Błąd uploadu pliku" },
+      { error: err.message || "Upload error" },
       { status: 500 }
     );
   }
