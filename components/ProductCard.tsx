@@ -144,7 +144,6 @@ export default function ProductCard({
             </div>
           </div>
 
-
           <div className="mt-6 grid grid-cols-[1fr_auto] items-center gap-3 border-t border-gray-100 pt-5">
             <div>
               <p className="text-sm font-medium text-gray-900">
