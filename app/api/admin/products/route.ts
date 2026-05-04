@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/admin-session";
 import { prisma } from "@/lib/prisma";
 export const revalidate = 0;
 function getStockStatus(stock: number) {
@@ -8,6 +9,12 @@ function getStockStatus(stock: number) {
 }
 export const dynamic = "force-dynamic";
 export async function GET() {
+  const admin = await requireAdmin();
+
+  if (!admin) {
+    return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
+  }
+
   try {
     const products = await prisma.product.findMany({
       orderBy: {
@@ -34,6 +41,12 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const admin = await requireAdmin();
+
+  if (!admin) {
+    return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
+  }
+
   try {
     const body = await request.json();
     const {

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/admin-session";
 import { v2 as cloudinary } from "cloudinary";
 
 export const runtime = "nodejs";
@@ -10,6 +11,12 @@ cloudinary.config({
 });
 
 export async function POST(request: Request) {
+  const admin = await requireAdmin();
+
+  if (!admin) {
+    return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
+  }
+
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;

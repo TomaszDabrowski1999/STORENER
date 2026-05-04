@@ -1,10 +1,17 @@
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/admin-session";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
 
 export async function GET() {
+  const admin = await requireAdmin();
+
+  if (!admin) {
+    return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
+  }
+
   try {
     const { prisma } = await import("@/lib/prisma");
 

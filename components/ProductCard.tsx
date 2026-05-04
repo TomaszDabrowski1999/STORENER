@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ArrowUpRight, BadgePercent, PackageCheck, Sparkles } from "lucide-react";
-import ReviewStars from "./ReviewStars";
 
 type ProductCardProps = {
   name: string;
@@ -20,10 +19,10 @@ export default function ProductCard({
   image,
   slug,
   category,
-  stock = 0,
-  stockStatus = "BRAK",
-  averageRating = 0,
-  reviewsCount = 0,
+  stock: _stock = 0,
+  stockStatus: _stockStatus = "BRAK",
+  averageRating: _averageRating = 0,
+  reviewsCount: _reviewsCount = 0,
 }: ProductCardProps) {
   const getCategoryLabel = (value?: string) => {
     if (!value) return "";
@@ -65,23 +64,6 @@ export default function ProductCard({
     return <PackageCheck className="h-3.5 w-3.5" />;
   };
 
-  const getStockLabel = () => {
-    if (stockStatus === "BRAK") return "Brak w magazynie";
-    if (stockStatus === "MALO_SZTUK") return `Mało sztuk: ${stock}`;
-    return `Dostępny: ${stock}`;
-  };
-
-  const getStockClasses = () => {
-    if (stockStatus === "BRAK") {
-      return "border-red-200 bg-red-50 text-red-700";
-    }
-
-    if (stockStatus === "MALO_SZTUK") {
-      return "border-yellow-200 bg-yellow-50 text-yellow-700";
-    }
-
-    return "border-emerald-200 bg-emerald-50 text-emerald-700";
-  };
 
   return (
     <Link href={`/produkty/${slug}`} className="group block h-full">
@@ -122,16 +104,6 @@ export default function ProductCard({
             </h2>
           </div>
 
-          <div className="mt-3 flex items-center gap-2">
-            <ReviewStars rating={Math.round(averageRating)} size="sm" />
-            <span className="text-sm font-medium text-gray-700">
-              {reviewsCount > 0 ? averageRating.toFixed(1) : "Brak ocen"}
-            </span>
-            {reviewsCount > 0 && (
-              <span className="text-sm text-gray-400">({reviewsCount})</span>
-            )}
-          </div>
-
           <div className="mt-5 flex items-end justify-between gap-3">
             <div>
               <p className="text-xs font-medium uppercase tracking-[0.16em] text-gray-400">
@@ -150,7 +122,7 @@ export default function ProductCard({
                 Zobacz szczegóły produktu
               </p>
               <p className="mt-1 text-xs text-gray-500">
-                Więcej zdjęć, opis i opinie klientów
+                Więcej zdjęć i opis produktu
               </p>
             </div>
 

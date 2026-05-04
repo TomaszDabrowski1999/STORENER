@@ -1,8 +1,15 @@
 import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/admin-session";
 
 export async function POST(request: Request) {
+  const admin = await requireAdmin();
+
+  if (!admin) {
+    return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
+  }
+
   try {
     const formData = await request.formData();
     const files = formData.getAll("files") as File[];

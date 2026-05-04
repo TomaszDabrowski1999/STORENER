@@ -73,13 +73,6 @@ export default function Navbar() {
           </Link>
 
           <UserNavbarActions />
-
-          <Link
-            href="/admin"
-            className="rounded-xl border border-white/30 px-4 py-2 text-sm font-medium text-white transition hover:border-green-500 hover:text-green-400"
-          >
-            Admin
-          </Link>
         </nav>
 
         <button
@@ -118,14 +111,6 @@ export default function Navbar() {
             <div className="mt-2 border-t border-white/10 pt-2">
               <MobileUserNavbarActions onNavigate={closeMenu} />
             </div>
-
-            <Link
-              href="/admin"
-              onClick={closeMenu}
-              className="mt-2 rounded-xl px-3 py-3 text-sm font-medium text-white hover:bg-white/10 hover:text-green-400"
-            >
-              Admin
-            </Link>
           </div>
         </div>
       )}

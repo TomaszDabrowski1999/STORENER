@@ -53,7 +53,11 @@ export default function LoginPage() {
       }
 
       toast.success("Zalogowano pomyślnie", { id: toastId });
-      router.push("/");
+
+      const meResponse = await fetch("/api/me", { cache: "no-store" });
+      const me = meResponse.ok ? await meResponse.json() : null;
+
+      router.push(me?.role === "ADMIN" ? "/admin" : "/");
       router.refresh();
     } catch {
       setLocalError("Wystąpił błąd połączenia");

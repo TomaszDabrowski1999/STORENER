@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/admin-session";
 import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -15,6 +16,12 @@ function getStockStatus(stock: number) {
 }
 
 export async function PUT(request: Request, context: RouteContext) {
+  const admin = await requireAdmin();
+
+  if (!admin) {
+    return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
+  }
+
   try {
     const { id } = await context.params;
     const productId = Number(id);
@@ -140,6 +147,12 @@ export async function PUT(request: Request, context: RouteContext) {
 }
 
 export async function DELETE(_: Request, context: RouteContext) {
+  const admin = await requireAdmin();
+
+  if (!admin) {
+    return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
+  }
+
   try {
     const { id } = await context.params;
     const productId = Number(id);
@@ -188,6 +201,12 @@ export async function DELETE(_: Request, context: RouteContext) {
 }
 
 export async function PATCH(_: Request, context: RouteContext) {
+  const admin = await requireAdmin();
+
+  if (!admin) {
+    return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
+  }
+
   try {
     const { id } = await context.params;
     const productId = Number(id);

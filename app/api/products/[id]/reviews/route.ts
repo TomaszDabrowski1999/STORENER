@@ -10,44 +10,13 @@ type RouteContext = {
   }>;
 };
 
-export async function GET(_: Request, context: RouteContext) {
-  try {
-    const { id } = await context.params;
-    const productId = Number(id);
-
-    if (Number.isNaN(productId)) {
-      return NextResponse.json(
-        { error: "Nieprawidłowe ID produktu" },
-        { status: 400 }
-      );
-    }
-
-    const reviews = await prisma.productReview.findMany({
-      where: {
-        productId,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      include: {
-        user: {
-          select: {
-            fullName: true,
-          },
-        },
-      },
-    });
-
-    return NextResponse.json(reviews);
-  } catch (error) {
-    console.error("GET REVIEWS ERROR:", error);
-
-    return NextResponse.json(
-      { error: "Nie udało się pobrać opinii" },
-      { status: 500 }
-    );
-  }
+export async function GET() {
+  return NextResponse.json(
+    { error: "Opinie nie są publicznie wyświetlane" },
+    { status: 403 }
+  );
 }
+
 
 export async function POST(request: Request, context: RouteContext) {
   try {

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import {
-  BadgeCheck,
   RefreshCcw,
   ShieldCheck,
   Truck,
@@ -67,29 +66,9 @@ export default async function ProductPage({ params }: Props) {
       id: "desc",
     },
     take: 4,
-    include: {
-      reviews: {
-        select: {
-          rating: true,
-        },
-      },
-    },
   });
 
-  const similarProducts = similarProductsRaw.map((item: any) => {
-    const reviewsCount = item.reviews.length;
-    const averageRating =
-      reviewsCount > 0
-        ? item.reviews.reduce((sum, review) => sum + review.rating, 0) /
-          reviewsCount
-        : 0;
-
-    return {
-      ...item,
-      averageRating,
-      reviewsCount,
-    };
-  });
+  const similarProducts = similarProductsRaw;
 
   const galleryImages = [
     product.image,
@@ -112,23 +91,6 @@ export default async function ProductPage({ params }: Props) {
     return value;
   };
 
-  const getStockLabel = () => {
-    if (product.stockStatus === "BRAK") return "Brak w magazynie";
-    if (product.stockStatus === "MALO_SZTUK") return `Mało sztuk (${product.stock})`;
-    return `Dostępny (${product.stock})`;
-  };
-
-  const getStockClasses = () => {
-    if (product.stockStatus === "BRAK") {
-      return "border-red-200 bg-red-50 text-red-700";
-    }
-
-    if (product.stockStatus === "MALO_SZTUK") {
-      return "border-yellow-200 bg-yellow-50 text-yellow-700";
-    }
-
-    return "border-emerald-200 bg-emerald-50 text-emerald-700";
-  };
 
   return (
     <main className="min-h-screen bg-[#f5f5f7]">
@@ -182,12 +144,6 @@ export default async function ProductPage({ params }: Props) {
                         zł
                       </span>
                     </p>
-                  </div>
-
-                  <div
-                    className={`inline-flex rounded-full border px-4 py-2 text-sm font-semibold ${getStockClasses()}`}
-                  >
-                    {getStockLabel()}
                   </div>
                 </div>
 
@@ -271,11 +227,6 @@ export default async function ProductPage({ params }: Props) {
                     </div>
 
                     <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
-                      <span className="text-gray-500">Slug</span>
-                      <span className="font-semibold text-black">{product.slug}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
                       <span className="text-gray-500">Kategoria</span>
                       <span className="font-semibold text-black">
                         {getCategoryLabel(product.category)}
@@ -290,21 +241,6 @@ export default async function ProductPage({ params }: Props) {
                         </span>
                       </div>
                     )}
-
-                    <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
-                      <span className="text-gray-500">Stan magazynowy</span>
-                      <span className="font-semibold text-black">
-                        {product.stock}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="text-gray-500">Status</span>
-                      <span className="inline-flex items-center gap-2 font-semibold text-black">
-                        <BadgeCheck className="h-4 w-4" />
-                        {getStockLabel()}
-                      </span>
-                    </div>
                   </div>
 
                   <Link
@@ -356,8 +292,6 @@ export default async function ProductPage({ params }: Props) {
                   category={item.category}
                   stock={item.stock}
                   stockStatus={item.stockStatus}
-                  averageRating={item.averageRating}
-                  reviewsCount={item.reviewsCount}
                 />
               ))}
             </div>

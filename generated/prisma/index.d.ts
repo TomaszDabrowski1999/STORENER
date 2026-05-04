@@ -53,7 +53,15 @@ export type ProductReview = $Result.DefaultSelection<Prisma.$ProductReviewPayloa
  * Enums
  */
 export namespace $Enums {
-  export const ProductCategory: {
+  export const UserRole: {
+  USER: 'USER',
+  ADMIN: 'ADMIN'
+};
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
+
+export const ProductCategory: {
   NOWOSCI: 'NOWOSCI',
   WYPRZEDAZ: 'WYPRZEDAZ',
   DOM_I_OGROD: 'DOM_I_OGROD',
@@ -109,6 +117,10 @@ export const ProductStockStatus: {
 export type ProductStockStatus = (typeof ProductStockStatus)[keyof typeof ProductStockStatus]
 
 }
+
+export type UserRole = $Enums.UserRole
+
+export const UserRole: typeof $Enums.UserRole
 
 export type ProductCategory = $Enums.ProductCategory
 
@@ -1641,6 +1653,7 @@ export namespace Prisma {
     fullName: string | null
     email: string | null
     password: string | null
+    role: $Enums.UserRole | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1648,6 +1661,7 @@ export namespace Prisma {
     fullName: string | null
     email: string | null
     password: string | null
+    role: $Enums.UserRole | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1655,6 +1669,7 @@ export namespace Prisma {
     fullName: number
     email: number
     password: number
+    role: number
     _all: number
   }
 
@@ -1672,6 +1687,7 @@ export namespace Prisma {
     fullName?: true
     email?: true
     password?: true
+    role?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1679,6 +1695,7 @@ export namespace Prisma {
     fullName?: true
     email?: true
     password?: true
+    role?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1686,6 +1703,7 @@ export namespace Prisma {
     fullName?: true
     email?: true
     password?: true
+    role?: true
     _all?: true
   }
 
@@ -1780,6 +1798,7 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    role: $Enums.UserRole
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -1806,6 +1825,7 @@ export namespace Prisma {
     fullName?: boolean
     email?: boolean
     password?: boolean
+    role?: boolean
     orders?: boolean | User$ordersArgs<ExtArgs>
     reviews?: boolean | User$reviewsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1816,6 +1836,7 @@ export namespace Prisma {
     fullName?: boolean
     email?: boolean
     password?: boolean
+    role?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1823,6 +1844,7 @@ export namespace Prisma {
     fullName?: boolean
     email?: boolean
     password?: boolean
+    role?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1830,9 +1852,10 @@ export namespace Prisma {
     fullName?: boolean
     email?: boolean
     password?: boolean
+    role?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "email" | "password", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "email" | "password" | "role", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orders?: boolean | User$ordersArgs<ExtArgs>
     reviews?: boolean | User$reviewsArgs<ExtArgs>
@@ -1852,6 +1875,7 @@ export namespace Prisma {
       fullName: string
       email: string
       password: string
+      role: $Enums.UserRole
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2281,6 +2305,7 @@ export namespace Prisma {
     readonly fullName: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
+    readonly role: FieldRef<"User", 'UserRole'>
   }
     
 
@@ -6530,8 +6555,8 @@ export namespace Prisma {
     quantity?: boolean
     productId?: boolean
     orderId?: boolean
-    product?: boolean | ProductDefaultArgs<ExtArgs>
     order?: boolean | OrderDefaultArgs<ExtArgs>
+    product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["orderItem"]>
 
   export type OrderItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6539,8 +6564,8 @@ export namespace Prisma {
     quantity?: boolean
     productId?: boolean
     orderId?: boolean
-    product?: boolean | ProductDefaultArgs<ExtArgs>
     order?: boolean | OrderDefaultArgs<ExtArgs>
+    product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["orderItem"]>
 
   export type OrderItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6548,8 +6573,8 @@ export namespace Prisma {
     quantity?: boolean
     productId?: boolean
     orderId?: boolean
-    product?: boolean | ProductDefaultArgs<ExtArgs>
     order?: boolean | OrderDefaultArgs<ExtArgs>
+    product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["orderItem"]>
 
   export type OrderItemSelectScalar = {
@@ -6561,23 +6586,23 @@ export namespace Prisma {
 
   export type OrderItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "quantity" | "productId" | "orderId", ExtArgs["result"]["orderItem"]>
   export type OrderItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    product?: boolean | ProductDefaultArgs<ExtArgs>
     order?: boolean | OrderDefaultArgs<ExtArgs>
+    product?: boolean | ProductDefaultArgs<ExtArgs>
   }
   export type OrderItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    product?: boolean | ProductDefaultArgs<ExtArgs>
     order?: boolean | OrderDefaultArgs<ExtArgs>
+    product?: boolean | ProductDefaultArgs<ExtArgs>
   }
   export type OrderItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    product?: boolean | ProductDefaultArgs<ExtArgs>
     order?: boolean | OrderDefaultArgs<ExtArgs>
+    product?: boolean | ProductDefaultArgs<ExtArgs>
   }
 
   export type $OrderItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "OrderItem"
     objects: {
-      product: Prisma.$ProductPayload<ExtArgs>
       order: Prisma.$OrderPayload<ExtArgs>
+      product: Prisma.$ProductPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -6978,8 +7003,8 @@ export namespace Prisma {
    */
   export interface Prisma__OrderItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     order<T extends OrderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrderDefaultArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9627,7 +9652,8 @@ export namespace Prisma {
     id: 'id',
     fullName: 'fullName',
     email: 'email',
-    password: 'password'
+    password: 'password',
+    role: 'role'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -9770,6 +9796,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'UserRole'
+   */
+  export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
+    
+
+
+  /**
+   * Reference to a field of type 'UserRole[]'
+   */
+  export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -9899,6 +9939,7 @@ export namespace Prisma {
     fullName?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     orders?: OrderListRelationFilter
     reviews?: ProductReviewListRelationFilter
   }
@@ -9908,6 +9949,7 @@ export namespace Prisma {
     fullName?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    role?: SortOrder
     orders?: OrderOrderByRelationAggregateInput
     reviews?: ProductReviewOrderByRelationAggregateInput
   }
@@ -9920,6 +9962,7 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     fullName?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     orders?: OrderListRelationFilter
     reviews?: ProductReviewListRelationFilter
   }, "id" | "email">
@@ -9929,6 +9972,7 @@ export namespace Prisma {
     fullName?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    role?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -9944,6 +9988,7 @@ export namespace Prisma {
     fullName?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
+    role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   }
 
   export type ProductWhereInput = {
@@ -10194,8 +10239,8 @@ export namespace Prisma {
     quantity?: IntFilter<"OrderItem"> | number
     productId?: IntFilter<"OrderItem"> | number
     orderId?: IntFilter<"OrderItem"> | number
-    product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
+    product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }
 
   export type OrderItemOrderByWithRelationInput = {
@@ -10203,8 +10248,8 @@ export namespace Prisma {
     quantity?: SortOrder
     productId?: SortOrder
     orderId?: SortOrder
-    product?: ProductOrderByWithRelationInput
     order?: OrderOrderByWithRelationInput
+    product?: ProductOrderByWithRelationInput
   }
 
   export type OrderItemWhereUniqueInput = Prisma.AtLeast<{
@@ -10215,8 +10260,8 @@ export namespace Prisma {
     quantity?: IntFilter<"OrderItem"> | number
     productId?: IntFilter<"OrderItem"> | number
     orderId?: IntFilter<"OrderItem"> | number
-    product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
+    product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }, "id">
 
   export type OrderItemOrderByWithAggregationInput = {
@@ -10369,6 +10414,7 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    role?: $Enums.UserRole
     orders?: OrderCreateNestedManyWithoutUserInput
     reviews?: ProductReviewCreateNestedManyWithoutUserInput
   }
@@ -10378,6 +10424,7 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    role?: $Enums.UserRole
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
     reviews?: ProductReviewUncheckedCreateNestedManyWithoutUserInput
   }
@@ -10386,6 +10433,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     orders?: OrderUpdateManyWithoutUserNestedInput
     reviews?: ProductReviewUpdateManyWithoutUserNestedInput
   }
@@ -10395,6 +10443,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
     reviews?: ProductReviewUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -10404,12 +10453,14 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    role?: $Enums.UserRole
   }
 
   export type UserUpdateManyMutationInput = {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -10417,6 +10468,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   }
 
   export type ProductCreateInput = {
@@ -10678,8 +10730,8 @@ export namespace Prisma {
 
   export type OrderItemCreateInput = {
     quantity: number
-    product: ProductCreateNestedOneWithoutOrderItemsInput
     order: OrderCreateNestedOneWithoutItemsInput
+    product: ProductCreateNestedOneWithoutOrderItemsInput
   }
 
   export type OrderItemUncheckedCreateInput = {
@@ -10691,8 +10743,8 @@ export namespace Prisma {
 
   export type OrderItemUpdateInput = {
     quantity?: IntFieldUpdateOperationsInput | number
-    product?: ProductUpdateOneRequiredWithoutOrderItemsNestedInput
     order?: OrderUpdateOneRequiredWithoutItemsNestedInput
+    product?: ProductUpdateOneRequiredWithoutOrderItemsNestedInput
   }
 
   export type OrderItemUncheckedUpdateInput = {
@@ -10864,6 +10916,13 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type EnumUserRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
+  }
+
   export type OrderListRelationFilter = {
     every?: OrderWhereInput
     some?: OrderWhereInput
@@ -10889,6 +10948,7 @@ export namespace Prisma {
     fullName?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    role?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -10900,6 +10960,7 @@ export namespace Prisma {
     fullName?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    role?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -10907,6 +10968,7 @@ export namespace Prisma {
     fullName?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    role?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -10945,6 +11007,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type EnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserRoleFilter<$PrismaModel>
+    _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
   export type FloatFilter<$PrismaModel = never> = {
@@ -11473,6 +11545,10 @@ export namespace Prisma {
     set?: string
   }
 
+  export type EnumUserRoleFieldUpdateOperationsInput = {
+    set?: $Enums.UserRole
+  }
+
   export type OrderUpdateManyWithoutUserNestedInput = {
     create?: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput> | OrderCreateWithoutUserInput[] | OrderUncheckedCreateWithoutUserInput[]
     connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[]
@@ -11783,24 +11859,16 @@ export namespace Prisma {
     deleteMany?: OrderItemScalarWhereInput | OrderItemScalarWhereInput[]
   }
 
-  export type ProductCreateNestedOneWithoutOrderItemsInput = {
-    create?: XOR<ProductCreateWithoutOrderItemsInput, ProductUncheckedCreateWithoutOrderItemsInput>
-    connectOrCreate?: ProductCreateOrConnectWithoutOrderItemsInput
-    connect?: ProductWhereUniqueInput
-  }
-
   export type OrderCreateNestedOneWithoutItemsInput = {
     create?: XOR<OrderCreateWithoutItemsInput, OrderUncheckedCreateWithoutItemsInput>
     connectOrCreate?: OrderCreateOrConnectWithoutItemsInput
     connect?: OrderWhereUniqueInput
   }
 
-  export type ProductUpdateOneRequiredWithoutOrderItemsNestedInput = {
+  export type ProductCreateNestedOneWithoutOrderItemsInput = {
     create?: XOR<ProductCreateWithoutOrderItemsInput, ProductUncheckedCreateWithoutOrderItemsInput>
     connectOrCreate?: ProductCreateOrConnectWithoutOrderItemsInput
-    upsert?: ProductUpsertWithoutOrderItemsInput
     connect?: ProductWhereUniqueInput
-    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutOrderItemsInput, ProductUpdateWithoutOrderItemsInput>, ProductUncheckedUpdateWithoutOrderItemsInput>
   }
 
   export type OrderUpdateOneRequiredWithoutItemsNestedInput = {
@@ -11809,6 +11877,14 @@ export namespace Prisma {
     upsert?: OrderUpsertWithoutItemsInput
     connect?: OrderWhereUniqueInput
     update?: XOR<XOR<OrderUpdateToOneWithWhereWithoutItemsInput, OrderUpdateWithoutItemsInput>, OrderUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type ProductUpdateOneRequiredWithoutOrderItemsNestedInput = {
+    create?: XOR<ProductCreateWithoutOrderItemsInput, ProductUncheckedCreateWithoutOrderItemsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutOrderItemsInput
+    upsert?: ProductUpsertWithoutOrderItemsInput
+    connect?: ProductWhereUniqueInput
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutOrderItemsInput, ProductUpdateWithoutOrderItemsInput>, ProductUncheckedUpdateWithoutOrderItemsInput>
   }
 
   export type ProductCreateNestedOneWithoutReviewsInput = {
@@ -11864,6 +11940,13 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedEnumUserRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -11906,6 +11989,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserRoleFilter<$PrismaModel>
+    _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
@@ -12450,6 +12543,7 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    role?: $Enums.UserRole
     reviews?: ProductReviewCreateNestedManyWithoutUserInput
   }
 
@@ -12458,6 +12552,7 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    role?: $Enums.UserRole
     reviews?: ProductReviewUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -12502,6 +12597,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     reviews?: ProductReviewUpdateManyWithoutUserNestedInput
   }
 
@@ -12510,6 +12606,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     reviews?: ProductReviewUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -12527,6 +12624,40 @@ export namespace Prisma {
   export type OrderItemUpdateManyWithWhereWithoutOrderInput = {
     where: OrderItemScalarWhereInput
     data: XOR<OrderItemUpdateManyMutationInput, OrderItemUncheckedUpdateManyWithoutOrderInput>
+  }
+
+  export type OrderCreateWithoutItemsInput = {
+    createdAt?: Date | string
+    total: number
+    status?: $Enums.OrderStatus
+    fullName: string
+    email: string
+    address: string
+    city: string
+    postalCode: string
+    paymentMethod: $Enums.PaymentMethod
+    paymentStatus?: $Enums.PaymentStatus
+    user?: UserCreateNestedOneWithoutOrdersInput
+  }
+
+  export type OrderUncheckedCreateWithoutItemsInput = {
+    id?: number
+    createdAt?: Date | string
+    total: number
+    status?: $Enums.OrderStatus
+    fullName: string
+    email: string
+    address: string
+    city: string
+    postalCode: string
+    paymentMethod: $Enums.PaymentMethod
+    paymentStatus?: $Enums.PaymentStatus
+    userId?: number | null
+  }
+
+  export type OrderCreateOrConnectWithoutItemsInput = {
+    where: OrderWhereUniqueInput
+    create: XOR<OrderCreateWithoutItemsInput, OrderUncheckedCreateWithoutItemsInput>
   }
 
   export type ProductCreateWithoutOrderItemsInput = {
@@ -12565,38 +12696,44 @@ export namespace Prisma {
     create: XOR<ProductCreateWithoutOrderItemsInput, ProductUncheckedCreateWithoutOrderItemsInput>
   }
 
-  export type OrderCreateWithoutItemsInput = {
-    createdAt?: Date | string
-    total: number
-    status?: $Enums.OrderStatus
-    fullName: string
-    email: string
-    address: string
-    city: string
-    postalCode: string
-    paymentMethod: $Enums.PaymentMethod
-    paymentStatus?: $Enums.PaymentStatus
-    user?: UserCreateNestedOneWithoutOrdersInput
-  }
-
-  export type OrderUncheckedCreateWithoutItemsInput = {
-    id?: number
-    createdAt?: Date | string
-    total: number
-    status?: $Enums.OrderStatus
-    fullName: string
-    email: string
-    address: string
-    city: string
-    postalCode: string
-    paymentMethod: $Enums.PaymentMethod
-    paymentStatus?: $Enums.PaymentStatus
-    userId?: number | null
-  }
-
-  export type OrderCreateOrConnectWithoutItemsInput = {
-    where: OrderWhereUniqueInput
+  export type OrderUpsertWithoutItemsInput = {
+    update: XOR<OrderUpdateWithoutItemsInput, OrderUncheckedUpdateWithoutItemsInput>
     create: XOR<OrderCreateWithoutItemsInput, OrderUncheckedCreateWithoutItemsInput>
+    where?: OrderWhereInput
+  }
+
+  export type OrderUpdateToOneWithWhereWithoutItemsInput = {
+    where?: OrderWhereInput
+    data: XOR<OrderUpdateWithoutItemsInput, OrderUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type OrderUpdateWithoutItemsInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    total?: FloatFieldUpdateOperationsInput | number
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    postalCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    user?: UserUpdateOneWithoutOrdersNestedInput
+  }
+
+  export type OrderUncheckedUpdateWithoutItemsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    total?: FloatFieldUpdateOperationsInput | number
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    postalCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    userId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ProductUpsertWithoutOrderItemsInput = {
@@ -12641,46 +12778,6 @@ export namespace Prisma {
     reviews?: ProductReviewUncheckedUpdateManyWithoutProductNestedInput
   }
 
-  export type OrderUpsertWithoutItemsInput = {
-    update: XOR<OrderUpdateWithoutItemsInput, OrderUncheckedUpdateWithoutItemsInput>
-    create: XOR<OrderCreateWithoutItemsInput, OrderUncheckedCreateWithoutItemsInput>
-    where?: OrderWhereInput
-  }
-
-  export type OrderUpdateToOneWithWhereWithoutItemsInput = {
-    where?: OrderWhereInput
-    data: XOR<OrderUpdateWithoutItemsInput, OrderUncheckedUpdateWithoutItemsInput>
-  }
-
-  export type OrderUpdateWithoutItemsInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    total?: FloatFieldUpdateOperationsInput | number
-    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-    fullName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
-    postalCode?: StringFieldUpdateOperationsInput | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    user?: UserUpdateOneWithoutOrdersNestedInput
-  }
-
-  export type OrderUncheckedUpdateWithoutItemsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    total?: FloatFieldUpdateOperationsInput | number
-    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-    fullName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
-    postalCode?: StringFieldUpdateOperationsInput | string
-    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
-    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    userId?: NullableIntFieldUpdateOperationsInput | number | null
-  }
-
   export type ProductCreateWithoutReviewsInput = {
     name: string
     price: number
@@ -12721,6 +12818,7 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    role?: $Enums.UserRole
     orders?: OrderCreateNestedManyWithoutUserInput
   }
 
@@ -12729,6 +12827,7 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    role?: $Enums.UserRole
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -12794,6 +12893,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     orders?: OrderUpdateManyWithoutUserNestedInput
   }
 
@@ -12802,6 +12902,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
 

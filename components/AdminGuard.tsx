@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { isAdminLoggedIn } from "../lib/admin-auth";
+import { useSession } from "next-auth/react";
 
 type AdminGuardProps = {
   children: React.ReactNode;
@@ -10,20 +10,22 @@ type AdminGuardProps = {
 
 export default function AdminGuard({ children }: AdminGuardProps) {
   const router = useRouter();
-  const [isAllowed, setIsAllowed] = useState(false);
+  const { data: session, status } = useSession();
 
   useEffect(() => {
-    const loggedIn = isAdminLoggedIn();
+    if (status === "loading") return;
 
-    if (!loggedIn) {
-      router.push("/admin/login");
+    if (!session?.user) {
+      router.push("/logowanie");
       return;
     }
 
-    setIsAllowed(true);
-  }, [router]);
+    if (session.user.role !== "ADMIN") {
+      router.push("/");
+    }
+  }, [router, session, status]);
 
-  if (!isAllowed) {
+  if (status === "loading" || !session?.user || session.user.role !== "ADMIN") {
     return (
       <main className="min-h-screen bg-gray-50 p-10">
         <div className="mx-auto max-w-xl rounded-2xl bg-white p-6 shadow-sm">

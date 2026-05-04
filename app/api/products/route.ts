@@ -45,31 +45,8 @@ export async function GET(request: Request) {
         ...(subcategory ? { subcategory: subcategory as any } : {}),
       },
       orderBy,
-      include: {
-        reviews: {
-          select: {
-            rating: true,
-          },
-        },
-      },
     });
-
-    const normalizedProducts = products.map((product: { reviews: any[] }) => {
-      const reviewsCount = product.reviews.length;
-      const averageRating =
-        reviewsCount > 0
-          ? product.reviews.reduce((sum, review) => sum + review.rating, 0) /
-            reviewsCount
-          : 0;
-
-      return {
-        ...product,
-        averageRating,
-        reviewsCount,
-      };
-    });
-
-    return NextResponse.json(normalizedProducts);
+    return NextResponse.json(products);
   } catch (error) {
     console.error("PRODUCTS GET ERROR:", error);
 

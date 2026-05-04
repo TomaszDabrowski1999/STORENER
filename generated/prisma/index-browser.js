@@ -124,7 +124,8 @@ exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   fullName: 'fullName',
   email: 'email',
-  password: 'password'
+  password: 'password',
+  role: 'role'
 };
 
 exports.Prisma.ProductScalarFieldEnum = {
@@ -202,6 +203,11 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.UserRole = exports.$Enums.UserRole = {
+  USER: 'USER',
+  ADMIN: 'ADMIN'
+};
+
 exports.ProductCategory = exports.$Enums.ProductCategory = {
   NOWOSCI: 'NOWOSCI',
   WYPRZEDAZ: 'WYPRZEDAZ',
