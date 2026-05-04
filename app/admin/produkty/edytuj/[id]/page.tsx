@@ -155,19 +155,21 @@ export default function EditProductPage({ params }: Props) {
     }));
   };
 
-  const handleGenerateSlug = () => {
-    const generatedSlug = form.name
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, "-")
-      .replace(/[^a-z0-9ąćęłńóśźż-]/gi, "")
-      .replace(/-+/g, "-");
+const handleGenerateSlug = () => {
+  const generatedSlug = form.name
+    .toLowerCase()
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/-+/g, "-");
 
-    setForm((prev) => ({
-      ...prev,
-      slug: generatedSlug,
-    }));
-  };
+  setForm((prev) => ({
+    ...prev,
+    slug: generatedSlug,
+  }));
+};
 
   const handleMainFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedMainFile(e.target.files?.[0] || null);

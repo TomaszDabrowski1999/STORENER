@@ -69,12 +69,14 @@ export default function AddProductPage() {
   };
 
   const handleNameChange = (value: string) => {
-    const generatedSlug = value
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, "-")
-      .replace(/[^a-z0-9-ąćęłńóśźż]/gi, "")
-      .replace(/-+/g, "-");
+      const generatedSlug = value
+  .toLowerCase()
+  .trim()
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .replace(/\s+/g, "-")
+  .replace(/[^a-z0-9-]/g, "")
+  .replace(/-+/g, "-");
 
     setForm((prev) => ({
       ...prev,
