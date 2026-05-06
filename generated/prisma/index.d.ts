@@ -2801,6 +2801,7 @@ export namespace Prisma {
     subcategory: $Enums.ProductSubcategory | null
     stock: number | null
     stockStatus: $Enums.ProductStockStatus | null
+    productDetails: string | null
   }
 
   export type ProductMaxAggregateOutputType = {
@@ -2815,6 +2816,7 @@ export namespace Prisma {
     subcategory: $Enums.ProductSubcategory | null
     stock: number | null
     stockStatus: $Enums.ProductStockStatus | null
+    productDetails: string | null
   }
 
   export type ProductCountAggregateOutputType = {
@@ -2829,6 +2831,7 @@ export namespace Prisma {
     subcategory: number
     stock: number
     stockStatus: number
+    productDetails: number
     _all: number
   }
 
@@ -2857,6 +2860,7 @@ export namespace Prisma {
     subcategory?: true
     stock?: true
     stockStatus?: true
+    productDetails?: true
   }
 
   export type ProductMaxAggregateInputType = {
@@ -2871,6 +2875,7 @@ export namespace Prisma {
     subcategory?: true
     stock?: true
     stockStatus?: true
+    productDetails?: true
   }
 
   export type ProductCountAggregateInputType = {
@@ -2885,6 +2890,7 @@ export namespace Prisma {
     subcategory?: true
     stock?: true
     stockStatus?: true
+    productDetails?: true
     _all?: true
   }
 
@@ -2986,6 +2992,7 @@ export namespace Prisma {
     subcategory: $Enums.ProductSubcategory | null
     stock: number
     stockStatus: $Enums.ProductStockStatus
+    productDetails: string | null
     _count: ProductCountAggregateOutputType | null
     _avg: ProductAvgAggregateOutputType | null
     _sum: ProductSumAggregateOutputType | null
@@ -3019,6 +3026,7 @@ export namespace Prisma {
     subcategory?: boolean
     stock?: boolean
     stockStatus?: boolean
+    productDetails?: boolean
     orderItems?: boolean | Product$orderItemsArgs<ExtArgs>
     images?: boolean | Product$imagesArgs<ExtArgs>
     reviews?: boolean | Product$reviewsArgs<ExtArgs>
@@ -3037,6 +3045,7 @@ export namespace Prisma {
     subcategory?: boolean
     stock?: boolean
     stockStatus?: boolean
+    productDetails?: boolean
   }, ExtArgs["result"]["product"]>
 
   export type ProductSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3051,6 +3060,7 @@ export namespace Prisma {
     subcategory?: boolean
     stock?: boolean
     stockStatus?: boolean
+    productDetails?: boolean
   }, ExtArgs["result"]["product"]>
 
   export type ProductSelectScalar = {
@@ -3065,9 +3075,10 @@ export namespace Prisma {
     subcategory?: boolean
     stock?: boolean
     stockStatus?: boolean
+    productDetails?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "price" | "description" | "image" | "slug" | "isActive" | "category" | "subcategory" | "stock" | "stockStatus", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "price" | "description" | "image" | "slug" | "isActive" | "category" | "subcategory" | "stock" | "stockStatus" | "productDetails", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orderItems?: boolean | Product$orderItemsArgs<ExtArgs>
     images?: boolean | Product$imagesArgs<ExtArgs>
@@ -3096,6 +3107,7 @@ export namespace Prisma {
       subcategory: $Enums.ProductSubcategory | null
       stock: number
       stockStatus: $Enums.ProductStockStatus
+      productDetails: string | null
     }, ExtArgs["result"]["product"]>
     composites: {}
   }
@@ -3533,6 +3545,7 @@ export namespace Prisma {
     readonly subcategory: FieldRef<"Product", 'ProductSubcategory'>
     readonly stock: FieldRef<"Product", 'Int'>
     readonly stockStatus: FieldRef<"Product", 'ProductStockStatus'>
+    readonly productDetails: FieldRef<"Product", 'String'>
   }
     
 
@@ -9670,7 +9683,8 @@ export namespace Prisma {
     category: 'category',
     subcategory: 'subcategory',
     stock: 'stock',
-    stockStatus: 'stockStatus'
+    stockStatus: 'stockStatus',
+    productDetails: 'productDetails'
   };
 
   export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
@@ -10006,6 +10020,7 @@ export namespace Prisma {
     subcategory?: EnumProductSubcategoryNullableFilter<"Product"> | $Enums.ProductSubcategory | null
     stock?: IntFilter<"Product"> | number
     stockStatus?: EnumProductStockStatusFilter<"Product"> | $Enums.ProductStockStatus
+    productDetails?: StringNullableFilter<"Product"> | string | null
     orderItems?: OrderItemListRelationFilter
     images?: ProductImageListRelationFilter
     reviews?: ProductReviewListRelationFilter
@@ -10023,6 +10038,7 @@ export namespace Prisma {
     subcategory?: SortOrderInput | SortOrder
     stock?: SortOrder
     stockStatus?: SortOrder
+    productDetails?: SortOrderInput | SortOrder
     orderItems?: OrderItemOrderByRelationAggregateInput
     images?: ProductImageOrderByRelationAggregateInput
     reviews?: ProductReviewOrderByRelationAggregateInput
@@ -10043,6 +10059,7 @@ export namespace Prisma {
     subcategory?: EnumProductSubcategoryNullableFilter<"Product"> | $Enums.ProductSubcategory | null
     stock?: IntFilter<"Product"> | number
     stockStatus?: EnumProductStockStatusFilter<"Product"> | $Enums.ProductStockStatus
+    productDetails?: StringNullableFilter<"Product"> | string | null
     orderItems?: OrderItemListRelationFilter
     images?: ProductImageListRelationFilter
     reviews?: ProductReviewListRelationFilter
@@ -10060,6 +10077,7 @@ export namespace Prisma {
     subcategory?: SortOrderInput | SortOrder
     stock?: SortOrder
     stockStatus?: SortOrder
+    productDetails?: SortOrderInput | SortOrder
     _count?: ProductCountOrderByAggregateInput
     _avg?: ProductAvgOrderByAggregateInput
     _max?: ProductMaxOrderByAggregateInput
@@ -10082,6 +10100,7 @@ export namespace Prisma {
     subcategory?: EnumProductSubcategoryNullableWithAggregatesFilter<"Product"> | $Enums.ProductSubcategory | null
     stock?: IntWithAggregatesFilter<"Product"> | number
     stockStatus?: EnumProductStockStatusWithAggregatesFilter<"Product"> | $Enums.ProductStockStatus
+    productDetails?: StringNullableWithAggregatesFilter<"Product"> | string | null
   }
 
   export type ProductImageWhereInput = {
@@ -10482,6 +10501,7 @@ export namespace Prisma {
     subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    productDetails?: string | null
     orderItems?: OrderItemCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
     reviews?: ProductReviewCreateNestedManyWithoutProductInput
@@ -10499,6 +10519,7 @@ export namespace Prisma {
     subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    productDetails?: string | null
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     reviews?: ProductReviewUncheckedCreateNestedManyWithoutProductInput
@@ -10515,6 +10536,7 @@ export namespace Prisma {
     subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    productDetails?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
     reviews?: ProductReviewUpdateManyWithoutProductNestedInput
@@ -10532,6 +10554,7 @@ export namespace Prisma {
     subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    productDetails?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     reviews?: ProductReviewUncheckedUpdateManyWithoutProductNestedInput
@@ -10549,6 +10572,7 @@ export namespace Prisma {
     subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    productDetails?: string | null
   }
 
   export type ProductUpdateManyMutationInput = {
@@ -10562,6 +10586,7 @@ export namespace Prisma {
     subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    productDetails?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductUncheckedUpdateManyInput = {
@@ -10576,6 +10601,7 @@ export namespace Prisma {
     subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    productDetails?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductImageCreateInput = {
@@ -11056,6 +11082,21 @@ export namespace Prisma {
     not?: NestedEnumProductStockStatusFilter<$PrismaModel> | $Enums.ProductStockStatus
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type OrderItemListRelationFilter = {
     every?: OrderItemWhereInput
     some?: OrderItemWhereInput
@@ -11093,6 +11134,7 @@ export namespace Prisma {
     subcategory?: SortOrder
     stock?: SortOrder
     stockStatus?: SortOrder
+    productDetails?: SortOrder
   }
 
   export type ProductAvgOrderByAggregateInput = {
@@ -11113,6 +11155,7 @@ export namespace Prisma {
     subcategory?: SortOrder
     stock?: SortOrder
     stockStatus?: SortOrder
+    productDetails?: SortOrder
   }
 
   export type ProductMinOrderByAggregateInput = {
@@ -11127,6 +11170,7 @@ export namespace Prisma {
     subcategory?: SortOrder
     stock?: SortOrder
     stockStatus?: SortOrder
+    productDetails?: SortOrder
   }
 
   export type ProductSumOrderByAggregateInput = {
@@ -11187,6 +11231,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumProductStockStatusFilter<$PrismaModel>
     _max?: NestedEnumProductStockStatusFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type ProductScalarRelationFilter = {
@@ -11679,6 +11741,10 @@ export namespace Prisma {
     set?: $Enums.ProductStockStatus
   }
 
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
   export type OrderItemUpdateManyWithoutProductNestedInput = {
     create?: XOR<OrderItemCreateWithoutProductInput, OrderItemUncheckedCreateWithoutProductInput> | OrderItemCreateWithoutProductInput[] | OrderItemUncheckedCreateWithoutProductInput[]
     connectOrCreate?: OrderItemCreateOrConnectWithoutProductInput | OrderItemCreateOrConnectWithoutProductInput[]
@@ -12027,6 +12093,20 @@ export namespace Prisma {
     not?: NestedEnumProductStockStatusFilter<$PrismaModel> | $Enums.ProductStockStatus
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -12090,6 +12170,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumProductStockStatusFilter<$PrismaModel>
     _max?: NestedEnumProductStockStatusFilter<$PrismaModel>
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -12472,6 +12569,7 @@ export namespace Prisma {
     subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    productDetails?: string | null
     orderItems?: OrderItemCreateNestedManyWithoutProductInput
     reviews?: ProductReviewCreateNestedManyWithoutProductInput
   }
@@ -12488,6 +12586,7 @@ export namespace Prisma {
     subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    productDetails?: string | null
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutProductInput
     reviews?: ProductReviewUncheckedCreateNestedManyWithoutProductInput
   }
@@ -12519,6 +12618,7 @@ export namespace Prisma {
     subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    productDetails?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUpdateManyWithoutProductNestedInput
     reviews?: ProductReviewUpdateManyWithoutProductNestedInput
   }
@@ -12535,6 +12635,7 @@ export namespace Prisma {
     subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    productDetails?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUncheckedUpdateManyWithoutProductNestedInput
     reviews?: ProductReviewUncheckedUpdateManyWithoutProductNestedInput
   }
@@ -12671,6 +12772,7 @@ export namespace Prisma {
     subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    productDetails?: string | null
     images?: ProductImageCreateNestedManyWithoutProductInput
     reviews?: ProductReviewCreateNestedManyWithoutProductInput
   }
@@ -12687,6 +12789,7 @@ export namespace Prisma {
     subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    productDetails?: string | null
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     reviews?: ProductReviewUncheckedCreateNestedManyWithoutProductInput
   }
@@ -12758,6 +12861,7 @@ export namespace Prisma {
     subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    productDetails?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductImageUpdateManyWithoutProductNestedInput
     reviews?: ProductReviewUpdateManyWithoutProductNestedInput
   }
@@ -12774,6 +12878,7 @@ export namespace Prisma {
     subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    productDetails?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     reviews?: ProductReviewUncheckedUpdateManyWithoutProductNestedInput
   }
@@ -12789,6 +12894,7 @@ export namespace Prisma {
     subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    productDetails?: string | null
     orderItems?: OrderItemCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
   }
@@ -12805,6 +12911,7 @@ export namespace Prisma {
     subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    productDetails?: string | null
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
   }
@@ -12858,6 +12965,7 @@ export namespace Prisma {
     subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    productDetails?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
   }
@@ -12874,6 +12982,7 @@ export namespace Prisma {
     subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    productDetails?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
   }

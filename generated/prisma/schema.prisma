@@ -18,20 +18,21 @@ model User {
 }
 
 model Product {
-  id          Int                 @id @default(autoincrement())
-  name        String
-  price       Float
-  description String
-  image       String
-  slug        String              @unique
-  isActive    Boolean             @default(true)
-  category    ProductCategory     @default(NOWOSCI)
-  subcategory ProductSubcategory?
-  stock       Int                 @default(0)
-  stockStatus ProductStockStatus  @default(BRAK)
-  orderItems  OrderItem[]
-  images      ProductImage[]
-  reviews     ProductReview[]
+  id             Int                 @id @default(autoincrement())
+  name           String
+  price          Float
+  description    String
+  image          String
+  slug           String              @unique
+  isActive       Boolean             @default(true)
+  category       ProductCategory     @default(NOWOSCI)
+  subcategory    ProductSubcategory?
+  stock          Int                 @default(0)
+  stockStatus    ProductStockStatus  @default(BRAK)
+  orderItems     OrderItem[]
+  images         ProductImage[]
+  reviews        ProductReview[]
+  productDetails String?
 }
 
 model ProductImage {

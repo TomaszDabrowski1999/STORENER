@@ -139,7 +139,8 @@ exports.Prisma.ProductScalarFieldEnum = {
   category: 'category',
   subcategory: 'subcategory',
   stock: 'stock',
-  stockStatus: 'stockStatus'
+  stockStatus: 'stockStatus',
+  productDetails: 'productDetails'
 };
 
 exports.Prisma.ProductImageScalarFieldEnum = {

@@ -32,6 +32,7 @@ model Product {
   orderItems  OrderItem[]
   images      ProductImage[]
   reviews     ProductReview[]
+  productDetails String?
 }
 
 model ProductImage {

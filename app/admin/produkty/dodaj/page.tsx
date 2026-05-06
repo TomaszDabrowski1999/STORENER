@@ -11,6 +11,7 @@ type ProductForm = {
   slug: string;
   price: string;
   description: string;
+  productDetails: string;
   image: string;
   category: string;
   subcategory: string;
@@ -24,6 +25,7 @@ export default function AddProductPage() {
     slug: "",
     price: "",
     description: "",
+    productDetails: "",
     image: "",
     category: "NOWOSCI",
     subcategory: "",
@@ -49,7 +51,9 @@ export default function AddProductPage() {
   }, [selectedMainFile, form.image]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
 
@@ -69,14 +73,14 @@ export default function AddProductPage() {
   };
 
   const handleNameChange = (value: string) => {
-      const generatedSlug = value
-  .toLowerCase()
-  .trim()
-  .normalize("NFD")
-  .replace(/[\u0300-\u036f]/g, "")
-  .replace(/\s+/g, "-")
-  .replace(/[^a-z0-9-]/g, "")
-  .replace(/-+/g, "-");
+    const generatedSlug = value
+      .toLowerCase()
+      .trim()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "")
+      .replace(/-+/g, "-");
 
     setForm((prev) => ({
       ...prev,
@@ -175,6 +179,7 @@ export default function AddProductPage() {
           slug: form.slug,
           price: Number(form.price),
           description: form.description,
+          productDetails: form.productDetails,
           image: mainImageUrl,
           category: form.category,
           subcategory: form.category === "DOM_I_OGROD" ? form.subcategory : null,
@@ -197,14 +202,15 @@ export default function AddProductPage() {
         slug: "",
         price: "",
         description: "",
+        productDetails: "",
         image: "",
         category: "NOWOSCI",
         subcategory: "",
         galleryImages: [],
         stock: "0",
       });
-      setSelectedMainFile(null);
 
+      setSelectedMainFile(null);
       setMessage("Produkt został dodany do bazy");
       toast.success("Produkt został dodany", { id: toastId });
     } catch (err) {
@@ -225,13 +231,14 @@ export default function AddProductPage() {
             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">
-                  panel administracyjny
+                  Panel administracyjny
                 </p>
                 <h1 className="mt-3 text-4xl font-bold text-gray-900">
                   Dodaj produkt
                 </h1>
                 <p className="mt-4 max-w-2xl text-lg leading-8 text-gray-600">
-                  Uzupełnij dane produktu, ustaw kategorię, stan magazynowy i dodaj galerię zdjęć z dysku.
+                  Uzupełnij dane produktu, ustaw kategorię, stan magazynowy i
+                  dodaj galerię zdjęć z dysku.
                 </p>
               </div>
 
@@ -351,8 +358,26 @@ export default function AddProductPage() {
                     name="description"
                     value={form.description}
                     onChange={handleChange}
+                    placeholder="Tutaj wpisz główny opis produktu."
                     className="min-h-36 w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-black"
                   />
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Dane produktu
+                  </label>
+                  <textarea
+                    name="productDetails"
+                    value={form.productDetails}
+                    onChange={handleChange}
+                    placeholder={`Materiał: Bawełna\nKolor: Czarny\nRozmiar: XL\nProducent: StoreNER`}
+                    className="min-h-44 w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-black"
+                  />
+                  <p className="mt-2 text-sm text-gray-500">
+                    Każda linia po Enterze będzie osobnym wierszem na stronie
+                    produktu.
+                  </p>
                 </div>
 
                 <div className="rounded-2xl border border-dashed border-gray-300 p-5">
@@ -404,7 +429,7 @@ export default function AddProductPage() {
             <div className="space-y-6">
               <div className="rounded-3xl bg-white p-8 shadow-sm">
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">
-                  podgląd
+                  Podgląd
                 </p>
                 <h2 className="mt-3 text-3xl font-bold text-gray-900">
                   Karta produktu
@@ -436,23 +461,37 @@ export default function AddProductPage() {
                     </p>
 
                     <p className="mt-4 text-2xl font-bold text-black">
-                      {form.price ? `${Number(form.price).toFixed(2)} zł` : "0.00 zł"}
-                    </p>
-
-                    <p className="mt-2 text-sm font-medium text-gray-600">
-                      Stan magazynowy: {form.stock}
+                      {form.price
+                        ? `${Number(form.price).toFixed(2)} zł`
+                        : "0.00 zł"}
                     </p>
 
                     <p className="mt-4 line-clamp-3 text-sm leading-7 text-gray-600">
                       {form.description || "Tutaj pojawi się opis produktu."}
                     </p>
+
+                    {form.productDetails && (
+                      <div className="mt-5 overflow-hidden rounded-2xl border border-gray-200 bg-white">
+                        {form.productDetails
+                          .split("\n")
+                          .filter(Boolean)
+                          .map((line, index) => (
+                            <div
+                              key={`${line}-${index}`}
+                              className="border-b border-gray-100 px-4 py-3 text-sm text-gray-700 last:border-b-0"
+                            >
+                              {line}
+                            </div>
+                          ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
 
               <div className="rounded-3xl bg-white p-8 shadow-sm">
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">
-                  galeria
+                  Galeria
                 </p>
                 <h2 className="mt-3 text-3xl font-bold text-gray-900">
                   Podgląd zdjęć

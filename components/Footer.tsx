@@ -34,39 +34,12 @@ export default function Footer() {
           />
         </div>
 
-        <div className="grid gap-8 border-b border-white/10 py-10 md:grid-cols-[1fr_auto] md:items-center">
-          <div>
-            <p className="text-sm uppercase tracking-[0.2em] text-white/40">
-              Płatności
-            </p>
-            <h3 className="mt-3 text-2xl font-bold text-white">
-              Obsługiwane metody płatności
-            </h3>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-white/60">
-              W sklepie możesz korzystać z wygodnych i popularnych metod
-              płatności online.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-3 md:justify-end">
-            {["Apple Pay", "Google Pay", "BLIK", "VISA", "Mastercard"].map(
-              (item) => (
-                <span
-                  key={item}
-                  className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black shadow-sm"
-                >
-                  {item}
-                </span>
-              )
-            )}
-          </div>
-        </div>
-
-        <div className="grid gap-10 border-b border-white/10 py-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 border-b border-white/10 py-10 lg:grid-cols-[1fr_1fr_1.45fr] lg:items-start">
           <div>
             <h3 className="mb-5 text-sm font-bold uppercase tracking-wide text-white">
               DOSTAWA I PŁATNOŚCI
             </h3>
+
             <ul className="space-y-3 text-sm text-white/60">
               <FooterLink href="/dostawa">Dostawa</FooterLink>
               <FooterLink href="/platnosci">Płatności</FooterLink>
@@ -78,6 +51,7 @@ export default function Footer() {
             <h3 className="mb-5 text-sm font-bold uppercase tracking-wide text-white">
               PRAWNE
             </h3>
+
             <ul className="space-y-3 text-sm text-white/60">
               <FooterLink href="/regulamin">Regulamin</FooterLink>
               <FooterLink href="/polityka-prywatnosci">
@@ -87,26 +61,13 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div>
-            <h3 className="mb-5 text-sm font-bold uppercase tracking-wide text-white">
-              KONTO
-            </h3>
-            <ul className="space-y-3 text-sm text-white/60">
-              <FooterLink href="/konto">Moje konto</FooterLink>
-              <FooterLink href="/koszyk">Koszyk</FooterLink>
-              <FooterLink href="/logowanie">Logowanie</FooterLink>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="mb-5 text-sm font-bold uppercase tracking-wide text-white">
-              STORENER
-            </h3>
-            <p className="text-sm leading-7 text-white/60">
-              Nowoczesny sklep online z produktami do domu, ogrodu, motoryzacji
-              i codziennego użytku.
-            </p>
-          </div>
+          <div className="rounded-2xl bg-[#0f1118] p-0">
+  <img
+    src="/przelewy24.png"
+    alt="Płatności obsługiwane przez Przelewy24"
+    className="h-auto w-full scale-140 object-contain"
+  />
+</div>
         </div>
 
         <div className="flex flex-col gap-4 py-6 text-sm text-white/45 md:flex-row md:items-center md:justify-between">
@@ -137,10 +98,12 @@ function FooterBox({ Icon, title, text }: any) {
       <div className="rounded-2xl border border-[#4caf3d]/20 bg-[#4caf3d]/10 p-3 text-[#4caf3d]">
         <Icon className="h-7 w-7" />
       </div>
+
       <div>
         <h3 className="text-sm font-bold uppercase tracking-wide text-white">
           {title}
         </h3>
+
         <p className="mt-2 text-sm leading-6 text-white/65">{text}</p>
       </div>
     </div>
