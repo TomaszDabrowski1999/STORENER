@@ -1,7 +1,14 @@
-import { mkdir, writeFile } from "fs/promises";
-import path from "path";
 import { NextResponse } from "next/server";
+import { v2 as cloudinary } from "cloudinary";
 import { requireAdmin } from "@/lib/admin-session";
+
+export const runtime = "nodejs";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(request: Request) {
   const admin = await requireAdmin();
@@ -39,25 +46,30 @@ export async function POST(request: Request) {
       );
     }
 
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
-    await mkdir(uploadDir, { recursive: true });
-
     const uploadedUrls: string[] = [];
 
     for (const file of validFiles) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
 
-      const safeName = file.name
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9.\-_]/g, "");
+      const result = await new Promise<any>((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            {
+              folder: "produkty",
+              resource_type: "image",
+            },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            }
+          )
+          .end(buffer);
+      });
 
-      const fileName = `${Date.now()}-${crypto.randomUUID()}-${safeName}`;
-      const filePath = path.join(uploadDir, fileName);
-
-      await writeFile(filePath, buffer);
-      uploadedUrls.push(`/uploads/${fileName}`);
+      if (result?.secure_url) {
+        uploadedUrls.push(result.secure_url);
+      }
     }
 
     return NextResponse.json({
@@ -65,10 +77,10 @@ export async function POST(request: Request) {
       urls: uploadedUrls,
     });
   } catch (error) {
-    console.error("UPLOAD MULTIPLE ERROR:", error);
+    console.error("UPLOAD MULTIPLE CLOUDINARY ERROR:", error);
 
     return NextResponse.json(
-      { error: "Nie udało się przesłać zdjęć" },
+      { error: "Nie udało się przesłać zdjęć do Cloudinary" },
       { status: 500 }
     );
   }
