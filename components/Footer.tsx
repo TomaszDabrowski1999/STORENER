@@ -27,11 +27,6 @@ export default function Footer() {
             title="Obsługa klienta"
             text="Szybki kontakt, pomoc i wsparcie przy zakupach."
           />
-          <FooterBox
-            Icon={Handshake}
-            title="Partnerstwo"
-            text="Rozwijamy współprace i budujemy nowoczesny sklep online."
-          />
         </div>
 
         <div className="grid gap-10 border-b border-white/10 py-10 lg:grid-cols-[1fr_1fr_1.45fr] lg:items-start">
