@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 type ProductGalleryProps = {
@@ -7,53 +8,63 @@ type ProductGalleryProps = {
   name: string;
 };
 
-export default function ProductGallery({
-  images,
-  name,
-}: ProductGalleryProps) {
-  const safeImages = images.filter(Boolean);
-  const [activeImage, setActiveImage] = useState(safeImages[0] || "");
+export default function ProductGallery({ images, name }: ProductGalleryProps) {
+const validImages = images.filter(
+  (image) =>
+    typeof image === "string" &&
+    image.trim() !== "" &&
+    image !== "null" &&
+    image !== "undefined" &&
+    !image.startsWith("/uploads")
+);
 
-  if (safeImages.length === 0) {
+  const [activeImage, setActiveImage] = useState(validImages[0] || "");
+
+  if (!activeImage) {
     return (
-      <div className="overflow-hidden rounded-[2rem] bg-gray-100 shadow-sm">
-        <div className="flex h-[500px] items-center justify-center text-gray-400">
-          Brak zdjęć produktu
-        </div>
+      <div className="flex h-[520px] items-center justify-center rounded-[30px] bg-white text-gray-400">
+        Brak zdjęcia produktu
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
-      <div className="overflow-hidden rounded-[2rem] bg-gray-100 shadow-sm">
-        <img
+    <div>
+      <div className="overflow-hidden rounded-[30px] border border-black/5 bg-white">
+        <Image
           src={activeImage}
           alt={name}
-          className="h-[500px] w-full object-cover"
+          width={900}
+          height={900}
+          className="h-[520px] w-full object-contain"
+          priority
         />
       </div>
 
-      <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4">
-        {safeImages.slice(0, 12).map((image, index) => (
-          <button
-            key={`${image}-${index}`}
-            type="button"
-            onClick={() => setActiveImage(image)}
-            className={`overflow-hidden rounded-2xl border transition ${
-              activeImage === image
-                ? "border-black ring-2 ring-black/10"
-                : "border-gray-200 hover:border-black"
-            }`}
-          >
-            <img
-              src={image}
-              alt={`${name} ${index + 1}`}
-              className="h-24 w-full object-cover"
-            />
-          </button>
-        ))}
-      </div>
+      {validImages.length > 1 && (
+        <div className="mt-4 grid grid-cols-4 gap-3">
+          {validImages.map((image, index) => (
+            <button
+              key={`${image}-${index}`}
+              type="button"
+              onClick={() => setActiveImage(image)}
+              className={`overflow-hidden rounded-2xl border bg-white transition ${
+                activeImage === image
+                  ? "border-black"
+                  : "border-gray-200 hover:border-black"
+              }`}
+            >
+              <Image
+                src={image}
+                alt={`${name} ${index + 1}`}
+                width={180}
+                height={180}
+                className="h-24 w-full object-cover"
+              />
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

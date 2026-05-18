@@ -19,9 +19,14 @@ export default function RootLayout({
     <html lang="pl">
       <body className="bg-gray-50 text-gray-900 antialiased">
         <SessionProviderWrapper>
-          <Navbar />
-          {children}
-          <Footer />
+
+<Navbar />
+
+<main>
+  {children}
+</main>
+
+<Footer />
 
           <Toaster
             position="top-right"

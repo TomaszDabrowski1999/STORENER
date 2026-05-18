@@ -21,7 +21,10 @@ const categories = [
   { label: "Wyprzedaż", href: "/produkty?category=WYPRZEDAZ" },
   { label: "Dom i ogród", href: "/produkty?category=DOM_I_OGROD" },
   { label: "Motoryzacja", href: "/produkty?category=MOTORYZACJA" },
-  { label: "Akcesoria dla zwierząt", href: "/produkty?category=AKCESORIA_DLA_ZWIERZAT" },
+  {
+    label: "Akcesoria dla zwierząt",
+    href: "/produkty?category=AKCESORIA_DLA_ZWIERZAT",
+  },
   { label: "Ogród", href: "/produkty?subcategory=OGROD" },
   { label: "Wyposażenie", href: "/produkty?subcategory=WYPOSAZENIE" },
 ];
@@ -56,9 +59,9 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-black text-white">
+    <header className="relative z-50 w-full bg-black text-white shadow-lg">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex items-center gap-8 py-8">
+        <div className="flex items-center gap-8 py-5">
           <Link href="/" onClick={closeMenu} className="shrink-0">
             <Image
               src="/storener-logo.png"
@@ -70,7 +73,10 @@ export default function Navbar() {
             />
           </Link>
 
-          <form action="/produkty" className="hidden h-[52px] flex-1 overflow-hidden rounded-md bg-white md:flex">
+          <form
+            action="/produkty"
+            className="hidden h-[52px] flex-1 overflow-hidden rounded-md bg-white md:flex"
+          >
             <button
               type="button"
               className="flex min-w-[210px] items-center justify-center gap-2 border-r border-gray-200 px-5 text-sm text-black"
@@ -80,7 +86,7 @@ export default function Navbar() {
             </button>
 
             <input
-              name="q"
+              name="search"
               type="text"
               placeholder="Wpisz czego szukasz"
               className="flex-1 px-5 text-sm text-gray-700 outline-none"
@@ -145,6 +151,54 @@ export default function Navbar() {
           </nav>
         </div>
       </div>
+
+      {isOpen && (
+        <div className="border-t border-white/10 bg-black md:hidden">
+          <div className="mx-auto flex max-w-7xl flex-col px-6 py-4">
+            <form
+              action="/produkty"
+              className="mb-4 flex h-[48px] overflow-hidden rounded-md bg-white"
+            >
+              <input
+                name="search"
+                type="text"
+                placeholder="Wpisz czego szukasz"
+                className="flex-1 px-4 text-sm text-gray-700 outline-none"
+              />
+
+              <button
+                type="submit"
+                className="flex w-[56px] items-center justify-center bg-[#4caf3d] text-white"
+              >
+                <Search className="h-6 w-6" />
+              </button>
+            </form>
+
+            {categories.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={closeMenu}
+                className="rounded-xl px-3 py-3 text-sm font-medium text-white hover:bg-white/10 hover:text-[#4caf3d]"
+              >
+                {item.label}
+              </Link>
+            ))}
+
+            <Link
+              href="/koszyk"
+              onClick={closeMenu}
+              className="rounded-xl px-3 py-3 text-sm font-medium text-white hover:bg-white/10 hover:text-[#4caf3d]"
+            >
+              Koszyk ({cartValue.toFixed(2)} zł)
+            </Link>
+
+            <div className="mt-2 border-t border-white/10 pt-2">
+              <MobileUserNavbarActions onNavigate={closeMenu} />
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
