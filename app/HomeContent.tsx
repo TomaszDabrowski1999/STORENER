@@ -205,7 +205,7 @@ export default function HomeContent() {
         )}
 
         {!isLoading && !error && products.length > 0 && !showFeatured && (
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {products.map((product) => (
               <ProductCard
                 key={product.id}
@@ -279,7 +279,7 @@ function ProductSection({
         </button>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {products.map((product) => (
           <ProductCard
             key={product.id}

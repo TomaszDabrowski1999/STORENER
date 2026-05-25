@@ -11,6 +11,7 @@ import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import Input from "../../components/ui/Input";
 import SectionHeader from "../../components/ui/SectionHeader";
+import { getShippingOption, shippingOptions } from "../../lib/shipping";
 
 type SessionUser = {
   id: string;
@@ -31,6 +32,7 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
     register,
     handleSubmit,
     setValue,
+    watch,
     reset,
     formState: { errors },
   } = useForm<CheckoutFormData>({
@@ -42,6 +44,8 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
       city: "",
       postalCode: "",
       paymentMethod: "KARTA",
+      shippingMethod: "INPOST_KURIER",
+      shippingPoint: "",
     },
   });
 
@@ -50,9 +54,14 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
     setValue("fullName", sessionUser.fullName);
     setValue("email", sessionUser.email);
     setValue("paymentMethod", "KARTA");
+    setValue("shippingMethod", "INPOST_KURIER");
   }, [sessionUser, setValue]);
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const selectedShippingMethod = watch("shippingMethod");
+  const selectedShipping = getShippingOption(selectedShippingMethod) || shippingOptions[1];
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const shippingPrice = cart.length > 0 ? selectedShipping.price : 0;
+  const total = subtotal + shippingPrice;
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const onSubmit = async (values: CheckoutFormData) => {
@@ -101,6 +110,8 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
         city: "",
         postalCode: "",
         paymentMethod: "KARTA",
+        shippingMethod: "INPOST_KURIER",
+        shippingPoint: "",
       });
 
       toast.success("Zamówienie zostało utworzone", { id: toastId });
@@ -180,6 +191,69 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
                 <p className="mt-2 font-semibold text-black">Płatność przy zamówieniu</p>
               </div>
 
+              <div className="space-y-4 rounded-3xl border border-gray-100 bg-white p-5">
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">
+                    dostawa
+                  </p>
+                  <h3 className="mt-2 text-2xl font-bold text-gray-900">
+                    Wybierz kuriera
+                  </h3>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {shippingOptions.map((option) => (
+                    <label
+                      key={option.id}
+                      className={`cursor-pointer rounded-2xl border p-4 transition ${
+                        selectedShippingMethod === option.id
+                          ? "border-black bg-black text-white"
+                          : "border-gray-100 bg-gray-50 text-gray-900 hover:border-gray-300"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        value={option.id}
+                        className="sr-only"
+                        {...register("shippingMethod")}
+                      />
+
+                      <span className="block text-base font-bold">
+                        {option.name}
+                      </span>
+                      <span
+                        className={`mt-1 block text-sm ${
+                          selectedShippingMethod === option.id
+                            ? "text-gray-200"
+                            : "text-gray-500"
+                        }`}
+                      >
+                        {option.description}
+                      </span>
+                      <span className="mt-3 flex items-center justify-between gap-3 text-sm font-semibold">
+                        <span>{option.estimatedDelivery}</span>
+                        <span>{option.price === 0 ? "Gratis" : `${option.price.toFixed(2)} zł`}</span>
+                      </span>
+                    </label>
+                  ))}
+                </div>
+
+                {errors.shippingMethod?.message && (
+                  <p className="text-sm font-medium text-red-600">
+                    {errors.shippingMethod.message}
+                  </p>
+                )}
+
+                {selectedShipping?.requiresPoint && (
+                  <Input
+                    type="text"
+                    placeholder="Numer paczkomatu lub nazwa punktu odbioru"
+                    error={errors.shippingPoint?.message}
+                    {...register("shippingPoint")}
+                  />
+                )}
+              </div>
+
               {serverError && (
                 <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
                   {serverError}
@@ -251,6 +325,16 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
                 <div className="flex items-center justify-between text-gray-600">
                   <span>Produkty</span>
                   <span>{totalItems}</span>
+                </div>
+
+                <div className="flex items-center justify-between text-gray-600">
+                  <span>Wartość produktów</span>
+                  <span>{subtotal.toFixed(2)} zł</span>
+                </div>
+
+                <div className="flex items-center justify-between text-gray-600">
+                  <span>Dostawa: {selectedShipping.name}</span>
+                  <span>{shippingPrice === 0 ? "Gratis" : `${shippingPrice.toFixed(2)} zł`}</span>
                 </div>
 
                 <div className="flex items-center justify-between text-lg font-semibold text-black">

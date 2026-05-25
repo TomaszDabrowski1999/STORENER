@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { prisma } from "../../../lib/prisma";
+import { formatShippingMethod } from "../../../lib/shipping";
 
 type Props = {
   params: Promise<{
@@ -11,7 +12,7 @@ export default async function OrderSuccessPage({ params }: Props) {
   const { id } = await params;
   const orderId = Number(id);
 
-  const order = await prisma.order.findUnique({
+  const order = await (prisma.order as any).findUnique({
     where: { id: orderId },
     include: {
       items: {
@@ -201,6 +202,30 @@ export default async function OrderSuccessPage({ params }: Props) {
                     {order.postalCode} {order.city}
                   </p>
                 </div>
+
+                <div className="rounded-2xl border border-gray-100 bg-gray-50 p-5">
+                  <p className="text-sm text-gray-500">Metoda dostawy</p>
+                  <p className="mt-2 font-semibold text-black">
+                    {order.shippingMethodName || formatShippingMethod(order.shippingMethod)}
+                  </p>
+                  <p className="mt-1 text-sm text-gray-600">
+                    {order.shippingEstimatedDelivery || "1-3 dni robocze"}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-gray-100 bg-gray-50 p-5">
+                  <p className="text-sm text-gray-500">Koszt dostawy</p>
+                  <p className="mt-2 font-semibold text-black">
+                    {Number(order.shippingPrice || 0) === 0
+                      ? "Gratis"
+                      : `${Number(order.shippingPrice || 0).toFixed(2)} zł`}
+                  </p>
+                  {order.shippingPoint ? (
+                    <p className="mt-1 text-sm text-gray-600">
+                      Punkt: {order.shippingPoint}
+                    </p>
+                  ) : null}
+                </div>
               </div>
             </div>
           </div>
@@ -219,6 +244,22 @@ export default async function OrderSuccessPage({ params }: Props) {
                   <span className="text-gray-500">Status zamówienia</span>
                   <span className="font-semibold text-black">
                     {getStatusLabel(order.status)}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
+                  <span className="text-gray-500">Metoda dostawy</span>
+                  <span className="text-right font-semibold text-black">
+                    {order.shippingMethodName || formatShippingMethod(order.shippingMethod)}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3">
+                  <span className="text-gray-500">Koszt dostawy</span>
+                  <span className="font-semibold text-black">
+                    {Number(order.shippingPrice || 0) === 0
+                      ? "Gratis"
+                      : `${Number(order.shippingPrice || 0).toFixed(2)} zł`}
                   </span>
                 </div>
 

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { shippingOptions } from "./shipping";
 
 export const checkoutSchema = z.object({
   fullName: z
@@ -19,6 +20,27 @@ export const checkoutSchema = z.object({
  paymentMethod: z.enum(["BLIK", "KARTA", "PRZELEW", "POBRANIE"], {
   message: "Wybierz metodę płatności",
 }),
+  shippingMethod: z.enum([
+    "INPOST_PACZKOMAT",
+    "INPOST_KURIER",
+    "DPD",
+    "DHL",
+    "ORLEN_PACZKA",
+    "ODBIOR_OSOBISTY",
+  ], {
+    message: "Wybierz metodę dostawy",
+  }),
+  shippingPoint: z.string().optional(),
+}).superRefine((data, ctx) => {
+  const option = shippingOptions.find((item) => item.id === data.shippingMethod);
+
+  if (option?.requiresPoint && !data.shippingPoint?.trim()) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["shippingPoint"],
+      message: "Podaj punkt odbioru lub numer paczkomatu",
+    });
+  }
 });
 
 export type CheckoutFormData = z.infer<typeof checkoutSchema>;

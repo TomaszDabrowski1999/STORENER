@@ -157,7 +157,7 @@ export default function ProduktyContent() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-10">
-        <div className="sticky top-24 z-30 rounded-3xl bg-white p-5 shadow-sm">
+        <div className="rounded-3xl bg-white p-5 shadow-sm">
           <form onSubmit={handleFilter}>
             <div className="grid gap-4 xl:grid-cols-6">
               <input
@@ -278,7 +278,7 @@ export default function ProduktyContent() {
         )}
 
         {!isLoading && !error && products.length > 0 && (
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {products.map((product) => (
               <ProductCard
                 key={product.id}

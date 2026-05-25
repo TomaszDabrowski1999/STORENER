@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import AdminGuard from "../../../components/AdminGuard";
+import { formatShippingMethod } from "../../../lib/shipping";
 
 type OrderItem = {
   id: number;
@@ -24,6 +25,11 @@ type Order = {
   postalCode: string;
   paymentMethod: "BLIK" | "KARTA" | "PRZELEW" | "POBRANIE";
   paymentStatus: "OCZEKUJE" | "OPLACONA" | "NIEUDANA";
+  shippingMethod?: string;
+  shippingMethodName?: string | null;
+  shippingPrice?: number | null;
+  shippingPoint?: string | null;
+  shippingEstimatedDelivery?: string | null;
   items: OrderItem[];
 };
 
@@ -207,6 +213,25 @@ export default function AdminOrdersPage() {
                           <p className="mt-1 text-sm text-gray-600">
                             {order.postalCode} {order.city}
                           </p>
+                        </div>
+
+                        <div className="rounded-2xl border border-gray-100 bg-gray-50 p-5">
+                          <p className="text-sm text-gray-500">
+                            Metoda dostawy
+                          </p>
+                          <p className="mt-2 font-semibold text-black">
+                            {order.shippingMethodName || formatShippingMethod(order.shippingMethod)}
+                          </p>
+                          <p className="mt-1 text-sm text-gray-600">
+                            {Number(order.shippingPrice || 0) === 0
+                              ? "Gratis"
+                              : `${Number(order.shippingPrice || 0).toFixed(2)} zł`}
+                          </p>
+                          {order.shippingPoint ? (
+                            <p className="mt-1 text-sm text-gray-600">
+                              Punkt: {order.shippingPoint}
+                            </p>
+                          ) : null}
                         </div>
 
                         <div className="rounded-2xl border border-gray-100 bg-gray-50 p-5">

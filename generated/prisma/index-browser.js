@@ -162,7 +162,12 @@ exports.Prisma.OrderScalarFieldEnum = {
   postalCode: 'postalCode',
   paymentMethod: 'paymentMethod',
   paymentStatus: 'paymentStatus',
-  userId: 'userId'
+  userId: 'userId',
+  shippingMethod: 'shippingMethod',
+  shippingMethodName: 'shippingMethodName',
+  shippingPrice: 'shippingPrice',
+  shippingPoint: 'shippingPoint',
+  shippingEstimatedDelivery: 'shippingEstimatedDelivery'
 };
 
 exports.Prisma.OrderItemScalarFieldEnum = {

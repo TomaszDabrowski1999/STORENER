@@ -29,10 +29,10 @@ model Product {
   subcategory    ProductSubcategory?
   stock          Int                 @default(0)
   stockStatus    ProductStockStatus  @default(BRAK)
+  productDetails String?
   orderItems     OrderItem[]
   images         ProductImage[]
   reviews        ProductReview[]
-  productDetails String?
 }
 
 model ProductImage {
@@ -44,20 +44,25 @@ model ProductImage {
 }
 
 model Order {
-  id            Int           @id @default(autoincrement())
-  createdAt     DateTime      @default(now())
-  total         Float
-  status        OrderStatus   @default(NOWE)
-  fullName      String
-  email         String
-  address       String
-  city          String
-  postalCode    String
-  paymentMethod PaymentMethod
-  paymentStatus PaymentStatus @default(OCZEKUJE)
-  userId        Int?
-  user          User?         @relation(fields: [userId], references: [id])
-  items         OrderItem[]
+  id                        Int           @id @default(autoincrement())
+  createdAt                 DateTime      @default(now())
+  total                     Float
+  status                    OrderStatus   @default(NOWE)
+  fullName                  String
+  email                     String
+  address                   String
+  city                      String
+  postalCode                String
+  paymentMethod             PaymentMethod
+  paymentStatus             PaymentStatus @default(OCZEKUJE)
+  userId                    Int?
+  shippingMethod            String        @default("INPOST_KURIER")
+  shippingMethodName        String        @default("InPost Kurier")
+  shippingPrice             Float         @default(16.99)
+  shippingPoint             String?
+  shippingEstimatedDelivery String        @default("1-2 dni robocze")
+  user                      User?         @relation(fields: [userId], references: [id])
+  items                     OrderItem[]
 }
 
 model OrderItem {
