@@ -77,19 +77,11 @@ export default function Navbar() {
             action="/produkty"
             className="hidden h-[52px] flex-1 overflow-hidden rounded-md bg-white md:flex"
           >
-            <button
-              type="button"
-              className="flex min-w-[210px] items-center justify-center gap-2 border-r border-gray-200 px-5 text-sm text-black"
-            >
-              Wszystkie kategorie
-              <ChevronDown className="h-4 w-4 text-gray-500" />
-            </button>
-
             <input
               name="search"
               type="text"
               placeholder="Wpisz czego szukasz"
-              className="flex-1 px-5 text-sm text-gray-700 outline-none"
+              className="flex-1 px-6 text-sm text-gray-700 outline-none"
             />
 
             <button
