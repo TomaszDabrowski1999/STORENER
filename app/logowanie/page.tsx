@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -10,7 +10,7 @@ import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
 import SectionHeader from "../../components/ui/SectionHeader";
 
-export default function LoginPage() {
+function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
@@ -126,5 +126,27 @@ export default function LoginPage() {
         </Card>
       </div>
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-gray-50 px-6 py-12">
+          <div className="mx-auto max-w-md">
+            <Card>
+              <SectionHeader
+                eyebrow="konto użytkownika"
+                title="Logowanie"
+                subtitle="Ładowanie formularza logowania..."
+              />
+            </Card>
+          </div>
+        </main>
+      }
+    >
+      <LoginPageContent />
+    </Suspense>
   );
 }
