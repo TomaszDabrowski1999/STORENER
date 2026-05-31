@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { CheckCircle2, CreditCard, LockKeyhole, MapPin, PackageCheck, Truck } from "lucide-react";
 import { getCart, saveCart } from "../../lib/cart";
 import { CartItem } from "../../types/cart";
 import { useForm } from "react-hook-form";
@@ -10,7 +12,6 @@ import { checkoutSchema, CheckoutFormData } from "../../lib/validators";
 import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import Input from "../../components/ui/Input";
-import SectionHeader from "../../components/ui/SectionHeader";
 import { getShippingOption, shippingOptions } from "../../lib/shipping";
 
 type SessionUser = {
@@ -22,6 +23,8 @@ type SessionUser = {
 type Props = {
   sessionUser: SessionUser;
 };
+
+const formatPrice = (value: number) => `${value.toFixed(2).replace(".", ",")} zł`;
 
 export default function CheckoutClientPage({ sessionUser }: Props) {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -125,227 +128,166 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      <section className="border-b bg-white">
-        <div className="mx-auto max-w-6xl px-6 py-14">
-          <SectionHeader
-            eyebrow="finalizacja zamówienia"
-            title="Checkout"
-            subtitle="Uzupełnij dane i sfinalizuj zamówienie w kilku prostych krokach."
-          />
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-6 py-10">
-        <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-          <Card className="p-8">
-            <div className="mb-8">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">
-                dane zamówienia
-              </p>
-              <h2 className="mt-3 text-3xl font-bold text-gray-900">
-                Informacje klienta
-              </h2>
+    <main className="min-h-screen bg-[#eef1f3] px-4 py-8 sm:px-6 lg:px-10">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-8">
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-700">
+            finalizacja zamówienia
+          </p>
+          <h1 className="mt-2 text-4xl font-semibold tracking-tight text-gray-950">
+            Dostawa i płatność
+          </h1>
+          <div className="mt-5 grid gap-3 text-sm text-gray-600 sm:grid-cols-3">
+            <div className="flex items-center gap-2 rounded-full bg-white px-4 py-3 shadow-sm">
+              <CheckCircle2 size={18} className="text-emerald-700" /> Koszyk
             </div>
+            <div className="flex items-center gap-2 rounded-full bg-white px-4 py-3 shadow-sm ring-1 ring-emerald-600">
+              <Truck size={18} className="text-emerald-700" /> Dane zamówienia
+            </div>
+            <div className="flex items-center gap-2 rounded-full bg-white px-4 py-3 shadow-sm">
+              <PackageCheck size={18} className="text-gray-400" /> Potwierdzenie
+            </div>
+          </div>
+        </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-              <Input
-                type="text"
-                placeholder="Imię i nazwisko"
-                error={errors.fullName?.message}
-                {...register("fullName")}
-              />
-
-              <Input
-                type="email"
-                placeholder="Email"
-                error={errors.email?.message}
-                {...register("email")}
-              />
-
-              <Input
-                type="text"
-                placeholder="Adres"
-                error={errors.address?.message}
-                {...register("address")}
-              />
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Input
-                  type="text"
-                  placeholder="Miasto"
-                  error={errors.city?.message}
-                  {...register("city")}
-                />
-
-                <Input
-                  type="text"
-                  placeholder="Kod pocztowy"
-                  error={errors.postalCode?.message}
-                  {...register("postalCode")}
-                />
-              </div>
-
-              <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4">
-                <p className="text-sm text-gray-500">Metoda płatności</p>
-                <p className="mt-2 font-semibold text-black">Płatność przy zamówieniu</p>
-              </div>
-
-              <div className="space-y-4 rounded-3xl border border-gray-100 bg-white p-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_390px]">
+          <div className="space-y-5">
+            <Card className="rounded-none p-6 shadow-sm sm:p-8">
+              <div className="mb-6 flex items-start gap-4">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+                  <MapPin size={22} />
+                </div>
                 <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">
-                    dostawa
-                  </p>
-                  <h3 className="mt-2 text-2xl font-bold text-gray-900">
-                    Wybierz kuriera
-                  </h3>
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">krok 1</p>
+                  <h2 className="mt-1 text-2xl font-bold text-gray-950">Dane odbiorcy</h2>
+                  <p className="mt-1 text-sm text-gray-500">Podaj dane potrzebne do wysyłki zamówienia.</p>
                 </div>
-
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {shippingOptions.map((option) => (
-                    <label
-                      key={option.id}
-                      className={`cursor-pointer rounded-2xl border p-4 transition ${
-                        selectedShippingMethod === option.id
-                          ? "border-black bg-black text-white"
-                          : "border-gray-100 bg-gray-50 text-gray-900 hover:border-gray-300"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        value={option.id}
-                        className="sr-only"
-                        {...register("shippingMethod")}
-                      />
-
-                      <span className="block text-base font-bold">
-                        {option.name}
-                      </span>
-                      <span
-                        className={`mt-1 block text-sm ${
-                          selectedShippingMethod === option.id
-                            ? "text-gray-200"
-                            : "text-gray-500"
-                        }`}
-                      >
-                        {option.description}
-                      </span>
-                      <span className="mt-3 flex items-center justify-between gap-3 text-sm font-semibold">
-                        <span>{option.estimatedDelivery}</span>
-                        <span>{option.price === 0 ? "Gratis" : `${option.price.toFixed(2)} zł`}</span>
-                      </span>
-                    </label>
-                  ))}
-                </div>
-
-                {errors.shippingMethod?.message && (
-                  <p className="text-sm font-medium text-red-600">
-                    {errors.shippingMethod.message}
-                  </p>
-                )}
-
-                {selectedShipping?.requiresPoint && (
-                  <Input
-                    type="text"
-                    placeholder="Numer paczkomatu lub nazwa punktu odbioru"
-                    error={errors.shippingPoint?.message}
-                    {...register("shippingPoint")}
-                  />
-                )}
               </div>
 
-              {serverError && (
-                <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
-                  {serverError}
+              <div className="grid gap-4">
+                <Input type="text" placeholder="Imię i nazwisko" error={errors.fullName?.message} {...register("fullName")} />
+                <Input type="email" placeholder="Email" error={errors.email?.message} {...register("email")} />
+                <Input type="text" placeholder="Adres, numer domu / mieszkania" error={errors.address?.message} {...register("address")} />
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Input type="text" placeholder="Miasto" error={errors.city?.message} {...register("city")} />
+                  <Input type="text" placeholder="Kod pocztowy" error={errors.postalCode?.message} {...register("postalCode")} />
+                </div>
+              </div>
+            </Card>
+
+            <Card className="rounded-none p-6 shadow-sm sm:p-8">
+              <div className="mb-6 flex items-start gap-4">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+                  <Truck size={22} />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">krok 2</p>
+                  <h2 className="mt-1 text-2xl font-bold text-gray-950">Wybierz dostawę</h2>
+                  <p className="mt-1 text-sm text-gray-500">Wszystkie produkty są w jednej przesyłce od jednego dostawcy.</p>
+                </div>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                {shippingOptions.map((option) => (
+                  <label key={option.id} className={`cursor-pointer border p-4 transition ${selectedShippingMethod === option.id ? "border-emerald-700 bg-emerald-50" : "border-gray-100 bg-white hover:border-gray-300"}`}>
+                    <input type="radio" value={option.id} className="sr-only" {...register("shippingMethod")} />
+                    <span className="flex items-start justify-between gap-4">
+                      <span>
+                        <span className="block text-base font-bold text-gray-950">{option.name}</span>
+                        <span className="mt-1 block text-sm leading-5 text-gray-500">{option.description}</span>
+                      </span>
+                      <span className="whitespace-nowrap text-sm font-bold text-gray-950">{option.price === 0 ? "Gratis" : formatPrice(option.price)}</span>
+                    </span>
+                    <span className="mt-3 block text-xs font-semibold uppercase tracking-[0.16em] text-emerald-700">{option.estimatedDelivery}</span>
+                  </label>
+                ))}
+              </div>
+
+              {errors.shippingMethod?.message && <p className="mt-3 text-sm font-medium text-red-600">{errors.shippingMethod.message}</p>}
+
+              {selectedShipping?.requiresPoint && (
+                <div className="mt-4">
+                  <Input type="text" placeholder="Numer paczkomatu lub nazwa punktu odbioru" error={errors.shippingPoint?.message} {...register("shippingPoint")} />
                 </div>
               )}
+            </Card>
 
-              <Button
-                type="submit"
-                className="w-full py-4 text-base"
-                disabled={isSaving}
-              >
-                {isSaving ? "Tworzenie zamówienia..." : "Złóż zamówienie"}
-              </Button>
-            </form>
-          </Card>
+            <Card className="rounded-none p-6 shadow-sm sm:p-8">
+              <div className="flex items-start gap-4">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+                  <CreditCard size={22} />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">krok 3</p>
+                  <h2 className="mt-1 text-2xl font-bold text-gray-950">Płatność</h2>
+                  <div className="mt-4 rounded-none border border-gray-100 bg-gray-50 p-4">
+                    <p className="font-semibold text-gray-950">Płatność przy zamówieniu</p>
+                    <p className="mt-1 text-sm text-gray-500">Metoda jest ustawiona automatycznie. Po złożeniu zamówienia klient otrzymuje potwierdzenie.</p>
+                  </div>
+                </div>
+              </div>
+            </Card>
 
-          <div className="space-y-6">
-            <Card className="p-8">
+            {serverError && (
+              <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                {serverError}
+              </div>
+            )}
+          </div>
+
+          <aside className="space-y-4 lg:sticky lg:top-6 lg:h-fit">
+            <Card className="rounded-none p-6 shadow-sm">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">
-                    podsumowanie
-                  </p>
-                  <h2 className="mt-3 text-3xl font-bold text-gray-900">
-                    Twoje zamówienie
-                  </h2>
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">podsumowanie</p>
+                  <h2 className="mt-2 text-2xl font-bold text-gray-950">Twoje zamówienie</h2>
                 </div>
-
-                <span className="rounded-2xl bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700">
-                  {totalItems} szt.
-                </span>
+                <span className="bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-700">{totalItems} szt.</span>
               </div>
 
               {cart.length === 0 ? (
-                <div className="mt-6 rounded-2xl bg-gray-50 p-5 text-gray-600">
-                  Koszyk jest pusty.
-                </div>
+                <div className="mt-6 bg-gray-50 p-5 text-gray-600">Koszyk jest pusty.</div>
               ) : (
-                <div className="mt-6 space-y-4">
+                <div className="mt-6 max-h-[360px] space-y-3 overflow-auto pr-1">
                   {cart.map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex items-center gap-4 rounded-2xl border border-gray-100 p-4"
-                    >
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="h-20 w-20 rounded-xl object-cover"
-                      />
-
+                    <div key={item.id} className="flex items-center gap-3 border border-gray-100 p-3">
+                      <Image src={item.image} alt={item.name} width={64} height={64} className="h-16 w-16 rounded-lg object-cover" />
                       <div className="min-w-0 flex-1">
-                        <h3 className="truncate text-base font-semibold text-gray-900">
-                          {item.name}
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-500">
-                          Ilość: {item.quantity}
-                        </p>
+                        <h3 className="truncate text-sm font-semibold text-gray-950">{item.name}</h3>
+                        <p className="mt-1 text-xs text-gray-500">Ilość: {item.quantity}</p>
                       </div>
-
-                      <p className="text-right text-base font-bold text-black">
-                        {(item.price * item.quantity).toFixed(2)} zł
-                      </p>
+                      <p className="text-right text-sm font-bold text-gray-950">{formatPrice(item.price * item.quantity)}</p>
                     </div>
                   ))}
                 </div>
               )}
 
-              <div className="mt-8 space-y-4 border-t border-gray-100 pt-6">
-                <div className="flex items-center justify-between text-gray-600">
-                  <span>Produkty</span>
-                  <span>{totalItems}</span>
-                </div>
-
+              <div className="mt-6 space-y-4 border-t border-gray-100 pt-5 text-sm">
                 <div className="flex items-center justify-between text-gray-600">
                   <span>Wartość produktów</span>
-                  <span>{subtotal.toFixed(2)} zł</span>
+                  <span className="font-semibold text-gray-950">{formatPrice(subtotal)}</span>
                 </div>
-
                 <div className="flex items-center justify-between text-gray-600">
                   <span>Dostawa: {selectedShipping.name}</span>
-                  <span>{shippingPrice === 0 ? "Gratis" : `${shippingPrice.toFixed(2)} zł`}</span>
+                  <span className="font-semibold text-gray-950">{shippingPrice === 0 ? "Gratis" : formatPrice(shippingPrice)}</span>
                 </div>
-
-                <div className="flex items-center justify-between text-lg font-semibold text-black">
+                <div className="flex items-center justify-between border-t border-gray-100 pt-5 text-xl font-bold text-gray-950">
                   <span>Razem</span>
-                  <span>{total.toFixed(2)} zł</span>
+                  <span>{formatPrice(total)}</span>
                 </div>
               </div>
+
+              <Button type="submit" className="mt-6 w-full rounded-none py-4 text-sm uppercase tracking-[0.2em]" disabled={isSaving || cart.length === 0}>
+                {isSaving ? "Tworzenie zamówienia..." : "Złóż zamówienie"}
+              </Button>
+
+              <div className="mt-4 flex items-center justify-center gap-2 text-xs font-medium text-gray-500">
+                <LockKeyhole size={14} /> Bezpieczne przetwarzanie zamówienia
+              </div>
             </Card>
-          </div>
-        </div>
-      </section>
+          </aside>
+        </form>
+      </div>
     </main>
   );
 }

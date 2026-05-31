@@ -1,29 +1,21 @@
 import { NextResponse } from "next/server";
+import { auth } from "../../../../auth";
 import { prisma } from "@/lib/prisma";
+
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-type RouteContext = {
-  params: Promise<{
-    userId: string;
-  }>;
-};
-
-export async function GET(_: Request, context: RouteContext) {
+export async function GET() {
   try {
-    const { userId } = await context.params;
-    const numericUserId = Number(userId);
+    const session = await auth();
 
-    if (Number.isNaN(numericUserId)) {
-      return NextResponse.json(
-        { error: "Nieprawidłowe ID użytkownika" },
-        { status: 400 }
-      );
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Brak autoryzacji" }, { status: 401 });
     }
 
     const orders = await prisma.order.findMany({
       where: {
-        userId: numericUserId,
+        userId: Number(session.user.id),
       },
       orderBy: {
         createdAt: "desc",
@@ -31,7 +23,15 @@ export async function GET(_: Request, context: RouteContext) {
       include: {
         items: {
           include: {
-            product: true,
+            product: {
+              select: {
+                id: true,
+                name: true,
+                price: true,
+                image: true,
+                slug: true,
+              },
+            },
           },
         },
       },
