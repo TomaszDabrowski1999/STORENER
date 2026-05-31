@@ -8,6 +8,13 @@ export const revalidate = 0;
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+function getStockStatus(stock: number) {
+  if (stock <= 0) return "BRAK";
+  if (stock <= 5) return "MALO_SZTUK";
+  return "DOSTEPNY";
+}
+
+
 function escapeHtml(value: unknown) {
   return String(value)
     .replace(/&/g, "&amp;")
@@ -87,52 +94,140 @@ export async function POST(request: Request) {
       );
     }
 
-    const subtotal = items.reduce(
-      (sum: number, item: any) => sum + item.price * item.quantity,
-      0
-    );
+    const normalizedItems = items.map((item: any) => ({
+      id: Number(item.id),
+      quantity: Number(item.quantity),
+    }));
+
+    if (
+      normalizedItems.some(
+        (item: { id: number; quantity: number }) =>
+          !item.id ||
+          Number.isNaN(item.id) ||
+          !Number.isInteger(item.quantity) ||
+          item.quantity <= 0
+      )
+    ) {
+      return NextResponse.json(
+        { error: "Nieprawidłowe produkty w koszyku" },
+        { status: 400 }
+      );
+    }
+
+    const productIds = normalizedItems.map((item: { id: number }) => item.id);
+
+    const dbProducts = await prisma.product.findMany({
+      where: {
+        id: { in: productIds },
+        isActive: true,
+      },
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        stock: true,
+      },
+    });
+
+    if (dbProducts.length !== productIds.length) {
+      return NextResponse.json(
+        { error: "Jeden z produktów jest niedostępny" },
+        { status: 400 }
+      );
+    }
+
+    const productById = new Map(dbProducts.map((product) => [product.id, product]));
+
+    for (const item of normalizedItems) {
+      const product = productById.get(item.id);
+
+      if (!product || product.stock < item.quantity) {
+        return NextResponse.json(
+          {
+            error: product
+              ? `Produkt „${product.name}” ma dostępne tylko ${product.stock} szt.`
+              : "Produkt jest niedostępny",
+          },
+          { status: 400 }
+        );
+      }
+    }
+
+    const subtotal = normalizedItems.reduce((sum: number, item: any) => {
+      const product = productById.get(item.id);
+      return sum + Number(product?.price || 0) * item.quantity;
+    }, 0);
 
     const shippingPrice = shippingOption.price;
     const total = subtotal + shippingPrice;
 
-    const paymentStatus =
-      paymentMethod === "POBRANIE" ? "OCZEKUJE" : "OPLACONA";
+    const paymentStatus = "OCZEKUJE";
 
     const userId =
       session?.user?.id && !Number.isNaN(Number(session.user.id))
         ? Number(session.user.id)
         : null;
 
-    const order = await (prisma.order as any).create({
-      data: {
-        total,
-        fullName,
-        email,
-        address,
-        city,
-        postalCode,
-        paymentMethod,
-        shippingMethod,
-        shippingMethodName: shippingOption.name,
-        shippingPrice,
-        shippingPoint: shippingPoint?.trim() || null,
-        shippingEstimatedDelivery: shippingOption.estimatedDelivery,
-        paymentStatus,
-        userId,
-        items: {
-          create: items.map((item: any) => ({
-            productId: item.id,
-            quantity: item.quantity,
-          })),
-        },
-      },
-      include: {
-        items: {
-          include: {
-            product: true,
+    const order = await prisma.$transaction(async (tx) => {
+      for (const item of normalizedItems) {
+        const updated = await tx.product.updateMany({
+          where: {
+            id: item.id,
+            stock: { gte: item.quantity },
+          },
+          data: {
+            stock: { decrement: item.quantity },
+          },
+        });
+
+        if (updated.count !== 1) {
+          throw new Error("OUT_OF_STOCK");
+        }
+
+        const productAfterUpdate = await tx.product.findUnique({
+          where: { id: item.id },
+          select: { stock: true },
+        });
+
+        await tx.product.update({
+          where: { id: item.id },
+          data: {
+            stockStatus: getStockStatus(productAfterUpdate?.stock || 0),
+          },
+        });
+      }
+
+      return tx.order.create({
+        data: {
+          total,
+          fullName,
+          email,
+          address,
+          city,
+          postalCode,
+          paymentMethod,
+          shippingMethod,
+          shippingMethodName: shippingOption.name,
+          shippingPrice,
+          shippingPoint: shippingPoint?.trim() || null,
+          shippingEstimatedDelivery: shippingOption.estimatedDelivery,
+          paymentStatus,
+          userId,
+          items: {
+            create: normalizedItems.map((item: any) => ({
+              productId: item.id,
+              quantity: item.quantity,
+            })),
           },
         },
-      },
+        include: {
+          items: {
+            include: {
+              product: true,
+            },
+          },
+        },
+      });
     });
 
     const orderItemsHtml = order.items
@@ -209,6 +304,13 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error(error);
+
+    if (error instanceof Error && error.message === "OUT_OF_STOCK") {
+      return NextResponse.json(
+        { error: "Jeden z produktów nie ma już wystarczającej ilości na stanie" },
+        { status: 400 }
+      );
+    }
 
     return NextResponse.json(
       { error: "Błąd przy tworzeniu zamówienia" },

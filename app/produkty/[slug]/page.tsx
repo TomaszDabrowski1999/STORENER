@@ -164,6 +164,7 @@ export default async function ProductPage({ params }: Props) {
                   name={product.name}
                   price={product.price}
                   image={product.image}
+                  stock={product.stock}
                 />
               </div>
             </div>

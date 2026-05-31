@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PaymentAction from "./PaymentAction";
 import { notFound } from "next/navigation";
 import { prisma } from "../../../lib/prisma";
 
@@ -108,12 +109,11 @@ export default async function PaymentPage({ params }: Props) {
             <p className="mt-1">{order.paymentStatus}</p>
           </div>
 
-          <Link
-            href={`/zamowienia/${order.id}`}
-            className="mt-6 block rounded-2xl bg-gray-950 px-6 py-4 text-center font-black text-white transition hover:opacity-90"
-          >
-            Potwierdź i zobacz zamówienie
-          </Link>
+          <PaymentAction
+            orderId={order.id}
+            paymentMethod={order.paymentMethod}
+            paymentStatus={order.paymentStatus}
+          />
 
           <Link
             href="/moje-zamowienia"

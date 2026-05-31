@@ -17,6 +17,7 @@ type AddToCartButtonProps = {
   name: string;
   price: number;
   image: string;
+  stock?: number;
 };
 
 export default function AddToCartButton({
@@ -24,6 +25,7 @@ export default function AddToCartButton({
   name,
   price,
   image,
+  stock = 0,
 }: AddToCartButtonProps) {
   const [isToastVisible, setIsToastVisible] = useState(false);
 
@@ -38,12 +40,20 @@ export default function AddToCartButton({
   }, [isToastVisible]);
 
   const handleAddToCart = () => {
+    if (stock <= 0) {
+      return;
+    }
+
     const existingCart = localStorage.getItem("cart");
     const cart: CartItem[] = existingCart ? JSON.parse(existingCart) : [];
 
     const existingProduct = cart.find((item) => item.id === id);
 
     if (existingProduct) {
+      if (existingProduct.quantity >= stock) {
+        return;
+      }
+
       existingProduct.quantity += 1;
     } else {
       cart.push({
@@ -64,9 +74,10 @@ export default function AddToCartButton({
     <>
       <button
         onClick={handleAddToCart}
-        className="inline-flex w-full items-center justify-center rounded-xl bg-black px-6 py-4 text-lg font-semibold text-white transition hover:opacity-90"
+        disabled={stock <= 0}
+        className="inline-flex w-full items-center justify-center rounded-xl bg-black px-6 py-4 text-lg font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500"
       >
-        Dodaj do koszyka
+        {stock <= 0 ? "Produkt niedostępny" : "Dodaj do koszyka"}
       </button>
 
       {isToastVisible && (
