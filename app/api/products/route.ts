@@ -35,11 +35,16 @@ export async function GET(request: Request) {
   }
 
   if (category === "DOM") {
-    where.category = "DOM_I_OGROD";
-    where.subcategory = "WYPOSAZENIE";
+    where.OR = [
+      { category: "DOM" },
+      { category: "DOM_I_OGROD", subcategory: "WYPOSAZENIE" },
+      { category: "DOM_I_OGROD", subcategory: null },
+    ];
   } else if (category === "OGROD") {
-    where.category = "DOM_I_OGROD";
-    where.subcategory = "OGROD";
+    where.OR = [
+      { category: "OGROD" },
+      { category: "DOM_I_OGROD", subcategory: "OGROD" },
+    ];
   } else if (category) {
     where.category = category;
   }

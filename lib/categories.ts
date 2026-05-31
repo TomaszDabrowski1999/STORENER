@@ -8,27 +8,24 @@ export const CATEGORY_OPTIONS = [
 ];
 
 export function getPublicCategoryValue(category?: string | null, subcategory?: string | null) {
+  if (category === "DOM" || category === "OGROD") return category;
   if (category === "DOM_I_OGROD" && subcategory === "OGROD") return "OGROD";
-  if (category === "DOM_I_OGROD" && subcategory === "WYPOSAZENIE") return "DOM";
+  if (category === "DOM_I_OGROD") return "DOM";
   return category || "";
 }
 
 export function getCategoryLabel(category?: string | null, subcategory?: string | null) {
   const publicCategory = getPublicCategoryValue(category, subcategory);
   const option = CATEGORY_OPTIONS.find((item) => item.value === publicCategory);
-  if (option) return option.label;
-  if (category === "DOM_I_OGROD") return "Dom";
-  return category || "";
+  return option?.label || category || "";
 }
 
 export function mapPublicCategoryToProductPayload(category: string) {
-  if (category === "DOM") {
-    return { category: "DOM_I_OGROD", subcategory: "WYPOSAZENIE" };
-  }
-
-  if (category === "OGROD") {
-    return { category: "DOM_I_OGROD", subcategory: "OGROD" };
-  }
-
+  // Docelowo zapisujemy normalne kategorie DOM / OGROD.
+  // Stare rekordy DOM_I_OGROD są obsługiwane tylko jako kompatybilność wsteczna.
   return { category, subcategory: null };
+}
+
+export function matchesPublicCategory(product: { category?: string | null; subcategory?: string | null }, category: string) {
+  return getPublicCategoryValue(product.category, product.subcategory) === category;
 }

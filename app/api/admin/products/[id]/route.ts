@@ -61,12 +61,6 @@ export async function PUT(request: Request, context: RouteContext) {
       );
     }
 
-    if (category === "DOM_I_OGROD" && !subcategory) {
-      return NextResponse.json(
-        { error: "Dla kategorii Dom i ogród wybierz podkategorię" },
-        { status: 400 }
-      );
-    }
 
     const stockValue = Number(stock);
 
@@ -116,7 +110,7 @@ export async function PUT(request: Request, context: RouteContext) {
         description,
         image,
         category,
-        subcategory: category === "DOM_I_OGROD" ? subcategory : null,
+        subcategory: null,
         stock: stockValue,
         stockStatus: getStockStatus(stockValue),
         images: {

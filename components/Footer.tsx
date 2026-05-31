@@ -38,6 +38,8 @@ export default function Footer() {
               <FooterLink href="/dostawa">Dostawa</FooterLink>
               <FooterLink href="/platnosci">Płatności</FooterLink>
               <FooterLink href="/reklamacje">Reklamacje</FooterLink>
+              <FooterLink href="/zwroty">Zwroty i wymiany</FooterLink>
+              <FooterLink href="/status-zamowienia">Status zamówienia</FooterLink>
             </ul>
           </div>
 
@@ -52,6 +54,8 @@ export default function Footer() {
                 Polityka prywatności
               </FooterLink>
               <FooterLink href="/polityka-cookies">Polityka cookies</FooterLink>
+              <FooterLink href="/faq">FAQ</FooterLink>
+              <FooterLink href="/kontakt">Kontakt</FooterLink>
             </ul>
           </div>
 

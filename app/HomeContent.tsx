@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { ShieldCheck, Sparkles, Truck } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import HomeBannerSlider from "../components/HomeBannerSlider";
+import { matchesPublicCategory } from "../lib/categories";
 
 type Product = {
   id: number;
@@ -114,18 +115,12 @@ export default function HomeContent() {
   );
 
   const featuredHome = useMemo(
-    () =>
-      products
-        .filter((p) => p.category === "DOM_I_OGROD" && p.subcategory === "WYPOSAZENIE")
-        .slice(0, 4),
+    () => products.filter((p) => matchesPublicCategory(p, "DOM")).slice(0, 4),
     [products]
   );
 
   const featuredGarden = useMemo(
-    () =>
-      products
-        .filter((p) => p.category === "DOM_I_OGROD" && p.subcategory === "OGROD")
-        .slice(0, 4),
+    () => products.filter((p) => matchesPublicCategory(p, "OGROD")).slice(0, 4),
     [products]
   );
 
