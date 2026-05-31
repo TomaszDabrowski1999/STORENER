@@ -118,7 +118,7 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
       });
 
       toast.success("Zamówienie zostało utworzone", { id: toastId });
-      window.location.href = `/zamowienie/${data.id}`;
+      window.location.href = `/platnosci/${data.id}`;
     } catch {
       setServerError("Wystąpił błąd połączenia");
       toast.error("Wystąpił błąd połączenia", { id: toastId });

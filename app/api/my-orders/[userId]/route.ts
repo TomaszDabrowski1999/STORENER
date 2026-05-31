@@ -13,13 +13,15 @@ export async function GET() {
       return NextResponse.json({ error: "Brak autoryzacji" }, { status: 401 });
     }
 
+    const userId = Number(session.user.id);
+
+    if (Number.isNaN(userId)) {
+      return NextResponse.json({ error: "Nieprawidłowa sesja użytkownika" }, { status: 401 });
+    }
+
     const orders = await prisma.order.findMany({
-      where: {
-        userId: Number(session.user.id),
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
+      where: { userId },
+      orderBy: { createdAt: "desc" },
       include: {
         items: {
           include: {
@@ -39,8 +41,7 @@ export async function GET() {
 
     return NextResponse.json(orders);
   } catch (error) {
-    console.error(error);
-
+    console.error("MY_ORDERS_ERROR", error);
     return NextResponse.json(
       { error: "Błąd pobierania zamówień użytkownika" },
       { status: 500 }
