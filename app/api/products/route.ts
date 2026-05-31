@@ -34,7 +34,13 @@ export async function GET(request: Request) {
     ];
   }
 
-  if (category) {
+  if (category === "DOM") {
+    where.category = "DOM_I_OGROD";
+    where.subcategory = "WYPOSAZENIE";
+  } else if (category === "OGROD") {
+    where.category = "DOM_I_OGROD";
+    where.subcategory = "OGROD";
+  } else if (category) {
     where.category = category;
   }
 

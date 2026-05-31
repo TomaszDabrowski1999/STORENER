@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import Card from "../../components/ui/Card";
 import Input from "../../components/ui/Input";
@@ -12,6 +12,8 @@ import SectionHeader from "../../components/ui/SectionHeader";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -57,7 +59,7 @@ export default function LoginPage() {
       const meResponse = await fetch("/api/me", { cache: "no-store" });
       const me = meResponse.ok ? await meResponse.json() : null;
 
-      router.push(me?.role === "ADMIN" ? "/admin" : "/");
+      router.push(callbackUrl || (me?.role === "ADMIN" ? "/admin" : "/konto"));
       router.refresh();
     } catch {
       setLocalError("Wystąpił błąd połączenia");

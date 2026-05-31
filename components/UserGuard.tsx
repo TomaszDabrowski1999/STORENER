@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { isUserLoggedIn } from "../lib/user-auth";
+import { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 type UserGuardProps = {
   children: React.ReactNode;
@@ -10,20 +10,17 @@ type UserGuardProps = {
 
 export default function UserGuard({ children }: UserGuardProps) {
   const router = useRouter();
-  const [isAllowed, setIsAllowed] = useState(false);
+  const pathname = usePathname();
+  const { status } = useSession();
 
   useEffect(() => {
-    const loggedIn = isUserLoggedIn();
-
-    if (!loggedIn) {
-      router.push("/logowanie");
-      return;
+    if (status === "unauthenticated") {
+      const callbackUrl = pathname ? `?callbackUrl=${encodeURIComponent(pathname)}` : "";
+      router.replace(`/logowanie${callbackUrl}`);
     }
+  }, [pathname, router, status]);
 
-    setIsAllowed(true);
-  }, [router]);
-
-  if (!isAllowed) {
+  if (status === "loading" || status === "unauthenticated") {
     return (
       <main className="min-h-screen bg-gray-50 p-10">
         <div className="mx-auto max-w-xl rounded-2xl bg-white p-6 shadow-sm">

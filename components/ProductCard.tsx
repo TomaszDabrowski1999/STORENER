@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight, BadgePercent, PackageCheck, Sparkles } from "lucide-react";
+import { getCategoryLabel, getPublicCategoryValue } from "../lib/categories";
 
 type ProductCardProps = {
   name: string;
@@ -7,6 +8,7 @@ type ProductCardProps = {
   image: string;
   slug: string;
   category?: string;
+  subcategory?: string | null;
   stock?: number;
   stockStatus?: string;
   averageRating?: number;
@@ -19,20 +21,13 @@ export default function ProductCard({
   image,
   slug,
   category,
+  subcategory,
   stock: _stock = 0,
   stockStatus: _stockStatus = "BRAK",
   averageRating: _averageRating = 0,
   reviewsCount: _reviewsCount = 0,
 }: ProductCardProps) {
-  const getCategoryLabel = (value?: string) => {
-    if (!value) return "";
-    if (value === "NOWOSCI") return "Nowości";
-    if (value === "WYPRZEDAZ") return "Wyprzedaż";
-    if (value === "DOM_I_OGROD") return "Dom i ogród";
-    if (value === "MOTORYZACJA") return "Motoryzacja";
-    if (value === "AKCESORIA_DLA_ZWIERZAT") return "Akcesoria dla zwierząt";
-    return value;
-  };
+  const displayCategory = getPublicCategoryValue(category, subcategory);
 
   const getCategoryBadgeClasses = (value?: string) => {
     if (value === "NOWOSCI") {
@@ -43,7 +38,7 @@ export default function ProductCard({
       return "border-red-200 bg-red-50 text-red-700";
     }
 
-    if (value === "DOM_I_OGROD") {
+    if (value === "DOM" || value === "OGROD" || value === "DOM_I_OGROD") {
       return "border-green-200 bg-green-50 text-green-700";
     }
 
@@ -81,11 +76,11 @@ export default function ProductCard({
             {category && (
               <span
                 className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold shadow-sm backdrop-blur ${getCategoryBadgeClasses(
-                  category
+                  displayCategory
                 )}`}
               >
-                {getCategoryIcon(category)}
-                {getCategoryLabel(category)}
+                {getCategoryIcon(displayCategory)}
+                {getCategoryLabel(category, subcategory)}
               </span>
             )}
           </div>

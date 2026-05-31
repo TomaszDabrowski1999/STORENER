@@ -19,14 +19,13 @@ const categories = [
   { label: "Wszystkie produkty", href: "/produkty" },
   { label: "Nowości", href: "/produkty?category=NOWOSCI" },
   { label: "Wyprzedaż", href: "/produkty?category=WYPRZEDAZ" },
-  { label: "Dom i ogród", href: "/produkty?category=DOM_I_OGROD" },
+  { label: "Dom", href: "/produkty?category=DOM" },
+  { label: "Ogród", href: "/produkty?category=OGROD" },
   { label: "Motoryzacja", href: "/produkty?category=MOTORYZACJA" },
   {
     label: "Akcesoria dla zwierząt",
     href: "/produkty?category=AKCESORIA_DLA_ZWIERZAT",
   },
-  { label: "Ogród", href: "/produkty?subcategory=OGROD" },
-  { label: "Wyposażenie", href: "/produkty?subcategory=WYPOSAZENIE" },
 ];
 
 export default function Navbar() {

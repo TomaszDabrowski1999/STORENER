@@ -5,6 +5,7 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import AdminGuard from "../../../../components/AdminGuard";
 import AdminGalleryManager from "../../../../components/AdminGalleryManager";
+import { CATEGORY_OPTIONS, getCategoryLabel, mapPublicCategoryToProductPayload } from "../../../../lib/categories";
 
 type ProductForm = {
   name: string;
@@ -57,15 +58,6 @@ export default function AddProductPage() {
   ) => {
     const { name, value } = e.target;
 
-    if (name === "category") {
-      setForm((prev) => ({
-        ...prev,
-        category: value,
-        subcategory: value === "DOM_I_OGROD" ? prev.subcategory : "",
-      }));
-      return;
-    }
-
     setForm((prev) => ({
       ...prev,
       [name]: value,
@@ -113,21 +105,6 @@ export default function AddProductPage() {
     return result.imageUrl as string;
   };
 
-  const getCategoryLabel = (value: string) => {
-    if (value === "NOWOSCI") return "Nowości";
-    if (value === "WYPRZEDAZ") return "Wyprzedaż";
-    if (value === "DOM_I_OGROD") return "Dom i ogród";
-    if (value === "MOTORYZACJA") return "Motoryzacja";
-    if (value === "AKCESORIA_DLA_ZWIERZAT") return "Akcesoria dla zwierząt";
-    return value;
-  };
-
-  const getSubcategoryLabel = (value: string) => {
-    if (value === "OGROD") return "Ogród";
-    if (value === "WYPOSAZENIE") return "Wyposażenie";
-    return value;
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -148,13 +125,6 @@ export default function AddProductPage() {
       return;
     }
 
-    if (form.category === "DOM_I_OGROD" && !form.subcategory) {
-      const msg = "Dla kategorii Dom i ogród wybierz podkategorię";
-      setError(msg);
-      toast.error(msg);
-      return;
-    }
-
     if (Number(form.stock) < 0) {
       const msg = "Stan magazynowy nie może być ujemny";
       setError(msg);
@@ -168,6 +138,7 @@ export default function AddProductPage() {
       setIsLoading(true);
 
       const mainImageUrl = await uploadMainImage();
+      const categoryPayload = mapPublicCategoryToProductPayload(form.category);
 
       const response = await fetch("/api/admin/products", {
         method: "POST",
@@ -181,8 +152,8 @@ export default function AddProductPage() {
           description: form.description,
           productDetails: form.productDetails,
           image: mainImageUrl,
-          category: form.category,
-          subcategory: form.category === "DOM_I_OGROD" ? form.subcategory : null,
+          category: categoryPayload.category,
+          subcategory: categoryPayload.subcategory,
           galleryImages: form.galleryImages,
           stock: Number(form.stock),
         }),
@@ -321,33 +292,13 @@ export default function AddProductPage() {
                       onChange={handleChange}
                       className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-black"
                     >
-                      <option value="NOWOSCI">Nowości</option>
-                      <option value="WYPRZEDAZ">Wyprzedaż</option>
-                      <option value="DOM_I_OGROD">Dom i ogród</option>
-                      <option value="MOTORYZACJA">Motoryzacja</option>
-                      <option value="AKCESORIA_DLA_ZWIERZAT">
-                        Akcesoria dla zwierząt
-                      </option>
+                      {CATEGORY_OPTIONS.map((item) => (
+                        <option key={item.value} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
-
-                  {form.category === "DOM_I_OGROD" && (
-                    <div>
-                      <label className="mb-2 block text-sm font-medium text-gray-700">
-                        Podkategoria
-                      </label>
-                      <select
-                        name="subcategory"
-                        value={form.subcategory}
-                        onChange={handleChange}
-                        className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-black"
-                      >
-                        <option value="">Wybierz podkategorię</option>
-                        <option value="OGROD">Ogród</option>
-                        <option value="WYPOSAZENIE">Wyposażenie</option>
-                      </select>
-                    </div>
-                  )}
                 </div>
 
                 <div>
@@ -455,9 +406,6 @@ export default function AddProductPage() {
 
                     <p className="mt-2 text-sm text-gray-500">
                       {getCategoryLabel(form.category)}
-                      {form.category === "DOM_I_OGROD" && form.subcategory
-                        ? ` / ${getSubcategoryLabel(form.subcategory)}`
-                        : ""}
                     </p>
 
                     <p className="mt-4 text-2xl font-bold text-black">

@@ -4,6 +4,7 @@ import AddToCartButton from "../../../components/AddToCartButton";
 import ProductGallery from "../../../components/ProductGallery";
 import ProductCard from "../../../components/ProductCard";
 import { prisma } from "../../../lib/prisma";
+import { getCategoryLabel, getPublicCategoryValue } from "../../../lib/categories";
 
 type Props = {
   params: Promise<{
@@ -49,6 +50,7 @@ export default async function ProductPage({ params }: Props) {
     where: {
       isActive: true,
       category: product.category,
+      ...(product.category === "DOM_I_OGROD" ? { subcategory: product.subcategory } : {}),
       NOT: { id: product.id },
     },
     orderBy: { id: "desc" },
@@ -96,22 +98,6 @@ export default async function ProductPage({ params }: Props) {
     .map((line) => line.trim())
     .filter(Boolean);
 
-  const getCategoryLabel = (value: string) => {
-    if (value === "NOWOSCI") return "Nowości";
-    if (value === "WYPRZEDAZ") return "Wyprzedaż";
-    if (value === "DOM_I_OGROD") return "Dom i ogród";
-    if (value === "MOTORYZACJA") return "Motoryzacja";
-    if (value === "AKCESORIA_DLA_ZWIERZAT") return "Akcesoria dla zwierząt";
-    return value;
-  };
-
-  const getSubcategoryLabel = (value: string | null) => {
-    if (!value) return null;
-    if (value === "OGROD") return "Ogród";
-    if (value === "WYPOSAZENIE") return "Wyposażenie";
-    return value;
-  };
-
   return (
     <main className="min-h-screen bg-[#f5f5f7]">
       <section className="mx-auto max-w-6xl px-6 py-8">
@@ -120,7 +106,7 @@ export default async function ProductPage({ params }: Props) {
             Start
           </Link>
           <span>/</span>
-          <span>{getCategoryLabel(product.category)}</span>
+          <span>{getCategoryLabel(product.category, product.subcategory)}</span>
           <span>/</span>
           <span className="text-black">{product.name}</span>
         </div>
@@ -134,14 +120,8 @@ export default async function ProductPage({ params }: Props) {
             <div className="rounded-[34px] border border-black/5 bg-white p-7 shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
               <div className="flex flex-wrap gap-2">
                 <span className="rounded-full bg-black px-4 py-2 text-sm font-semibold text-white">
-                  {getCategoryLabel(product.category)}
+                  {getCategoryLabel(product.category, product.subcategory)}
                 </span>
-
-                {product.subcategory && (
-                  <span className="rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700">
-                    {getSubcategoryLabel(product.subcategory)}
-                  </span>
-                )}
               </div>
 
               <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-gray-950">
@@ -294,16 +274,12 @@ export default async function ProductPage({ params }: Props) {
                   Podobne produkty
                 </p>
                 <h2 className="mt-2 text-3xl font-bold text-gray-950">
-                  Więcej z kategorii {getCategoryLabel(product.category)}
+                  Więcej z kategorii {getCategoryLabel(product.category, product.subcategory)}
                 </h2>
               </div>
 
               <Link
-                href={`/?category=${product.category}${
-                  product.subcategory
-                    ? `&subcategory=${product.subcategory}`
-                    : ""
-                }`}
+                href={`/?category=${getPublicCategoryValue(product.category, product.subcategory)}`}
                 className="rounded-2xl border border-black px-5 py-3 font-medium text-black transition hover:bg-black hover:text-white"
               >
                 Zobacz więcej
@@ -319,6 +295,7 @@ export default async function ProductPage({ params }: Props) {
                   price={item.price}
                   image={item.image}
                   category={item.category}
+                  subcategory={item.subcategory}
                   stock={item.stock}
                   stockStatus={item.stockStatus}
                   averageRating={item.averageRating}

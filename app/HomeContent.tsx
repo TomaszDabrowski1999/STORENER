@@ -114,7 +114,18 @@ export default function HomeContent() {
   );
 
   const featuredHome = useMemo(
-    () => products.filter((p) => p.category === "DOM_I_OGROD").slice(0, 4),
+    () =>
+      products
+        .filter((p) => p.category === "DOM_I_OGROD" && p.subcategory === "WYPOSAZENIE")
+        .slice(0, 4),
+    [products]
+  );
+
+  const featuredGarden = useMemo(
+    () =>
+      products
+        .filter((p) => p.category === "DOM_I_OGROD" && p.subcategory === "OGROD")
+        .slice(0, 4),
     [products]
   );
 
@@ -173,9 +184,18 @@ export default function HomeContent() {
             {featuredHome.length > 0 && (
               <ProductSection
                 eyebrow="Inspiracje"
-                title="Dom i ogród"
+                title="Dom"
                 products={featuredHome}
-                onClick={() => selectCategory("DOM_I_OGROD")}
+                onClick={() => selectCategory("DOM")}
+              />
+            )}
+
+            {featuredGarden.length > 0 && (
+              <ProductSection
+                eyebrow="Ogród"
+                title="Ogród"
+                products={featuredGarden}
+                onClick={() => selectCategory("OGROD")}
               />
             )}
           </div>
@@ -214,6 +234,7 @@ export default function HomeContent() {
                 price={product.price}
                 image={product.image}
                 category={product.category}
+                subcategory={product.subcategory}
                 stock={product.stock}
                 stockStatus={product.stockStatus}
                 averageRating={product.averageRating}

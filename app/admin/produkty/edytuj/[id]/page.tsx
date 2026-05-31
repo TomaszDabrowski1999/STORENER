@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import AdminGuard from "../../../../../components/AdminGuard";
 import AdminGalleryManager from "../../../../../components/AdminGalleryManager";
+import { CATEGORY_OPTIONS, getCategoryLabel, getPublicCategoryValue, mapPublicCategoryToProductPayload } from "../../../../../lib/categories";
 
 type ProductForm = {
   name: string;
@@ -115,8 +116,8 @@ export default function EditProductPage({ params }: Props) {
           price: String(product.price),
           description: product.description,
           image: product.image,
-          category: product.category || "NOWOSCI",
-          subcategory: product.subcategory || "",
+          category: getPublicCategoryValue(product.category, product.subcategory) || "NOWOSCI",
+          subcategory: "",
           galleryImages: product.images
             ? product.images
                 .sort((a, b) => a.position - b.position)
@@ -139,15 +140,6 @@ export default function EditProductPage({ params }: Props) {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-
-    if (name === "category") {
-      setForm((prev) => ({
-        ...prev,
-        category: value,
-        subcategory: value === "DOM_I_OGROD" ? prev.subcategory : "",
-      }));
-      return;
-    }
 
     setForm((prev) => ({
       ...prev,
@@ -195,21 +187,6 @@ const handleGenerateSlug = () => {
     return result.imageUrl as string;
   };
 
-  const getCategoryLabel = (value: string) => {
-    if (value === "NOWOSCI") return "Nowości";
-    if (value === "WYPRZEDAZ") return "Wyprzedaż";
-    if (value === "DOM_I_OGROD") return "Dom i ogród";
-    if (value === "MOTORYZACJA") return "Motoryzacja";
-    if (value === "AKCESORIA_DLA_ZWIERZAT") return "Akcesoria dla zwierząt";
-    return value;
-  };
-
-  const getSubcategoryLabel = (value: string) => {
-    if (value === "OGROD") return "Ogród";
-    if (value === "WYPOSAZENIE") return "Wyposażenie";
-    return value;
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -237,13 +214,6 @@ const handleGenerateSlug = () => {
       return;
     }
 
-    if (form.category === "DOM_I_OGROD" && !form.subcategory) {
-      const msg = "Dla kategorii Dom i ogród wybierz podkategorię";
-      setError(msg);
-      toast.error(msg);
-      return;
-    }
-
     if (Number(form.stock) < 0) {
       const msg = "Stan magazynowy nie może być ujemny";
       setError(msg);
@@ -257,6 +227,7 @@ const handleGenerateSlug = () => {
       setIsSaving(true);
 
       const mainImageUrl = await uploadMainImage();
+      const categoryPayload = mapPublicCategoryToProductPayload(form.category);
 
       const response = await fetch(`/api/admin/products/${productId}`, {
         method: "PUT",
@@ -269,8 +240,8 @@ const handleGenerateSlug = () => {
           price: Number(form.price),
           description: form.description,
           image: mainImageUrl,
-          category: form.category,
-          subcategory: form.category === "DOM_I_OGROD" ? form.subcategory : null,
+          category: categoryPayload.category,
+          subcategory: categoryPayload.subcategory,
           galleryImages: form.galleryImages,
           stock: Number(form.stock),
         }),
@@ -439,33 +410,13 @@ const handleGenerateSlug = () => {
                         onChange={handleChange}
                         className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-black"
                       >
-                        <option value="NOWOSCI">Nowości</option>
-                        <option value="WYPRZEDAZ">Wyprzedaż</option>
-                        <option value="DOM_I_OGROD">Dom i ogród</option>
-                        <option value="MOTORYZACJA">Motoryzacja</option>
-                        <option value="AKCESORIA_DLA_ZWIERZAT">
-                          Akcesoria dla zwierząt
-                        </option>
+                        {CATEGORY_OPTIONS.map((item) => (
+                          <option key={item.value} value={item.value}>
+                            {item.label}
+                          </option>
+                        ))}
                       </select>
                     </div>
-
-                    {form.category === "DOM_I_OGROD" && (
-                      <div>
-                        <label className="mb-2 block text-sm font-medium text-gray-700">
-                          Podkategoria
-                        </label>
-                        <select
-                          name="subcategory"
-                          value={form.subcategory}
-                          onChange={handleChange}
-                          className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-black"
-                        >
-                          <option value="">Wybierz podkategorię</option>
-                          <option value="OGROD">Ogród</option>
-                          <option value="WYPOSAZENIE">Wyposażenie</option>
-                        </select>
-                      </div>
-                    )}
                   </div>
 
                   <div>
@@ -555,9 +506,6 @@ const handleGenerateSlug = () => {
 
                       <p className="mt-2 text-sm text-gray-500">
                         {getCategoryLabel(form.category)}
-                        {form.category === "DOM_I_OGROD" && form.subcategory
-                          ? ` / ${getSubcategoryLabel(form.subcategory)}`
-                          : ""}
                       </p>
 
                       <p className="mt-4 text-2xl font-bold text-black">
