@@ -46,6 +46,15 @@ export default function UserNavbarActions() {
         Moje zamówienia
       </Link>
 
+      {session.user.role === "ADMIN" && (
+        <Link
+          href="/admin"
+          className="rounded-full border border-green-400/60 px-4 py-2 text-sm font-bold text-green-300 transition hover:bg-green-400 hover:text-black"
+        >
+          Panel admina
+        </Link>
+      )}
+
       <button
         type="button"
         onClick={() => signOut({ callbackUrl: "/" })}

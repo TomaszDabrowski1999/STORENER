@@ -54,6 +54,16 @@ export default function MobileUserNavbarActions({
         Moje zamówienia
       </Link>
 
+      {session.user.role === "ADMIN" && (
+        <Link
+          href="/admin"
+          onClick={onNavigate}
+          className="mt-2 block rounded-xl border border-green-400/50 px-3 py-3 text-sm font-bold text-green-300 hover:bg-green-400 hover:text-black"
+        >
+          Panel admina
+        </Link>
+      )}
+
       <button
         type="button"
         onClick={() => {
