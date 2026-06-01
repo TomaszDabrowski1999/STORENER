@@ -2,18 +2,12 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+type ProductWhere = Record<string, any>;
 
-  const search = searchParams.get("search") || searchParams.get("q") || "";
-  const category = searchParams.get("category") || "";
-  const subcategory = searchParams.get("subcategory") || "";
-  const minPrice = searchParams.get("minPrice") || "";
-  const maxPrice = searchParams.get("maxPrice") || "";
-  const sort = searchParams.get("sort") || "newest";
-
-  const where: any = {
+function buildBaseWhere(search: string, minPrice: string, maxPrice: string) {
+  const where: ProductWhere = {
     isActive: true,
     AND: [],
   };
@@ -37,33 +31,6 @@ export async function GET(request: Request) {
     });
   }
 
-  if (category === "DOM") {
-    where.AND.push({
-      OR: [
-        { category: "DOM" },
-        { category: "DOM_I_OGROD", subcategory: "WYPOSAZENIE" },
-        { category: "DOM_I_OGROD", subcategory: null },
-      ],
-    });
-  } else if (category === "OGROD") {
-    where.AND.push({
-      OR: [
-        { category: "OGROD" },
-        { category: "DOM_I_OGROD", subcategory: "OGROD" },
-      ],
-    });
-  } else if (category) {
-    where.category = category;
-  }
-
-  if (where.AND.length === 0) {
-    delete where.AND;
-  }
-
-  if (subcategory) {
-    where.subcategory = subcategory;
-  }
-
   if (minPrice || maxPrice) {
     where.price = {};
 
@@ -76,27 +43,64 @@ export async function GET(request: Request) {
     }
   }
 
-  let orderBy: any = {
-    id: "desc",
-  };
+  return where;
+}
 
-  if (sort === "price_asc") {
-    orderBy = { price: "asc" };
+function cleanupWhere(where: ProductWhere) {
+  if (Array.isArray(where.AND) && where.AND.length === 0) {
+    delete where.AND;
   }
 
-  if (sort === "price_desc") {
-    orderBy = { price: "desc" };
+  return where;
+}
+
+function buildWhere(params: {
+  search: string;
+  category: string;
+  subcategory: string;
+  minPrice: string;
+  maxPrice: string;
+  includeNewDomOgrodValues: boolean;
+}) {
+  const { search, category, subcategory, minPrice, maxPrice, includeNewDomOgrodValues } = params;
+  const where = buildBaseWhere(search, minPrice, maxPrice);
+
+  if (category === "DOM") {
+    where.AND.push({
+      OR: [
+        ...(includeNewDomOgrodValues ? [{ category: "DOM" }] : []),
+        { category: "DOM_I_OGROD", subcategory: "WYPOSAZENIE" },
+        { category: "DOM_I_OGROD", subcategory: null },
+      ],
+    });
+  } else if (category === "OGROD") {
+    where.AND.push({
+      OR: [
+        ...(includeNewDomOgrodValues ? [{ category: "OGROD" }] : []),
+        { category: "DOM_I_OGROD", subcategory: "OGROD" },
+      ],
+    });
+  } else if (category) {
+    where.category = category;
   }
 
-  if (sort === "name_asc") {
-    orderBy = { name: "asc" };
+  if (subcategory) {
+    where.subcategory = subcategory;
   }
 
-  if (sort === "name_desc") {
-    orderBy = { name: "desc" };
-  }
+  return cleanupWhere(where);
+}
 
-  const products = await prisma.product.findMany({
+function getOrderBy(sort: string) {
+  if (sort === "price_asc") return { price: "asc" };
+  if (sort === "price_desc") return { price: "desc" };
+  if (sort === "name_asc") return { name: "asc" };
+  if (sort === "name_desc") return { name: "desc" };
+  return { id: "desc" };
+}
+
+async function findProducts(where: ProductWhere, orderBy: any) {
+  return prisma.product.findMany({
     where,
     orderBy,
     include: {
@@ -107,24 +111,4 @@ export async function GET(request: Request) {
       },
     },
   });
-
-  const mappedProducts = products.map((product) => {
-    const reviewsCount = product.reviews.length;
-
-    const averageRating =
-      reviewsCount > 0
-        ? product.reviews.reduce((sum, review) => sum + review.rating, 0) /
-          reviewsCount
-        : 0;
-
-    const { reviews, ...productWithoutReviews } = product;
-
-    return {
-      ...productWithoutReviews,
-      averageRating,
-      reviewsCount,
-    };
-  });
-
-  return NextResponse.json(mappedProducts);
 }

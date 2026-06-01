@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin-session";
 import { prisma } from "@/lib/prisma";
+import { mapPublicCategoryToProductPayload } from "@/lib/categories";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 type RouteContext = {
@@ -87,6 +88,8 @@ export async function PUT(request: Request, context: RouteContext) {
       );
     }
 
+    const normalizedCategory = mapPublicCategoryToProductPayload(category);
+
     const validGalleryImages = Array.isArray(galleryImages)
       ? galleryImages
           .filter((url: string) => typeof url === "string" && url.trim() !== "")
@@ -109,8 +112,8 @@ export async function PUT(request: Request, context: RouteContext) {
         price: Number(price),
         description,
         image,
-        category,
-        subcategory: subcategory || null,
+        category: normalizedCategory.category as any,
+        subcategory: (subcategory || normalizedCategory.subcategory) as any,
         stock: stockValue,
         stockStatus: getStockStatus(stockValue),
         images: {

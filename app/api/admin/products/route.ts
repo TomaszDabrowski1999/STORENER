@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { mapPublicCategoryToProductPayload } from "@/lib/categories";
 
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
@@ -91,6 +92,8 @@ export async function POST(request: Request) {
       );
     }
 
+    const normalizedCategory = mapPublicCategoryToProductPayload(category);
+
     const validGalleryImages = Array.isArray(galleryImages)
       ? galleryImages
           .filter((url: string) => typeof url === "string" && url.trim() !== "")
@@ -106,8 +109,8 @@ export async function POST(request: Request) {
         productDetails: productDetails || "",
         image,
         isActive: true,
-        category,
-        subcategory: subcategory || null,
+        category: normalizedCategory.category as any,
+        subcategory: (subcategory || normalizedCategory.subcategory) as any,
         stock: stockValue,
         stockStatus: getStockStatus(stockValue),
         images: {
