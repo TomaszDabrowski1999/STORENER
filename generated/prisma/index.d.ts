@@ -64,6 +64,8 @@ export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 export const ProductCategory: {
   NOWOSCI: 'NOWOSCI',
   WYPRZEDAZ: 'WYPRZEDAZ',
+  DOM: 'DOM',
+  OGROD: 'OGROD',
   DOM_I_OGROD: 'DOM_I_OGROD',
   MOTORYZACJA: 'MOTORYZACJA',
   AKCESORIA_DLA_ZWIERZAT: 'AKCESORIA_DLA_ZWIERZAT'

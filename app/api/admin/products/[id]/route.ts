@@ -110,7 +110,7 @@ export async function PUT(request: Request, context: RouteContext) {
         description,
         image,
         category,
-        subcategory: null,
+        subcategory: subcategory || null,
         stock: stockValue,
         stockStatus: getStockStatus(stockValue),
         images: {

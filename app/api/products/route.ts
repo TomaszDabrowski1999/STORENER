@@ -15,38 +15,49 @@ export async function GET(request: Request) {
 
   const where: any = {
     isActive: true,
+    AND: [],
   };
 
   if (search.trim()) {
-    where.OR = [
-      {
-        name: {
-          contains: search.trim(),
-          mode: "insensitive",
+    where.AND.push({
+      OR: [
+        {
+          name: {
+            contains: search.trim(),
+            mode: "insensitive",
+          },
         },
-      },
-      {
-        description: {
-          contains: search.trim(),
-          mode: "insensitive",
+        {
+          description: {
+            contains: search.trim(),
+            mode: "insensitive",
+          },
         },
-      },
-    ];
+      ],
+    });
   }
 
   if (category === "DOM") {
-    where.OR = [
-      { category: "DOM" },
-      { category: "DOM_I_OGROD", subcategory: "WYPOSAZENIE" },
-      { category: "DOM_I_OGROD", subcategory: null },
-    ];
+    where.AND.push({
+      OR: [
+        { category: "DOM" },
+        { category: "DOM_I_OGROD", subcategory: "WYPOSAZENIE" },
+        { category: "DOM_I_OGROD", subcategory: null },
+      ],
+    });
   } else if (category === "OGROD") {
-    where.OR = [
-      { category: "OGROD" },
-      { category: "DOM_I_OGROD", subcategory: "OGROD" },
-    ];
+    where.AND.push({
+      OR: [
+        { category: "OGROD" },
+        { category: "DOM_I_OGROD", subcategory: "OGROD" },
+      ],
+    });
   } else if (category) {
     where.category = category;
+  }
+
+  if (where.AND.length === 0) {
+    delete where.AND;
   }
 
   if (subcategory) {

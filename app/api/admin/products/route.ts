@@ -107,7 +107,7 @@ export async function POST(request: Request) {
         image,
         isActive: true,
         category,
-        subcategory: null,
+        subcategory: subcategory || null,
         stock: stockValue,
         stockStatus: getStockStatus(stockValue),
         images: {

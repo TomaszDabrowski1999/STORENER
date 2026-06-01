@@ -217,6 +217,8 @@ exports.UserRole = exports.$Enums.UserRole = {
 exports.ProductCategory = exports.$Enums.ProductCategory = {
   NOWOSCI: 'NOWOSCI',
   WYPRZEDAZ: 'WYPRZEDAZ',
+  DOM: 'DOM',
+  OGROD: 'OGROD',
   DOM_I_OGROD: 'DOM_I_OGROD',
   MOTORYZACJA: 'MOTORYZACJA',
   AKCESORIA_DLA_ZWIERZAT: 'AKCESORIA_DLA_ZWIERZAT'
