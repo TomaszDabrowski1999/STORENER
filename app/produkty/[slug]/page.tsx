@@ -275,12 +275,11 @@ export default async function ProductPage({ params }: Props) {
                   Podobne produkty
                 </p>
                 <h2 className="mt-2 text-3xl font-bold text-gray-950">
-
+                  Może ci się spodobać
                 </h2>
               </div>
-
               <Link
-
+                href={`/produkty?category=${product.category}`}
                 className="rounded-2xl border border-black px-5 py-3 font-medium text-black transition hover:bg-black hover:text-white"
               >
                 Zobacz więcej
