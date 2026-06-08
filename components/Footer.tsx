@@ -1,88 +1,117 @@
-import {
-  CreditCard,
-  LifeBuoy,
-  Truck,
-  ChevronRight,
-} from "lucide-react";
+import { Truck, CreditCard, LifeBuoy, ShieldCheck, ChevronRight, Mail, Phone } from "lucide-react";
 import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="mt-16 bg-[#0f1118] text-white">
-      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-        <div className="grid gap-6 border-b border-white/10 py-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
-          <FooterBox
-            Icon={Truck}
-            title="Szybka wysyłka"
-            text="Sprawna realizacja zamówień i szybka dostawa produktów."
-          />
-          <FooterBox
-            Icon={CreditCard}
-            title="Bezpieczne płatności"
-            text="Wygodne formy płatności online i bezpieczny proces zamówienia."
-          />
-          <FooterBox
-            Icon={LifeBuoy}
-            title="Obsługa klienta"
-            text="Szybki kontakt, pomoc i wsparcie przy zakupach."
-          />
+    <footer className="bg-[#0a0a0a] text-white">
+      {/* Trust bar */}
+      <div className="border-b border-white/6">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="grid grid-cols-2 gap-0 divide-x divide-white/6 lg:grid-cols-4">
+            {[
+              { Icon: Truck,       title: "Szybka wysyłka",       sub: "Realizacja w 24–48h" },
+              { Icon: ShieldCheck, title: "Bezpieczne zakupy",    sub: "Szyfrowane płatności" },
+              { Icon: CreditCard,  title: "Wygodne płatności",    sub: "BLIK, karta, przelew" },
+              { Icon: LifeBuoy,    title: "Obsługa klienta",      sub: "Pon–Pt 9:00–17:00" },
+            ].map(({ Icon, title, sub }) => (
+              <div key={title} className="flex items-center gap-4 px-6 py-6">
+                <div className="shrink-0 rounded-xl bg-[#4caf3d]/10 p-2.5 text-[#4caf3d]">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">{title}</p>
+                  <p className="mt-0.5 text-xs text-white/45">{sub}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
+      </div>
 
-        <div className="grid gap-10 border-b border-white/10 py-10 lg:grid-cols-[1fr_1fr_1.6fr] lg:items-start lg:gap-14">
-          <div className="text-center sm:text-left">
-            <h3 className="mb-5 text-sm font-bold uppercase tracking-wide text-white">
-              DOSTAWA I PŁATNOŚCI
+      {/* Main footer */}
+      <div className="mx-auto max-w-7xl px-6 py-14">
+        <div className="grid gap-12 lg:grid-cols-[1.8fr_1fr_1fr_1.4fr]">
+          {/* Brand */}
+          <div>
+            <img src="/storener-logo.png" alt="STORENER" className="h-auto w-[140px] object-contain brightness-200" />
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/50">
+              Nowoczesny sklep internetowy z produktami do domu, ogrodu, motoryzacji i dla zwierząt.
+            </p>
+            <div className="mt-6 flex flex-col gap-2.5">
+              <a href="mailto:kontakt@storener.pl" className="flex items-center gap-2.5 text-sm text-white/45 transition hover:text-white/80">
+                <Mail className="h-4 w-4 text-[#4caf3d]" />
+                kontakt@storener.pl
+              </a>
+              <a href="tel:+48000000000" className="flex items-center gap-2.5 text-sm text-white/45 transition hover:text-white/80">
+                <Phone className="h-4 w-4 text-[#4caf3d]" />
+                +48 000 000 000
+              </a>
+            </div>
+          </div>
+
+          {/* Dostawa */}
+          <div>
+            <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-white/30">
+              Dostawa i płatności
             </h3>
-
-            <ul className="space-y-3 text-sm text-white/60">
-              <FooterLink href="/dostawa">Dostawa</FooterLink>
-              <FooterLink href="/platnosci">Płatności</FooterLink>
-              <FooterLink href="/reklamacje">Reklamacje</FooterLink>
-              <FooterLink href="/zwroty">Zwroty i wymiany</FooterLink>
-              <FooterLink href="/status-zamowienia">Status zamówienia</FooterLink>
+            <ul className="space-y-3">
+              {[
+                ["Dostawa", "/dostawa"],
+                ["Płatności", "/platnosci"],
+                ["Reklamacje", "/reklamacje"],
+                ["Zwroty i wymiany", "/zwroty"],
+                ["Status zamówienia", "/status-zamowienia"],
+              ].map(([label, href]) => (
+                <FooterLink key={href} href={href}>{label}</FooterLink>
+              ))}
             </ul>
           </div>
 
-          <div className="text-center sm:text-left">
-            <h3 className="mb-5 text-sm font-bold uppercase tracking-wide text-white">
-              PRAWNE
+          {/* Prawne */}
+          <div>
+            <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-white/30">
+              Informacje
             </h3>
-
-            <ul className="space-y-3 text-sm text-white/60">
-              <FooterLink href="/regulamin">Regulamin</FooterLink>
-              <FooterLink href="/polityka-prywatnosci">
-                Polityka prywatności
-              </FooterLink>
-              <FooterLink href="/polityka-cookies">Polityka cookies</FooterLink>
-              <FooterLink href="/faq">FAQ</FooterLink>
-              <FooterLink href="/kontakt">Kontakt</FooterLink>
+            <ul className="space-y-3">
+              {[
+                ["Regulamin", "/regulamin"],
+                ["Polityka prywatności", "/polityka-prywatnosci"],
+                ["Polityka cookies", "/polityka-cookies"],
+                ["FAQ", "/faq"],
+                ["Kontakt", "/kontakt"],
+              ].map(([label, href]) => (
+                <FooterLink key={href} href={href}>{label}</FooterLink>
+              ))}
             </ul>
           </div>
 
-          <div className="flex justify-center lg:justify-end">
-            <img
-              src="/przelewy24.png"
-              alt="Płatności obsługiwane przez Przelewy24"
-              className="h-auto w-full max-w-[360px] object-contain sm:max-w-[460px] lg:max-w-[600px]"
-            />
+          {/* Payments */}
+          <div>
+            <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-white/30">
+              Akceptowane płatności
+            </h3>
+            <div className="rounded-2xl bg-white/5 p-4">
+              <img
+                src="/przelewy24.png"
+                alt="Przelewy24"
+                className="h-auto w-full max-w-[280px] object-contain opacity-75 transition hover:opacity-100"
+              />
+            </div>
+            <p className="mt-4 text-xs leading-relaxed text-white/30">
+              Wszystkie transakcje są szyfrowane i bezpieczne. Obsługujemy BLIK, karty płatnicze i przelewy bankowe.
+            </p>
           </div>
         </div>
+      </div>
 
-        <div className="flex flex-col items-center gap-4 py-6 text-center text-sm text-white/45 md:flex-row md:justify-between md:text-left">
-          <p>
-            © {new Date().getFullYear()} STORENER. Wszelkie prawa zastrzeżone.
-          </p>
-
-          <div className="flex flex-wrap justify-center gap-4 md:justify-end">
-            <Link href="/" className="transition hover:text-[#4caf3d]">
-              Start
-            </Link>
-            <Link href="/konto" className="transition hover:text-[#4caf3d]">
-              Konto
-            </Link>
-            <Link href="/koszyk" className="transition hover:text-[#4caf3d]">
-              Koszyk
-            </Link>
+      {/* Bottom bar */}
+      <div className="border-t border-white/6">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-5 text-xs text-white/30 md:flex-row">
+          <p>© {new Date().getFullYear()} STORENER. Wszelkie prawa zastrzeżone.</p>
+          <div className="flex items-center gap-5">
+            {[["Start", "/"], ["Produkty", "/produkty"], ["Konto", "/konto"], ["Koszyk", "/koszyk"]].map(([l, h]) => (
+              <Link key={h} href={h} className="transition hover:text-white/70">{l}</Link>
+            ))}
           </div>
         </div>
       </div>
@@ -90,32 +119,11 @@ export default function Footer() {
   );
 }
 
-function FooterBox({ Icon, title, text }: any) {
-  return (
-    <div className="flex items-start gap-4 rounded-2xl sm:justify-start">
-      <div className="shrink-0 rounded-2xl border border-[#4caf3d]/20 bg-[#4caf3d]/10 p-3 text-[#4caf3d]">
-        <Icon className="h-7 w-7" />
-      </div>
-
-      <div>
-        <h3 className="text-sm font-bold uppercase tracking-wide text-white">
-          {title}
-        </h3>
-
-        <p className="mt-2 max-w-xs text-sm leading-6 text-white/65">{text}</p>
-      </div>
-    </div>
-  );
-}
-
-function FooterLink({ href, children }: any) {
+function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <li>
-      <Link
-        href={href}
-        className="group inline-flex items-center justify-center gap-2 transition hover:text-[#4caf3d] sm:justify-start"
-      >
-        <ChevronRight className="h-4 w-4 text-[#4caf3d]/70 transition group-hover:translate-x-1" />
+      <Link href={href} className="group flex items-center gap-2 text-sm text-white/50 transition hover:text-white/90">
+        <ChevronRight className="h-3.5 w-3.5 text-[#4caf3d]/60 transition-transform group-hover:translate-x-0.5" />
         {children}
       </Link>
     </li>

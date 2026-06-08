@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, BadgePercent, PackageCheck, Sparkles, Star } from "lucide-react";
+import { ArrowUpRight, BadgePercent, Flame, Home, Leaf, Car, PawPrint, Sofa, Star } from "lucide-react";
 
 type ProductCardProps = {
   name: string;
@@ -13,121 +13,102 @@ type ProductCardProps = {
   reviewsCount?: number;
 };
 
+const CATEGORY_MAP: Record<string, { label: string; color: string; bg: string; icon: any }> = {
+  NOWOSCI:               { label: "Nowości",              color: "text-violet-700", bg: "bg-violet-50 border-violet-100",  icon: Flame },
+  WYPRZEDAZ:             { label: "Wyprzedaż",            color: "text-red-600",    bg: "bg-red-50 border-red-100",        icon: BadgePercent },
+  DOM_I_OGROD:           { label: "Dom i ogród",          color: "text-green-700",  bg: "bg-green-50 border-green-100",    icon: Home },
+  OGROD:                 { label: "Ogród",                color: "text-emerald-700",bg: "bg-emerald-50 border-emerald-100",icon: Leaf },
+  WYPOSAZENIE:           { label: "Wyposażenie",          color: "text-teal-700",   bg: "bg-teal-50 border-teal-100",      icon: Sofa },
+  MOTORYZACJA:           { label: "Motoryzacja",          color: "text-blue-700",   bg: "bg-blue-50 border-blue-100",      icon: Car },
+  AKCESORIA_DLA_ZWIERZAT:{ label: "Dla zwierząt",         color: "text-orange-700", bg: "bg-orange-50 border-orange-100",  icon: PawPrint },
+};
+
 export default function ProductCard({
-  name,
-  price,
-  image,
-  slug,
+  name, price, image, slug,
   category,
   stock: _stock = 0,
   stockStatus = "BRAK",
   averageRating = 0,
   reviewsCount = 0,
 }: ProductCardProps) {
-  const getCategoryLabel = (value?: string) => {
-    if (!value) return "";
-    if (value === "NOWOSCI") return "Nowości";
-    if (value === "WYPRZEDAZ") return "Wyprzedaż";
-    if (value === "DOM_I_OGROD") return "Dom i ogród";
-    if (value === "MOTORYZACJA") return "Motoryzacja";
-    if (value === "AKCESORIA_DLA_ZWIERZAT") return "Akcesoria dla zwierząt";
-    return value;
-  };
+  const cat = category ? CATEGORY_MAP[category] : null;
+  const Icon = cat?.icon;
 
-  const getCategoryBadgeClasses = (value?: string) => {
-    if (value === "NOWOSCI") return "border-black/10 bg-black text-white";
-    if (value === "WYPRZEDAZ") return "border-red-200 bg-red-50 text-red-700";
-    if (value === "DOM_I_OGROD") return "border-green-200 bg-green-50 text-green-700";
-    if (value === "MOTORYZACJA") return "border-blue-200 bg-blue-50 text-blue-700";
-    if (value === "AKCESORIA_DLA_ZWIERZAT") return "border-orange-200 bg-orange-50 text-orange-700";
-    return "border-gray-200 bg-white text-gray-700";
-  };
-
-  const getCategoryIcon = (value?: string) => {
-    if (value === "NOWOSCI") return <Sparkles className="h-3.5 w-3.5" />;
-    if (value === "WYPRZEDAZ") return <BadgePercent className="h-3.5 w-3.5" />;
-    return <PackageCheck className="h-3.5 w-3.5" />;
-  };
-
-  const stockBadge = () => {
-    if (stockStatus === "BRAK") return { label: "Brak", cls: "bg-red-100 text-red-700" };
-    if (stockStatus === "MALO_SZTUK") return { label: "Ostatnie sztuki", cls: "bg-orange-100 text-orange-700" };
-    return null;
-  };
-
-  const badge = stockBadge();
+  const isOutOfStock = stockStatus === "BRAK";
+  const isLowStock = stockStatus === "MALO_SZTUK";
 
   return (
     <Link href={`/produkty/${slug}`} className="group block h-full">
-      <article className="flex h-full flex-col overflow-hidden rounded-[28px] border border-black/5 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)]">
-        <div className="relative overflow-hidden">
-          <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-50 transition duration-300 group-hover:opacity-70" />
+      <article className="relative flex h-full flex-col overflow-hidden rounded-[26px] bg-white transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_64px_rgba(0,0,0,0.13)]"
+        style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04)", border: "1px solid rgba(0,0,0,0.04)" }}>
 
+        {/* Image */}
+        <div className="relative overflow-hidden">
           <img
             src={image}
             alt={name}
-            className="h-[260px] w-full object-cover transition duration-700 group-hover:scale-104"
+            className="h-[240px] w-full object-cover transition-transform duration-700 group-hover:scale-105"
             loading="lazy"
           />
 
-          <div className="absolute left-4 top-4 z-20 flex max-w-[80%] flex-wrap gap-2">
-            {category && (
-              <span
-                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold shadow-sm backdrop-blur ${getCategoryBadgeClasses(category)}`}
-              >
-                {getCategoryIcon(category)}
-                {getCategoryLabel(category)}
-              </span>
-            )}
-            {badge && (
-              <span className={`inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-bold backdrop-blur ${badge.cls}`}>
-                {badge.label}
-              </span>
-            )}
-          </div>
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-          <div className="absolute right-4 top-4 z-20">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full border border-white/25 bg-white/15 text-white shadow-sm backdrop-blur-md transition duration-300 group-hover:bg-white group-hover:text-black">
-              <ArrowUpRight className="h-4 w-4" />
+          {/* Category badge */}
+          {cat && Icon && (
+            <div className={`absolute left-3.5 top-3.5 flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-bold backdrop-blur-sm ${cat.bg} ${cat.color}`}>
+              <Icon className="h-3 w-3" />
+              {cat.label}
             </div>
+          )}
+
+          {/* Stock badge */}
+          {isLowStock && (
+            <div className="absolute right-3.5 top-3.5 rounded-full bg-amber-500 px-2.5 py-1 text-[10px] font-bold text-white shadow-md">
+              Ostatnie sztuki
+            </div>
+          )}
+          {isOutOfStock && (
+            <div className="absolute right-3.5 top-3.5 rounded-full bg-gray-800/80 px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur-sm">
+              Brak
+            </div>
+          )}
+
+          {/* Arrow CTA */}
+          <div className="absolute bottom-3 right-3 flex h-9 w-9 translate-y-2 items-center justify-center rounded-full bg-white/90 text-black opacity-0 shadow-lg backdrop-blur-sm transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+            <ArrowUpRight className="h-4 w-4" />
           </div>
         </div>
 
+        {/* Content */}
         <div className="flex flex-1 flex-col p-5">
-          <h2 className="line-clamp-2 text-[1rem] font-semibold leading-7 text-gray-950 transition group-hover:text-black">
+          <h2 className="line-clamp-2 text-[0.95rem] font-semibold leading-snug text-gray-900" style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}>
             {name}
           </h2>
 
+          {/* Stars */}
           {reviewsCount > 0 && (
             <div className="mt-2 flex items-center gap-1.5">
               <div className="flex items-center gap-0.5">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star
-                    key={star}
-                    className={`h-3.5 w-3.5 ${star <= Math.round(averageRating) ? "fill-amber-400 text-amber-400" : "fill-gray-200 text-gray-200"}`}
-                  />
+                {[1,2,3,4,5].map(s => (
+                  <Star key={s} className={`h-3 w-3 ${s <= Math.round(averageRating) ? "fill-amber-400 text-amber-400" : "fill-gray-100 text-gray-200"}`} />
                 ))}
               </div>
-              <span className="text-xs font-medium text-gray-500">
-                {averageRating.toFixed(1)} ({reviewsCount})
-              </span>
+              <span className="text-xs text-gray-400">{averageRating.toFixed(1)} ({reviewsCount})</span>
             </div>
           )}
 
           <div className="mt-auto pt-4">
-            <div className="flex items-end justify-between gap-3">
+            <div className="flex items-center justify-between gap-2 border-t border-gray-50 pt-4">
               <div>
-                <p className="text-xs font-medium uppercase tracking-[0.12em] text-gray-400">
-                  cena
-                </p>
-                <p className="mt-0.5 text-2xl font-bold tracking-tight text-gray-950">
-                  {price.toFixed(2)}
-                  <span className="ml-1 text-base font-semibold text-gray-400">zł</span>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">cena</p>
+                <p className="mt-0.5 text-2xl font-bold tracking-tight text-gray-950" style={{ fontFamily: "'Syne', system-ui, sans-serif" }}>
+                  {price.toFixed(2)}<span className="ml-0.5 text-sm font-semibold text-gray-400"> zł</span>
                 </p>
               </div>
 
-              <span className="rounded-xl bg-black px-4 py-2.5 text-sm font-semibold text-white transition duration-300 group-hover:bg-[#4caf3d]">
-                Szczegóły
+              <span className={`rounded-xl px-4 py-2.5 text-[13px] font-bold text-white transition-colors duration-300 ${isOutOfStock ? "bg-gray-300" : "bg-[#0a0a0a] group-hover:bg-[#4caf3d]"}`}>
+                {isOutOfStock ? "Niedostępny" : "Szczegóły"}
               </span>
             </div>
           </div>

@@ -2,24 +2,23 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { ShieldCheck, Sparkles, Truck } from "lucide-react";
+import { ShieldCheck, Sparkles, Truck, Tag, ArrowRight, Zap } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import HomeBannerSlider from "../components/HomeBannerSlider";
+import Link from "next/link";
 
 type Product = {
-  id: number;
-  slug: string;
-  name: string;
-  price: number;
-  description: string;
-  image: string;
-  category: string;
-  subcategory: string | null;
-  stock: number;
-  stockStatus: string;
-  averageRating: number;
-  reviewsCount: number;
+  id: number; slug: string; name: string; price: number;
+  description: string; image: string; category: string;
+  stock: number; stockStatus: string; averageRating: number; reviewsCount: number;
 };
+
+const CATEGORY_SECTIONS = [
+  { key: "NOWOSCI",     eyebrow: "Świeże dodania",  title: "Nowości",         accent: "bg-violet-500", href: "/produkty?category=NOWOSCI" },
+  { key: "WYPRZEDAZ",   eyebrow: "Okazje cenowe",   title: "Wyprzedaż",       accent: "bg-red-500",    href: "/produkty?category=WYPRZEDAZ" },
+  { key: "DOM_I_OGROD", eyebrow: "Inspiracje",      title: "Dom i ogród",     accent: "bg-green-500",  href: "/produkty?category=DOM_I_OGROD" },
+  { key: "MOTORYZACJA", eyebrow: "Dla kierowców",   title: "Motoryzacja",     accent: "bg-blue-500",   href: "/produkty?category=MOTORYZACJA" },
+];
 
 export default function HomeContent() {
   const searchParams = useSearchParams();
@@ -28,273 +27,175 @@ export default function HomeContent() {
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
-  const [subcategory, setSubcategory] = useState("");
   const [sort, setSort] = useState("newest");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  const loadProducts = async (
-    nextSearch = search,
-    nextCategory = category,
-    nextSubcategory = subcategory,
-    nextSort = sort
-  ) => {
+  const loadProducts = async (nextSearch = search, nextCategory = category, nextSort = sort) => {
     try {
       setIsLoading(true);
       setError("");
-
       const params = new URLSearchParams();
-
       if (nextSearch) params.append("search", nextSearch);
       if (nextCategory) params.append("category", nextCategory);
-      if (nextSubcategory) params.append("subcategory", nextSubcategory);
       if (nextSort) params.append("sort", nextSort);
-
-      const response = await fetch(`/api/products?${params.toString()}`);
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError("Nie udało się pobrać produktów");
-        return;
-      }
-
+      const res = await fetch(`/api/products?${params}`);
+      const data = await res.json();
+      if (!res.ok) { setError("Nie udało się pobrać produktów"); return; }
       setProducts(data);
-    } catch {
-      setError("Wystąpił błąd połączenia");
-    } finally {
-      setIsLoading(false);
-    }
+    } catch { setError("Wystąpił błąd połączenia"); }
+    finally { setIsLoading(false); }
   };
 
   useEffect(() => {
-    const urlSearch = searchParams.get("search") || searchParams.get("q") || "";
-    const urlCategory = searchParams.get("category") || "";
-    const urlSubcategory = searchParams.get("subcategory") || "";
-    const urlSort = searchParams.get("sort") || "newest";
-
-    setSearch(urlSearch);
-    setCategory(urlCategory);
-    setSubcategory(urlSubcategory);
-    setSort(urlSort);
-
-    loadProducts(urlSearch, urlCategory, urlSubcategory, urlSort);
+    const s = searchParams.get("search") || searchParams.get("q") || "";
+    const c = searchParams.get("category") || "";
+    const so = searchParams.get("sort") || "newest";
+    setSearch(s); setCategory(c); setSort(so);
+    loadProducts(s, c, so);
   }, [searchParams]);
 
-  const updateUrl = (
-    nextSearch: string,
-    nextCategory: string,
-    nextSubcategory: string,
-    nextSort: string
-  ) => {
-    const params = new URLSearchParams();
-
-    if (nextSearch) params.set("search", nextSearch);
-    if (nextCategory) params.set("category", nextCategory);
-    if (nextSubcategory) params.set("subcategory", nextSubcategory);
-    if (nextSort) params.set("sort", nextSort);
-
-    const query = params.toString();
-    router.push(query ? `/?${query}` : "/");
+  const updateUrl = (s: string, c: string, so: string) => {
+    const p = new URLSearchParams();
+    if (s) p.set("search", s);
+    if (c) p.set("category", c);
+    if (so) p.set("sort", so);
+    router.push(p.toString() ? `/?${p}` : "/");
   };
 
-  const selectCategory = (nextCategory: string, nextSubcategory = "") => {
-    setCategory(nextCategory);
-    setSubcategory(nextSubcategory);
-    updateUrl(search, nextCategory, nextSubcategory, sort);
+  const selectCategory = (c: string) => {
+    setCategory(c);
+    updateUrl(search, c, sort);
   };
-
-  const featuredNew = useMemo(
-    () => products.filter((p) => p.category === "NOWOSCI").slice(0, 4),
-    [products]
-  );
-
-  const featuredSale = useMemo(
-    () => products.filter((p) => p.category === "WYPRZEDAZ").slice(0, 4),
-    [products]
-  );
-
-  const featuredHome = useMemo(
-    () => products.filter((p) => p.category === "DOM_I_OGROD").slice(0, 4),
-    [products]
-  );
 
   const showFeatured = !category && !search;
 
+  const sectionProducts = useMemo(() => {
+    const map: Record<string, Product[]> = {};
+    CATEGORY_SECTIONS.forEach(s => {
+      map[s.key] = products.filter(p => p.category === s.key).slice(0, 4);
+    });
+    return map;
+  }, [products]);
+
   return (
-    <main className="min-h-screen bg-[#f5f5f7]">
-      <section className="border-b border-black/5 bg-white">
+    <div className="min-h-screen" style={{ background: "var(--surface)" }}>
+      {/* Hero banner */}
+      <section className="bg-white">
         <HomeBannerSlider
           onSaleClick={() => selectCategory("WYPRZEDAZ")}
           onNewClick={() => selectCategory("NOWOSCI")}
         />
       </section>
 
-      <section className="mx-auto max-w-6xl px-6 pt-8">
-        <div className="grid gap-4 md:grid-cols-3">
-          <InfoBox
-            icon={<Truck className="h-5 w-5" />}
-            title="Szybka wysyłka"
-            text="Sprawna realizacja zamówień"
-          />
-          <InfoBox
-            icon={<ShieldCheck className="h-5 w-5" />}
-            title="Bezpieczne zakupy"
-            text="Wygodne płatności i wsparcie"
-          />
-          <InfoBox
-            icon={<Sparkles className="h-5 w-5" />}
-            title="Starannie wybrane produkty"
-            text="Nowości, okazje i bestsellery"
-          />
+      {/* Trust badges */}
+      <section className="bg-white border-b" style={{ borderColor: "var(--border)" }}>
+        <div className="mx-auto max-w-6xl px-6 py-5">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {[
+              { icon: <Truck className="h-5 w-5" />, title: "Szybka wysyłka", text: "Realizacja w 24–48h roboczych" },
+              { icon: <ShieldCheck className="h-5 w-5" />, title: "Bezpieczne zakupy", text: "Szyfrowane połączenie SSL" },
+              { icon: <Sparkles className="h-5 w-5" />, title: "Świeża oferta", text: "Regularnie dodawane nowości" },
+            ].map(({ icon, title, text }) => (
+              <div key={title} className="flex items-center gap-4 rounded-2xl px-5 py-4" style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#4caf3d]/10 text-[#4caf3d]">{icon}</div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-900">{title}</p>
+                  <p className="text-xs text-gray-500">{text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
+      {/* Category quick links */}
       {showFeatured && (
-        <section className="mx-auto max-w-6xl px-6 py-10">
-          <div className="space-y-10">
-            {featuredNew.length > 0 && (
-              <ProductSection
-                eyebrow="Kolekcja"
-                title="Nowości"
-                products={featuredNew}
-                onClick={() => selectCategory("NOWOSCI")}
-              />
-            )}
-
-            {featuredSale.length > 0 && (
-              <ProductSection
-                eyebrow="Promocje"
-                title="Wyprzedaż"
-                products={featuredSale}
-                onClick={() => selectCategory("WYPRZEDAZ")}
-              />
-            )}
-
-            {featuredHome.length > 0 && (
-              <ProductSection
-                eyebrow="Inspiracje"
-                title="Dom i ogród"
-                products={featuredHome}
-                onClick={() => selectCategory("DOM_I_OGROD")}
-              />
-            )}
+        <section className="mx-auto max-w-6xl px-6 pt-10">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {[
+              { label: "Nowości",     href: "/produkty?category=NOWOSCI",     emoji: "✨", bg: "from-violet-50 to-violet-100/60", border: "border-violet-100" },
+              { label: "Wyprzedaż",  href: "/produkty?category=WYPRZEDAZ",   emoji: "🏷️", bg: "from-red-50 to-red-100/60",      border: "border-red-100" },
+              { label: "Dom i ogród",href: "/produkty?category=DOM_I_OGROD", emoji: "🏡", bg: "from-green-50 to-green-100/60",  border: "border-green-100" },
+              { label: "Motoryzacja",href: "/produkty?category=MOTORYZACJA", emoji: "🚗", bg: "from-blue-50 to-blue-100/60",   border: "border-blue-100" },
+            ].map(({ label, href, emoji, bg, border }) => (
+              <Link
+                key={href}
+                href={href}
+                className={`group flex items-center justify-between rounded-2xl border bg-gradient-to-br px-5 py-4 transition-all hover:-translate-y-0.5 hover:shadow-md ${bg} ${border}`}
+              >
+                <div>
+                  <span className="text-xl">{emoji}</span>
+                  <p className="mt-1.5 text-sm font-bold text-gray-800">{label}</p>
+                </div>
+                <ArrowRight className="h-4 w-4 text-gray-400 transition-transform group-hover:translate-x-0.5 group-hover:text-gray-700" />
+              </Link>
+            ))}
           </div>
         </section>
       )}
 
-      <section className="mx-auto max-w-6xl px-6 pb-20 pt-6">
+      {/* Featured sections */}
+      {showFeatured && !isLoading && (
+        <section className="mx-auto max-w-6xl space-y-10 px-6 py-10">
+          {CATEGORY_SECTIONS.map(({ key, eyebrow, title, accent, href }) => {
+            const items = sectionProducts[key];
+            if (!items?.length) return null;
+            return (
+              <div key={key} className="overflow-hidden rounded-[32px] bg-white" style={{ boxShadow: "var(--shadow-md)" }}>
+                <div className="flex items-center justify-between border-b px-7 py-5" style={{ borderColor: "var(--border)" }}>
+                  <div className="flex items-center gap-3">
+                    <div className={`h-8 w-1.5 rounded-full ${accent}`} />
+                    <div>
+                      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-gray-400">{eyebrow}</p>
+                      <h2 className="text-xl font-bold text-gray-950" style={{ fontFamily: "'Syne', system-ui, sans-serif" }}>{title}</h2>
+                    </div>
+                  </div>
+                  <Link href={href} className="group flex items-center gap-1.5 rounded-xl border px-4 py-2 text-sm font-semibold transition hover:bg-gray-950 hover:text-white hover:border-gray-950" style={{ borderColor: "var(--border)" }}>
+                    Wszystkie
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                </div>
+                <div className="grid gap-5 p-6 sm:grid-cols-2 xl:grid-cols-4">
+                  {items.map(p => (
+                    <ProductCard key={p.id} slug={p.slug} name={p.name} price={p.price} image={p.image} category={p.category} stock={p.stock} stockStatus={p.stockStatus} averageRating={p.averageRating} reviewsCount={p.reviewsCount} />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </section>
+      )}
+
+      {/* Search results */}
+      <section className="mx-auto max-w-6xl px-6 pb-16">
         {isLoading && (
-          <div className="rounded-[32px] bg-white p-8 text-gray-600 shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
-            Ładowanie produktów...
+          <div className="rounded-[28px] bg-white p-10 text-center" style={{ boxShadow: "var(--shadow-md)" }}>
+            <div className="inline-flex items-center gap-3 text-gray-500">
+              <Zap className="h-5 w-5 animate-pulse text-[#4caf3d]" />
+              <span className="font-medium">Ładowanie produktów…</span>
+            </div>
           </div>
         )}
-
         {error && (
-          <div className="rounded-[32px] bg-white p-8 text-red-600 shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
+          <div className="rounded-[28px] bg-white p-8 text-red-600" style={{ boxShadow: "var(--shadow-md)" }}>
             {error}
           </div>
         )}
-
         {!isLoading && !error && products.length === 0 && (
-          <div className="rounded-[32px] bg-white p-8 shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
-            <h2 className="text-2xl font-bold text-gray-950">Brak wyników</h2>
-            <p className="mt-3 text-gray-600">
-              Nie znaleziono produktów spełniających podane kryteria.
-            </p>
+          <div className="rounded-[28px] bg-white p-10 text-center" style={{ boxShadow: "var(--shadow-md)" }}>
+            <p className="text-2xl font-bold text-gray-950" style={{ fontFamily: "'Syne', system-ui, sans-serif" }}>Brak wyników</p>
+            <p className="mt-2 text-gray-500">Nie znaleziono produktów spełniających podane kryteria.</p>
           </div>
         )}
-
         {!isLoading && !error && products.length > 0 && !showFeatured && (
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                slug={product.slug}
-                name={product.name}
-                price={product.price}
-                image={product.image}
-                category={product.category}
-                stock={product.stock}
-                stockStatus={product.stockStatus}
-                averageRating={product.averageRating}
-                reviewsCount={product.reviewsCount}
-              />
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {products.map(p => (
+              <ProductCard key={p.id} slug={p.slug} name={p.name} price={p.price} image={p.image} category={p.category} stock={p.stock} stockStatus={p.stockStatus} averageRating={p.averageRating} reviewsCount={p.reviewsCount} />
             ))}
           </div>
         )}
       </section>
-    </main>
-  );
-}
-
-function InfoBox({
-  icon,
-  title,
-  text,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  text: string;
-}) {
-  return (
-    <div className="rounded-[28px] border border-black/5 bg-white p-5 shadow-[0_10px_30px_rgba(0,0,0,0.04)]">
-      <div className="flex items-center gap-3">
-        <div className="rounded-2xl bg-black p-3 text-white">{icon}</div>
-        <div>
-          <p className="text-sm font-semibold text-gray-900">{title}</p>
-          <p className="text-sm text-gray-500">{text}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ProductSection({
-  eyebrow,
-  title,
-  products,
-  onClick,
-}: {
-  eyebrow: string;
-  title: string;
-  products: Product[];
-  onClick: () => void;
-}) {
-  return (
-    <div className="rounded-[32px] bg-white p-6 shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
-      <div className="mb-6 flex items-center justify-between gap-4">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">
-            {eyebrow}
-          </p>
-          <h2 className="mt-2 text-3xl font-bold text-gray-950">{title}</h2>
-        </div>
-
-        <button
-          type="button"
-          onClick={onClick}
-          className="rounded-2xl border border-black px-4 py-2 text-sm font-medium text-black transition hover:bg-black hover:text-white"
-        >
-          Zobacz więcej
-        </button>
-      </div>
-
-      <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            slug={product.slug}
-            name={product.name}
-            price={product.price}
-            image={product.image}
-            category={product.category}
-            stock={product.stock}
-            stockStatus={product.stockStatus}
-            averageRating={product.averageRating}
-            reviewsCount={product.reviewsCount}
-          />
-        ))}
-      </div>
     </div>
   );
 }
