@@ -1,17 +1,20 @@
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/admin-session";
 import { prisma } from "@/lib/prisma";
-import { mapPublicCategoryToProductPayload } from "@/lib/categories";
-
 export const revalidate = 0;
-export const dynamic = "force-dynamic";
-
 function getStockStatus(stock: number) {
   if (stock <= 0) return "BRAK";
   if (stock <= 5) return "MALO_SZTUK";
   return "DOSTEPNY";
 }
-
+export const dynamic = "force-dynamic";
 export async function GET() {
+  const admin = await requireAdmin();
+
+  if (!admin) {
+    return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
+  }
+
   try {
     const products = await prisma.product.findMany({
       orderBy: {
@@ -38,15 +41,19 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const admin = await requireAdmin();
+
+  if (!admin) {
+    return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
+  }
+
   try {
     const body = await request.json();
-
     const {
       name,
       slug,
       price,
       description,
-      productDetails,
       image,
       category,
       subcategory,
@@ -64,11 +71,17 @@ export async function POST(request: Request) {
       stock === undefined
     ) {
       return NextResponse.json(
-        { error: "Uzupełnij wszystkie wymagane pola" },
+        { error: "Uzupełnij wszystkie pola" },
         { status: 400 }
       );
     }
 
+    if (category === "DOM_I_OGROD" && !subcategory) {
+      return NextResponse.json(
+        { error: "Dla kategorii Dom i ogród wybierz podkategorię" },
+        { status: 400 }
+      );
+    }
 
     const stockValue = Number(stock);
 
@@ -92,8 +105,6 @@ export async function POST(request: Request) {
       );
     }
 
-    const normalizedCategory = mapPublicCategoryToProductPayload(category);
-
     const validGalleryImages = Array.isArray(galleryImages)
       ? galleryImages
           .filter((url: string) => typeof url === "string" && url.trim() !== "")
@@ -106,11 +117,10 @@ export async function POST(request: Request) {
         slug,
         price: Number(price),
         description,
-        productDetails: productDetails || "",
         image,
         isActive: true,
-        category: normalizedCategory.category as any,
-        subcategory: (subcategory || normalizedCategory.subcategory) as any,
+        category,
+        subcategory: category === "DOM_I_OGROD" ? subcategory : null,
         stock: stockValue,
         stockStatus: getStockStatus(stockValue),
         images: {

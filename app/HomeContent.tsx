@@ -5,7 +5,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { ShieldCheck, Sparkles, Truck } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import HomeBannerSlider from "../components/HomeBannerSlider";
-import { matchesPublicCategory } from "../lib/categories";
 
 type Product = {
   id: number;
@@ -115,12 +114,7 @@ export default function HomeContent() {
   );
 
   const featuredHome = useMemo(
-    () => products.filter((p) => matchesPublicCategory(p, "DOM")).slice(0, 4),
-    [products]
-  );
-
-  const featuredGarden = useMemo(
-    () => products.filter((p) => matchesPublicCategory(p, "OGROD")).slice(0, 4),
+    () => products.filter((p) => p.category === "DOM_I_OGROD").slice(0, 4),
     [products]
   );
 
@@ -179,18 +173,9 @@ export default function HomeContent() {
             {featuredHome.length > 0 && (
               <ProductSection
                 eyebrow="Inspiracje"
-                title="Dom"
+                title="Dom i ogród"
                 products={featuredHome}
-                onClick={() => selectCategory("DOM")}
-              />
-            )}
-
-            {featuredGarden.length > 0 && (
-              <ProductSection
-                eyebrow="Ogród"
-                title="Ogród"
-                products={featuredGarden}
-                onClick={() => selectCategory("OGROD")}
+                onClick={() => selectCategory("DOM_I_OGROD")}
               />
             )}
           </div>
@@ -220,7 +205,7 @@ export default function HomeContent() {
         )}
 
         {!isLoading && !error && products.length > 0 && !showFeatured && (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {products.map((product) => (
               <ProductCard
                 key={product.id}
@@ -229,7 +214,6 @@ export default function HomeContent() {
                 price={product.price}
                 image={product.image}
                 category={product.category}
-                subcategory={product.subcategory}
                 stock={product.stock}
                 stockStatus={product.stockStatus}
                 averageRating={product.averageRating}
@@ -295,7 +279,7 @@ function ProductSection({
         </button>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
         {products.map((product) => (
           <ProductCard
             key={product.id}

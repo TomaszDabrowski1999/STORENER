@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import ProductCard from "../../components/ProductCard";
-import { CATEGORY_OPTIONS, getCategoryLabel } from "../../lib/categories";
 
 
 type Product = {
@@ -111,6 +110,21 @@ export default function ProduktyContent() {
     loadProducts("", "", "", "", "", "newest");
   };
 
+  const getCategoryLabel = (value: string) => {
+    if (value === "NOWOSCI") return "Nowości";
+    if (value === "WYPRZEDAZ") return "Wyprzedaż";
+    if (value === "DOM_I_OGROD") return "Dom i ogród";
+    if (value === "MOTORYZACJA") return "Motoryzacja";
+    if (value === "AKCESORIA_DLA_ZWIERZAT") return "Akcesoria dla zwierząt";
+    return value;
+  };
+
+  const getSubcategoryLabel = (value: string) => {
+    if (value === "OGROD") return "Ogród";
+    if (value === "WYPOSAZENIE") return "Wyposażenie";
+    return value;
+  };
+
   return (
     <main className="min-h-screen bg-gray-50">
       <section className="border-b bg-white">
@@ -127,17 +141,23 @@ export default function ProduktyContent() {
                   {getCategoryLabel(category)}
                 </span>
               )}
+
+              {subcategory && (
+                <span className="rounded-full border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700">
+                  {getSubcategoryLabel(subcategory)}
+                </span>
+              )}
             </div>
           )}
 
           <p className="mt-4 max-w-2xl text-lg leading-8 text-gray-600">
-            Przeglądaj ofertę sklepu według przejrzystych kategorii.
+            Przeglądaj ofertę sklepu według kategorii i podkategorii.
           </p>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-10">
-        <div className="rounded-3xl bg-white p-5 shadow-sm">
+        <div className="sticky top-24 z-30 rounded-3xl bg-white p-5 shadow-sm">
           <form onSubmit={handleFilter}>
             <div className="grid gap-4 xl:grid-cols-6">
               <input
@@ -167,17 +187,22 @@ export default function ProduktyContent() {
               <select
                 value={category}
                 onChange={(e) => {
-                  setCategory(e.target.value);
-                  setSubcategory("");
+                  const nextCategory = e.target.value;
+                  setCategory(nextCategory);
+                  if (nextCategory !== "DOM_I_OGROD") {
+                    setSubcategory("");
+                  }
                 }}
                 className="rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-black"
               >
                 <option value="">Wszystkie kategorie</option>
-                {CATEGORY_OPTIONS.map((item) => (
-                  <option key={item.value} value={item.value}>
-                    {item.label}
-                  </option>
-                ))}
+                <option value="NOWOSCI">Nowości</option>
+                <option value="WYPRZEDAZ">Wyprzedaż</option>
+                <option value="DOM_I_OGROD">Dom i ogród</option>
+                <option value="MOTORYZACJA">Motoryzacja</option>
+                <option value="AKCESORIA_DLA_ZWIERZAT">
+                  Akcesoria dla zwierząt
+                </option>
               </select>
 
               <select
@@ -199,6 +224,20 @@ export default function ProduktyContent() {
                 Filtruj
               </button>
             </div>
+
+            {category === "DOM_I_OGROD" && (
+              <div className="mt-4">
+                <select
+                  value={subcategory}
+                  onChange={(e) => setSubcategory(e.target.value)}
+                  className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-black md:w-80"
+                >
+                  <option value="">Wszystkie podkategorie</option>
+                  <option value="OGROD">Ogród</option>
+                  <option value="WYPOSAZENIE">Wyposażenie</option>
+                </select>
+              </div>
+            )}
 
             <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
               <p className="text-sm text-gray-500">
@@ -239,7 +278,7 @@ export default function ProduktyContent() {
         )}
 
         {!isLoading && !error && products.length > 0 && (
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {products.map((product) => (
               <ProductCard
                 key={product.id}
@@ -248,7 +287,6 @@ export default function ProduktyContent() {
                 price={product.price}
                 image={product.image}
                 category={product.category}
-                subcategory={product.subcategory}
                 stock={product.stock}
                 stockStatus={product.stockStatus}
                 averageRating={product.averageRating}
