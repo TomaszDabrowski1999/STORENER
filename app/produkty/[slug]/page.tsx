@@ -50,7 +50,7 @@ export default async function ProductPage({ params }: Props) {
     where: {
       isActive: true,
       category: product.category,
-      ...(product.category === "DOM_I_OGROD" ? { subcategory: product.subcategory } : {}),
+
       NOT: { id: product.id },
     },
     orderBy: { id: "desc" },
@@ -106,7 +106,7 @@ export default async function ProductPage({ params }: Props) {
             Start
           </Link>
           <span>/</span>
-          <span>{getCategoryLabel(product.category, product.subcategory)}</span>
+
           <span>/</span>
           <span className="text-black">{product.name}</span>
         </div>
@@ -120,7 +120,7 @@ export default async function ProductPage({ params }: Props) {
             <div className="rounded-[34px] border border-black/5 bg-white p-7 shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
               <div className="flex flex-wrap gap-2">
                 <span className="rounded-full bg-black px-4 py-2 text-sm font-semibold text-white">
-                  {getCategoryLabel(product.category, product.subcategory)}
+
                 </span>
               </div>
 
@@ -275,12 +275,12 @@ export default async function ProductPage({ params }: Props) {
                   Podobne produkty
                 </p>
                 <h2 className="mt-2 text-3xl font-bold text-gray-950">
-                  Więcej z kategorii {getCategoryLabel(product.category, product.subcategory)}
+
                 </h2>
               </div>
 
               <Link
-                href={`/?category=${getPublicCategoryValue(product.category, product.subcategory)}`}
+
                 className="rounded-2xl border border-black px-5 py-3 font-medium text-black transition hover:bg-black hover:text-white"
               >
                 Zobacz więcej
