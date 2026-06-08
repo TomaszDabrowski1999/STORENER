@@ -160,7 +160,7 @@ export default function CartPage() {
                 href="/checkout"
                 className="mt-6 block rounded-lg bg-black px-6 py-3 text-center text-white"
               >
-                Przejdź do checkoutu
+                Przejdź do podsumowania
               </Link>
 
               <Link
