@@ -296,7 +296,7 @@ export default async function ProductPage({ params }: Props) {
                   price={item.price}
                   image={item.image}
                   category={item.category}
-                  subcategory={item.subcategory}
+
                   stock={item.stock}
                   stockStatus={item.stockStatus}
                   averageRating={item.averageRating}
