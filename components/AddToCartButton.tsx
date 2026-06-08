@@ -3,147 +3,109 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { ShoppingCart, X, ArrowRight, Check } from "lucide-react";
 
-type CartItem = {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  quantity: number;
-};
+type CartItem = { id: number; name: string; price: number; image: string; quantity: number };
+type Props = { id: number; name: string; price: number; image: string; stock?: number };
 
-type AddToCartButtonProps = {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  stock?: number;
-};
-
-export default function AddToCartButton({
-  id,
-  name,
-  price,
-  image,
-  stock = 0,
-}: AddToCartButtonProps) {
-  const [isToastVisible, setIsToastVisible] = useState(false);
+export default function AddToCartButton({ id, name, price, image, stock = 0 }: Props) {
+  const [visible, setVisible] = useState(false);
+  const [adding, setAdding] = useState(false);
 
   useEffect(() => {
-    if (!isToastVisible) return;
+    if (!visible) return;
+    const t = setTimeout(() => setVisible(false), 5000);
+    return () => clearTimeout(t);
+  }, [visible]);
 
-    const timeout = window.setTimeout(() => {
-      setIsToastVisible(false);
-    }, 4500);
+  const handleAdd = () => {
+    if (stock <= 0) return;
+    setAdding(true);
 
-    return () => window.clearTimeout(timeout);
-  }, [isToastVisible]);
-
-  const handleAddToCart = () => {
-    if (stock <= 0) {
-      return;
-    }
-
-    const existingCart = localStorage.getItem("cart");
-    const cart: CartItem[] = existingCart ? JSON.parse(existingCart) : [];
-
-    const existingProduct = cart.find((item) => item.id === id);
-
-    if (existingProduct) {
-      if (existingProduct.quantity >= stock) {
-        return;
-      }
-
-      existingProduct.quantity += 1;
+    const cart: CartItem[] = JSON.parse(localStorage.getItem("cart") || "[]");
+    const existing = cart.find(i => i.id === id);
+    if (existing) {
+      if (existing.quantity >= stock) { setAdding(false); return; }
+      existing.quantity += 1;
     } else {
-      cart.push({
-        id,
-        name,
-        price,
-        image,
-        quantity: 1,
-      });
+      cart.push({ id, name, price, image, quantity: 1 });
     }
-
     localStorage.setItem("cart", JSON.stringify(cart));
     window.dispatchEvent(new Event("storage"));
-    setIsToastVisible(true);
+
+    setTimeout(() => { setAdding(false); setVisible(true); }, 300);
   };
 
   return (
     <>
       <button
-        onClick={handleAddToCart}
-        disabled={stock <= 0}
-        className="inline-flex w-full items-center justify-center rounded-xl bg-black px-6 py-4 text-lg font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500"
+        onClick={handleAdd}
+        disabled={stock <= 0 || adding}
+        className={`flex w-full items-center justify-center gap-2.5 rounded-xl py-4 text-base font-bold transition ${
+          stock <= 0
+            ? "cursor-not-allowed bg-gray-100 text-gray-400"
+            : adding
+            ? "bg-[#4caf3d] text-white"
+            : "bg-[#4caf3d] text-white hover:bg-[#3a9a2c] active:scale-[0.98]"
+        }`}
+        style={{ boxShadow: stock > 0 ? "0 4px 16px rgba(76,175,61,0.3)" : "none" }}
       >
-        {stock <= 0 ? "Produkt niedostępny" : "Dodaj do koszyka"}
+        {adding ? (
+          <>
+            <Check className="h-5 w-5 animate-bounce" />
+            Dodano!
+          </>
+        ) : stock <= 0 ? (
+          "Produkt niedostępny"
+        ) : (
+          <>
+            <ShoppingCart className="h-5 w-5" />
+            Dodaj do koszyka
+          </>
+        )}
       </button>
 
-      {isToastVisible && (
+      {/* Slide-in toast */}
+      {visible && (
         <div
-          role="status"
-          aria-live="polite"
-          className="fixed right-4 top-4 z-50 w-[calc(100%-2rem)] max-w-md overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-black/20 sm:right-6 sm:top-6"
+          className="fixed bottom-6 right-6 z-50 w-80 overflow-hidden rounded-2xl bg-white shadow-2xl"
+          style={{ border: "1px solid var(--border)", animation: "slideUp 0.3s ease" }}
         >
-          <div className="flex items-start gap-4 border-b border-slate-100 p-4">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-2xl text-emerald-600">
-              ✓
+          <div className="flex items-center justify-between border-b px-4 py-3" style={{ borderColor: "var(--border)" }}>
+            <div className="flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#4caf3d]/10 text-[#4caf3d]">
+                <Check className="h-4 w-4" />
+              </div>
+              <p className="text-sm font-bold text-gray-900">Dodano do koszyka</p>
             </div>
-
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-slate-950">
-                Produkt dodany do koszyka
-              </p>
-              <p className="mt-1 text-sm text-slate-500">
-                Możesz kontynuować zakupy albo przejść od razu do koszyka.
-              </p>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setIsToastVisible(false)}
-              className="rounded-full px-2 text-2xl leading-none text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
-              aria-label="Zamknij komunikat"
-            >
-              ×
+            <button onClick={() => setVisible(false)} className="text-gray-400 transition hover:text-gray-700">
+              <X className="h-4 w-4" />
             </button>
           </div>
 
           <div className="flex gap-3 p-4">
-            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-slate-100 bg-slate-50">
-              <Image
-                src={image}
-                alt={name}
-                fill
-                sizes="64px"
-                className="object-cover"
-              />
+            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border" style={{ borderColor: "var(--border)" }}>
+              <Image src={image} alt={name} fill sizes="56px" className="object-cover" />
             </div>
-
-            <div className="min-w-0 flex-1">
-              <p className="line-clamp-2 text-sm font-medium text-slate-900">
-                {name}
-              </p>
-              <p className="mt-1 text-sm font-semibold text-slate-950">
-                {price.toFixed(2).replace(".", ",")} zł
-              </p>
+            <div className="min-w-0">
+              <p className="line-clamp-2 text-sm font-semibold text-gray-900">{name}</p>
+              <p className="mt-0.5 text-sm font-bold text-gray-950">{price.toFixed(2)} zł</p>
             </div>
           </div>
 
-          <div className="grid gap-3 bg-slate-50 p-4 sm:grid-cols-2">
+          <div className="grid grid-cols-2 gap-2 border-t p-3" style={{ borderColor: "var(--border)", background: "var(--surface)" }}>
             <button
-              type="button"
-              onClick={() => setIsToastVisible(false)}
-              className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-100"
+              onClick={() => setVisible(false)}
+              className="rounded-xl border py-2.5 text-xs font-bold text-gray-700 transition hover:border-gray-400"
+              style={{ borderColor: "var(--border)" }}
             >
-              Kontynuuj zakupy
+              Kontynuuj
             </button>
             <Link
               href="/koszyk"
-              className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+              className="flex items-center justify-center gap-1.5 rounded-xl bg-[#0a0a0a] py-2.5 text-xs font-bold text-white transition hover:bg-[#1a1a1a]"
             >
-              Przejdź do koszyka
+              Koszyk <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
         </div>
