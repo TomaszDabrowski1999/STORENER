@@ -42,7 +42,7 @@ export async function PUT(request: Request, context: RouteContext) {
       description,
       image,
       category,
-      subcategory,
+
       galleryImages,
       stock,
     } = body;
@@ -113,7 +113,7 @@ export async function PUT(request: Request, context: RouteContext) {
         description,
         image,
         category: normalizedCategory.category as any,
-        subcategory: (subcategory || normalizedCategory.subcategory) as any,
+
         stock: stockValue,
         stockStatus: getStockStatus(stockValue),
         images: {
