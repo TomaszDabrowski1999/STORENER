@@ -56,7 +56,7 @@ export async function POST(request: Request) {
       description,
       image,
       category,
-      subcategory,
+
       galleryImages,
       stock,
     } = body;
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (category === "DOM_I_OGROD" && !subcategory) {
+
       return NextResponse.json(
         { error: "Dla kategorii Dom i ogród wybierz podkategorię" },
         { status: 400 }
@@ -120,7 +120,7 @@ export async function POST(request: Request) {
         image,
         isActive: true,
         category,
-        subcategory: category === "DOM_I_OGROD" ? subcategory : null,
+
         stock: stockValue,
         stockStatus: getStockStatus(stockValue),
         images: {
