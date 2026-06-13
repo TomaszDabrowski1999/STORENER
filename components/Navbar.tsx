@@ -13,7 +13,7 @@ const categories = [
   { label: "Wszystkie produkty", href: "/produkty", icon: null },
   { label: "Nowości", href: "/produkty?category=NOWOSCI", icon: Sparkles, color: "text-violet-500" },
   { label: "Wyprzedaż", href: "/produkty?category=WYPRZEDAZ", icon: Tag, color: "text-red-500" },
-  { label: "Dom i ogród", href: "/produkty?category=DOM_I_OGROD", icon: Home, color: "text-green-600" },
+  // { label: "Dom i ogród", href: "/produkty?category=DOM_I_OGROD", icon: Home, color: "text-green-600" }, // chwilowo ukryte
   { label: "Ogród", href: "/produkty?category=OGROD", icon: Leaf, color: "text-emerald-500" },
   { label: "Wyposażenie", href: "/produkty?category=WYPOSAZENIE", icon: Sofa, color: "text-teal-500" },
   { label: "Motoryzacja", href: "/produkty?category=MOTORYZACJA", icon: Car, color: "text-blue-500" },
@@ -168,7 +168,8 @@ export default function Navbar() {
             <Link href="/produkty?category=WYPRZEDAZ" onClick={close} className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-[#4caf3d] transition hover:bg-white/8">
               <Tag className="h-3.5 w-3.5" /> Wyprzedaż
             </Link>
-            <Link href="/produkty?category=DOM_I_OGROD" onClick={close} className="rounded-lg px-3 py-2 transition hover:bg-white/8 hover:text-white">Dom i ogród</Link>
+            {/* Dom i ogród – chwilowo ukryte, nie usuwać */}
+            {/* <Link href="/produkty?category=DOM_I_OGROD" onClick={close} className="rounded-lg px-3 py-2 transition hover:bg-white/8 hover:text-white">Dom i ogród</Link> */}
             <Link href="/produkty?category=OGROD" onClick={close} className="rounded-lg px-3 py-2 transition hover:bg-white/8 hover:text-white">Ogród</Link>
             <Link href="/produkty?category=WYPOSAZENIE" onClick={close} className="rounded-lg px-3 py-2 transition hover:bg-white/8 hover:text-white">Wyposażenie</Link>
             <Link href="/produkty?category=MOTORYZACJA" onClick={close} className="rounded-lg px-3 py-2 transition hover:bg-white/8 hover:text-white">Motoryzacja</Link>
