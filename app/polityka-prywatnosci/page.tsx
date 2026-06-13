@@ -58,8 +58,8 @@ export default function Page() {
                   ["Założenie i prowadzenie konta", "imię, nazwisko, e-mail, telefon, adres", "do upływu okresu przedawnienia roszczeń"],
                   ["Dodawanie opinii", "imię", "do momentu wniesienia sprzeciwu"],
                   ["Formularz kontaktowy", "imię, e-mail, telefon", "do momentu wniesienia sprzeciwu"],
-                  ["Formularz „zapytaj o produkt"", "adres e-mail", "do momentu wniesienia sprzeciwu"],
-                  ["Formularz „powiadom o dostępności"", "adres e-mail", "do momentu wniesienia sprzeciwu"],
+                  ["Formularz zapytaj o produkt", "adres e-mail", "do momentu wniesienia sprzeciwu"],
+                  ["Formularz powiadom o dostepnosci", "adres e-mail", "do momentu wniesienia sprzeciwu"],
                   ["Analiza ruchu na stronie", "adres IP, dane przeglądarki", "do momentu wniesienia sprzeciwu"],
                   ["Ustalenie, dochodzenie i egzekucja roszczeń", "imię, nazwisko, adres, PESEL, NIP, e-mail, telefon, IP, nr konta/karty", "do upływu okresu przedawnienia roszczeń"],
                   ["Wypełnienie obowiązków prawnych (podatkowych i rachunkowych)", "imię, nazwisko, NIP/REGON, e-mail, telefon, adres, nr karty", "do momentu wygaśnięcia obowiązków prawnych"],
@@ -105,7 +105,7 @@ export default function Page() {
           <p className="mb-4 text-sm leading-relaxed">
             Nasz sklep umożliwia zalogowanie do konta za pomocą Twojego konta Google. W takich wypadkach otrzymujemy
             Twoje dane osobowe od Google Ireland Ltd. Przetwarzamy wówczas: imię, nazwisko, wizerunek (na podstawie
-            art. 6 ust. 1 lit. f) RODO) do momentu usunięcia konta w sklepie.
+            art. 6 ust. 1 lit. f RODO) do momentu usunięcia konta w sklepie.
           </p>
         </section>
 
@@ -116,7 +116,7 @@ export default function Page() {
             {[
               "żądania dostępu do swoich danych osobowych (art. 15 RODO)",
               "żądania sprostowania swoich danych osobowych (art. 16 RODO)",
-              "żądania usunięcia swoich danych osobowych – „prawo do bycia zapomnianym" (art. 17 RODO)",
+              "żądania usunięcia swoich danych osobowych - prawo do bycia zapomnianym (art. 17 RODO)",
               "żądania ograniczenia przetwarzania danych osobowych (art. 18 RODO)",
               "wniesienia sprzeciwu wobec przetwarzania danych osobowych (art. 21 RODO)",
               "żądania przenoszenia danych osobowych (art. 20 RODO)",
