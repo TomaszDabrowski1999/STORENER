@@ -1,1 +1,40 @@
-export default function ZwrotyPage() { return <main className="min-h-screen bg-gray-50"><section className="border-b bg-white"><div className="mx-auto max-w-5xl px-6 py-14"><p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00856f]">Zakupy bez obaw</p><h1 className="mt-3 text-4xl font-bold">Zwroty i wymiany</h1><p className="mt-4 text-gray-600">Przejrzyste zasady zwrotów zwiększają zaufanie klientów.</p></div></section><section className="mx-auto max-w-5xl px-6 py-10"><div className="rounded-3xl bg-white p-8 shadow-sm"><h2 className="text-2xl font-bold">Jak zwrócić produkt?</h2><ol className="mt-5 list-decimal space-y-3 pl-5 text-gray-600"><li>Skontaktuj się z obsługą klienta i podaj numer zamówienia.</li><li>Spakuj produkt oraz dołącz informację o zwrocie.</li><li>Wyślij paczkę na adres podany przez obsługę sklepu.</li><li>Po przyjęciu zwrotu środki zostaną zwrócone zgodnie z metodą płatności.</li></ol></div></section></main>; }
+import { Undo2 } from "lucide-react";
+import InfoPage, { InfoCard, Steps } from "../../components/InfoPage";
+
+export const metadata = { title: "Zwroty i wymiany" };
+
+export default function Page() {
+  return (
+    <InfoPage
+      eyebrow="Zakupy bez obaw"
+      title="Zwroty i wymiany"
+      icon={Undo2}
+      subtitle="Przejrzyste zasady zwrotów to spokój podczas zakupów. Poniżej wyjaśniamy, jak krok po kroku zwrócić produkt."
+    >
+      <InfoCard title="Jak zwrócić produkt?">
+        <Steps
+          items={[
+            "Skontaktuj się z obsługą klienta i podaj numer zamówienia.",
+            "Spakuj produkt oraz dołącz informację o zwrocie.",
+            "Wyślij paczkę na adres podany przez obsługę sklepu.",
+            "Po przyjęciu zwrotu środki zostaną zwrócone zgodnie z metodą płatności.",
+          ]}
+        />
+      </InfoCard>
+
+      <InfoCard className="bg-[#0a0a0a] text-white">
+        <p className="text-sm leading-relaxed text-white/70">
+          Potrzebujesz pomocy ze zwrotem? Napisz na{" "}
+          <a href="mailto:storener@interia.pl" className="font-medium text-[#4caf3d] hover:underline">
+            storener@interia.pl
+          </a>{" "}
+          lub zadzwoń pod{" "}
+          <a href="tel:+48661377044" className="font-medium text-[#4caf3d] hover:underline">
+            +48 661 377 044
+          </a>
+          .
+        </p>
+      </InfoCard>
+    </InfoPage>
+  );
+}

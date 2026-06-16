@@ -1,6 +1,56 @@
-const items = [
+"use client";
+
+import { useState } from "react";
+import { HelpCircle, Plus } from "lucide-react";
+import InfoPage from "../../components/InfoPage";
+
+const items: [string, string][] = [
   ["Jak długo trwa realizacja zamówienia?", "Standardowo zamówienia przygotowujemy w ciągu 1–2 dni roboczych."],
   ["Czy mogę zmienić dane po złożeniu zamówienia?", "Tak, skontaktuj się z obsługą klienta jak najszybciej po zakupie."],
-  ["Gdzie sprawdzę status?", "Status zamówienia widoczny jest w panelu klienta oraz na stronie statusu zamówienia."],
+  ["Gdzie sprawdzę status zamówienia?", "Status zamówienia widoczny jest w panelu klienta oraz na stronie „Status zamówienia”."],
 ];
-export default function FaqPage() { return <main className="min-h-screen bg-gray-50"><section className="bg-white border-b"><div className="mx-auto max-w-5xl px-6 py-14"><p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00856f]">Pomoc</p><h1 className="mt-3 text-4xl font-bold">FAQ</h1><p className="mt-4 text-gray-600">Najczęstsze pytania klientów dotyczące zakupów, dostawy i płatności.</p></div></section><section className="mx-auto max-w-5xl px-6 py-10"><div className="space-y-4">{items.map(([q,a]) => <article key={q} className="rounded-3xl bg-white p-6 shadow-sm"><h2 className="text-xl font-bold">{q}</h2><p className="mt-3 leading-7 text-gray-600">{a}</p></article>)}</div></section></main>; }
+
+export default function FaqPage() {
+  const [open, setOpen] = useState<number | null>(0);
+
+  return (
+    <InfoPage
+      eyebrow="Pomoc"
+      title="Najczęstsze pytania"
+      icon={HelpCircle}
+      subtitle="Odpowiedzi na pytania klientów dotyczące zakupów, dostawy i płatności. Nie znalazłeś odpowiedzi? Napisz do nas."
+      contentClassName="space-y-3"
+    >
+      {items.map(([q, a], i) => {
+        const isOpen = open === i;
+        return (
+          <div
+            key={q}
+            className="overflow-hidden rounded-2xl border border-[#e8e8e6] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.05)]"
+          >
+            <button
+              onClick={() => setOpen(isOpen ? null : i)}
+              className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
+            >
+              <span className="font-semibold text-[#0a0a0a]">{q}</span>
+              <Plus
+                className={`h-5 w-5 shrink-0 text-[#4caf3d] transition-transform duration-300 ${
+                  isOpen ? "rotate-45" : ""
+                }`}
+              />
+            </button>
+            <div
+              className={`grid transition-all duration-300 ease-out ${
+                isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+              }`}
+            >
+              <div className="overflow-hidden">
+                <p className="px-6 pb-5 leading-relaxed text-gray-600">{a}</p>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </InfoPage>
+  );
+}

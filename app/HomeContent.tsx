@@ -16,7 +16,7 @@ type Product = {
 const CATEGORY_SECTIONS = [
   { key: "NOWOSCI",     eyebrow: "Świeże dodania",  title: "Nowości",         accent: "bg-violet-500", href: "/produkty?category=NOWOSCI" },
   { key: "WYPRZEDAZ",   eyebrow: "Okazje cenowe",   title: "Wyprzedaż",       accent: "bg-red-500",    href: "/produkty?category=WYPRZEDAZ" },
-  { key: "DOM_I_OGROD", eyebrow: "Inspiracje",      title: "Dom i ogród",     accent: "bg-green-500",  href: "/produkty?category=DOM_I_OGROD" },
+  // { key: "DOM_I_OGROD", eyebrow: "Inspiracje",      title: "Dom i ogród",     accent: "bg-green-500",  href: "/produkty?category=DOM_I_OGROD" }, // chwilowo ukryte
   { key: "MOTORYZACJA", eyebrow: "Dla kierowców",   title: "Motoryzacja",     accent: "bg-blue-500",   href: "/produkty?category=MOTORYZACJA" },
 ];
 
@@ -116,7 +116,7 @@ export default function HomeContent() {
             {[
               { label: "Nowości",     href: "/produkty?category=NOWOSCI",     emoji: "✨", bg: "from-violet-50 to-violet-100/60", border: "border-violet-100" },
               { label: "Wyprzedaż",  href: "/produkty?category=WYPRZEDAZ",   emoji: "🏷️", bg: "from-red-50 to-red-100/60",      border: "border-red-100" },
-              { label: "Dom i ogród",href: "/produkty?category=DOM_I_OGROD", emoji: "🏡", bg: "from-green-50 to-green-100/60",  border: "border-green-100" },
+              { label: "Ogród",      href: "/produkty?category=OGROD",      emoji: "🌿", bg: "from-green-50 to-green-100/60",  border: "border-green-100" },
               { label: "Motoryzacja",href: "/produkty?category=MOTORYZACJA", emoji: "🚗", bg: "from-blue-50 to-blue-100/60",   border: "border-blue-100" },
             ].map(({ label, href, emoji, bg, border }) => (
               <Link

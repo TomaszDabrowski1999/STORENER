@@ -18,7 +18,7 @@ const CATEGORIES = [
   { value: "",                       label: "Wszystkie",            icon: Grid3x3,   color: "text-gray-500",    bg: "bg-gray-100" },
   { value: "NOWOSCI",                label: "Nowości",              icon: Sparkles,  color: "text-violet-600",  bg: "bg-violet-50" },
   { value: "WYPRZEDAZ",              label: "Wyprzedaż",            icon: Tag,       color: "text-red-600",     bg: "bg-red-50" },
-  { value: "DOM_I_OGROD",            label: "Dom i ogród",          icon: Home,      color: "text-green-700",   bg: "bg-green-50" },
+  { value: "DOM_I_OGROD",            label: "Dom i ogród",          icon: Home,      color: "text-green-700",   bg: "bg-green-50", hidden: true }, // chwilowo ukryte – nie usuwać (lookup po URL nadal działa)
   { value: "OGROD",                  label: "Ogród",                icon: Leaf,      color: "text-emerald-600", bg: "bg-emerald-50" },
   { value: "WYPOSAZENIE",            label: "Wyposażenie",          icon: Sofa,      color: "text-teal-600",    bg: "bg-teal-50" },
   { value: "MOTORYZACJA",            label: "Motoryzacja",          icon: Car,       color: "text-blue-600",    bg: "bg-blue-50" },
@@ -143,7 +143,7 @@ export default function ProduktyContent() {
       <div className="mx-auto max-w-6xl px-6 py-6">
         {/* Category pills */}
         <div className="mb-5 flex flex-wrap gap-2">
-          {CATEGORIES.map(({ value, label, icon: Icon, color, bg }) => (
+          {CATEGORIES.filter((c) => !c.hidden).map(({ value, label, icon: Icon, color, bg }) => (
             <button
               key={value}
               onClick={() => selectCategory(value)}
