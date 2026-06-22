@@ -16,6 +16,7 @@ type Order = {
   paymentMethod: "BLIK" | "KARTA" | "PRZELEW" | "POBRANIE";
   paymentStatus: "OCZEKUJE" | "OPLACONA" | "NIEUDANA";
   shippingMethodName?: string; shippingEstimatedDelivery?: string;
+  trackingNumber?: string | null; trackingCarrier?: string | null;
   fullName: string; address: string; city: string; postalCode: string;
   items: OrderItem[];
 };
@@ -190,6 +191,12 @@ export default function MyOrdersPage() {
                             <p className="mb-1 text-xs font-bold uppercase tracking-wider text-gray-400">Dostawa</p>
                             <p className="text-sm font-medium text-gray-700">{order.shippingMethodName || "Standardowa"}</p>
                             {order.shippingEstimatedDelivery && <p className="text-xs text-gray-400">{order.shippingEstimatedDelivery}</p>}
+                            {order.trackingNumber && (
+                              <p className="mt-1 text-xs font-semibold text-gray-700">
+                                Nr przesyłki{order.trackingCarrier ? ` (${order.trackingCarrier})` : ""}:{" "}
+                                <span className="font-mono text-gray-900">{order.trackingNumber}</span>
+                              </p>
+                            )}
                           </div>
                           <div>
                             <p className="mb-1 text-xs font-bold uppercase tracking-wider text-gray-400">Płatność</p>

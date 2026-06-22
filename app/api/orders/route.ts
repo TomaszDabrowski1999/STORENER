@@ -3,6 +3,7 @@ import { auth } from "../../../auth";
 import { prisma } from "@/lib/prisma";
 import { Resend } from "resend";
 import { getShippingOption, formatShippingMethod } from "@/lib/shipping";
+import type { Prisma } from "@/generated/prisma";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -33,6 +34,7 @@ export async function POST(request: Request) {
       items,
       fullName,
       email,
+      phone,
       address,
       city,
       postalCode,
@@ -51,6 +53,13 @@ export async function POST(request: Request) {
     if (!fullName || !email || !address || !city || !postalCode) {
       return NextResponse.json(
         { error: "Brak danych klienta" },
+        { status: 400 }
+      );
+    }
+
+    if (!phone || !String(phone).trim()) {
+      return NextResponse.json(
+        { error: "Podaj numer telefonu" },
         { status: 400 }
       );
     }
@@ -202,6 +211,7 @@ export async function POST(request: Request) {
           total,
           fullName,
           email,
+          phone: String(phone).trim(),
           address,
           city,
           postalCode,
@@ -219,7 +229,9 @@ export async function POST(request: Request) {
               quantity: item.quantity,
             })),
           },
-        },
+          // phone jest w bazie po migracji; rzutujemy przez unknown, bo lokalny
+          // klient Prisma pozna to pole dopiero po `prisma generate`.
+        } as unknown as Prisma.OrderCreateInput,
         include: {
           items: {
             include: {
@@ -279,7 +291,8 @@ export async function POST(request: Request) {
           <p>
             ${escapeHtml(fullName)}<br />
             ${escapeHtml(address)}<br />
-            ${escapeHtml(postalCode)} ${escapeHtml(city)}
+            ${escapeHtml(postalCode)} ${escapeHtml(city)}<br />
+            tel. ${escapeHtml(phone)}
           </p>
 
           <p><strong>Metoda dostawy:</strong> ${escapeHtml(formatShippingMethod(shippingMethod))}</p>

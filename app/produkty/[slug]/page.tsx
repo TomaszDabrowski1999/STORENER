@@ -5,6 +5,7 @@ import ProductGallery from "../../../components/ProductGallery";
 import ProductCard from "../../../components/ProductCard";
 import { prisma } from "../../../lib/prisma";
 import { getCategoryLabel } from "../../../lib/categories";
+import { formatDescriptionHtml } from "../../../lib/format";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -173,7 +174,7 @@ export default async function ProductPage({ params }: Props) {
           <h2 className="mt-1 mb-6 text-2xl font-bold text-gray-950" style={{ fontFamily: "'Syne', system-ui" }}>Opis produktu</h2>
           <div
             className="max-w-4xl text-[15px] leading-8 text-gray-700 [&_strong]:font-bold [&_b]:font-bold [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-6 [&_h2]:mb-3 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:mt-4 [&_h3]:mb-2 [&_p]:mb-4 [&_ul]:ml-5 [&_ul]:list-disc [&_ul]:mb-4 [&_ol]:ml-5 [&_ol]:list-decimal [&_ol]:mb-4 [&_li]:mb-1.5 [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-gray-200 [&_td]:p-3 [&_th]:border [&_th]:border-gray-200 [&_th]:bg-gray-50 [&_th]:p-3 [&_th]:text-left"
-            dangerouslySetInnerHTML={{ __html: product.description }}
+            dangerouslySetInnerHTML={{ __html: formatDescriptionHtml(product.description) }}
           />
         </div>
 

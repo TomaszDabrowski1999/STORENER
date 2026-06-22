@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@/generated/prisma";
 
 export const dynamic = "force-dynamic";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
 // Furgonetka sends tracking info to this endpoint when shipment is created
+// POST /api/furgonetka/orders/{id}  (opcja "Wysyłaj informacje o przesyłce")
 export async function POST(request: Request, context: RouteContext) {
   const authHeader = request.headers.get("authorization");
   const token = authHeader?.replace("Bearer ", "") || "";
@@ -20,16 +22,56 @@ export async function POST(request: Request, context: RouteContext) {
     const orderId = Number(id);
     if (isNaN(orderId)) return NextResponse.json({ error: "Invalid order ID" }, { status: 400 });
 
-    const body = await request.json();
-    const { tracking_number, carrier } = body;
+    const body = await request.json().catch(() => ({}));
 
-    // Update order status to W_REALIZACJI when shipment is created
-    await prisma.order.update({
-      where: { id: orderId },
-      data: { status: "W_REALIZACJI" },
-    });
+    // Furgonetka (oraz różne warianty integracji) mogą nazywać te pola różnie –
+    // przyjmujemy najczęstsze nazwy, żeby nic nie zgubić.
+    const trackingNumber =
+      body.tracking_number ||
+      body.trackingNumber ||
+      body.package_no ||
+      body.packageNo ||
+      body.tracking_no ||
+      body.waybill ||
+      body.number ||
+      null;
 
-    console.log(`Furgonetka tracking update for order #${orderId}: ${carrier} ${tracking_number}`);
+    const trackingCarrier =
+      body.carrier ||
+      body.service ||
+      body.courier ||
+      body.service_name ||
+      null;
+
+    // Upewniamy się, że zamówienie istnieje, zanim cokolwiek zmienimy.
+    const existing = await prisma.order.findUnique({ where: { id: orderId }, select: { id: true } });
+    if (!existing) return NextResponse.json({ error: "Order not found" }, { status: 404 });
+
+    // Etykieta wygenerowana => zamówienie jest wysłane.
+    const updateData: Record<string, unknown> = { status: "WYSLANE" };
+    if (trackingNumber) updateData.trackingNumber = String(trackingNumber);
+    if (trackingCarrier) updateData.trackingCarrier = String(trackingCarrier);
+
+    try {
+      await prisma.order.update({
+        where: { id: orderId },
+        // trackingNumber/trackingCarrier istnieją w bazie po migracji;
+        // rzutujemy przez unknown, bo lokalny klient Prisma pozna je po `prisma generate`.
+        data: updateData as unknown as Prisma.OrderUpdateInput,
+      });
+    } catch (writeError) {
+      // Gdyby kolumny trackingNumber/trackingCarrier nie były jeszcze w bazie
+      // (brak wykonanej migracji), nie wywracamy callbacku – aktualizujemy sam status.
+      console.error("FURGONETKA TRACKING WRITE FALLBACK:", writeError);
+      await prisma.order.update({
+        where: { id: orderId },
+        data: { status: "WYSLANE" },
+      });
+    }
+
+    console.log(
+      `Furgonetka shipment for order #${orderId}: ${trackingCarrier || "?"} ${trackingNumber || "(brak numeru)"}`
+    );
 
     return NextResponse.json({ success: true, message: "Order updated" });
   } catch (error) {
@@ -66,6 +108,13 @@ export async function GET(request: Request, context: RouteContext) {
 
     if (!order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
 
+    // Pola dodane migracją – lokalny klient Prisma pozna je po `prisma generate`.
+    const o = order as typeof order & {
+      phone?: string | null;
+      trackingNumber?: string | null;
+      trackingCarrier?: string | null;
+    };
+
     return NextResponse.json({
       id: String(order.id),
       status: order.status,
@@ -73,7 +122,7 @@ export async function GET(request: Request, context: RouteContext) {
       created_at: order.createdAt.toISOString(),
       total: order.total,
       currency: "PLN",
-      customer: { name: order.fullName, email: order.email },
+      customer: { name: order.fullName, email: order.email, phone: o.phone || null },
       shipping_address: {
         name: order.fullName,
         street: order.address,
@@ -86,6 +135,10 @@ export async function GET(request: Request, context: RouteContext) {
         method_name: order.shippingMethodName,
         price: order.shippingPrice,
         point: order.shippingPoint || null,
+      },
+      tracking: {
+        number: o.trackingNumber || null,
+        carrier: o.trackingCarrier || null,
       },
       items: order.items.map((item: any) => ({
         id: String(item.id),

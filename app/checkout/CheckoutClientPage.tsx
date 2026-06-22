@@ -43,6 +43,7 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
     defaultValues: {
       fullName: sessionUser.fullName,
       email: sessionUser.email,
+      phone: "",
       address: "",
       city: "",
       postalCode: "",
@@ -109,6 +110,7 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
       reset({
         fullName: sessionUser.fullName,
         email: sessionUser.email,
+        phone: "",
         address: "",
         city: "",
         postalCode: "",
@@ -167,6 +169,7 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
               <div className="grid gap-4">
                 <Input type="text" placeholder="Imię i nazwisko" error={errors.fullName?.message} {...register("fullName")} />
                 <Input type="email" placeholder="Email" error={errors.email?.message} {...register("email")} />
+                <Input type="tel" placeholder="Telefon (do kontaktu kuriera)" error={errors.phone?.message} {...register("phone")} />
                 <Input type="text" placeholder="Adres, numer domu / mieszkania" error={errors.address?.message} {...register("address")} />
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Input type="text" placeholder="Miasto" error={errors.city?.message} {...register("city")} />

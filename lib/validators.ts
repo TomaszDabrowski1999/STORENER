@@ -8,6 +8,11 @@ export const checkoutSchema = z.object({
   email: z
     .string()
     .email("Podaj poprawny adres email"),
+  phone: z
+    .string()
+    .trim()
+    .min(9, "Podaj poprawny numer telefonu")
+    .regex(/^[+]?[0-9\s-]{9,20}$/, "Numer telefonu może zawierać tylko cyfry, spacje, myślniki i +"),
   address: z
     .string()
     .min(5, "Adres musi mieć co najmniej 5 znaków"),

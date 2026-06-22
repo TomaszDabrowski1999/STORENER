@@ -173,6 +173,9 @@ export default function Navbar() {
             <Link href="/produkty?category=OGROD" onClick={close} className="rounded-lg px-3 py-2 transition hover:bg-white/8 hover:text-white">Ogród</Link>
             <Link href="/produkty?category=WYPOSAZENIE" onClick={close} className="rounded-lg px-3 py-2 transition hover:bg-white/8 hover:text-white">Wyposażenie</Link>
             <Link href="/produkty?category=MOTORYZACJA" onClick={close} className="rounded-lg px-3 py-2 transition hover:bg-white/8 hover:text-white">Motoryzacja</Link>
+            <Link href="/produkty?category=AKCESORIA_DLA_ZWIERZAT" onClick={close} className="flex items-center gap-1.5 rounded-lg px-3 py-2 transition hover:bg-white/8 hover:text-white">
+              <PawPrint className="h-3.5 w-3.5 text-orange-400" /> Akcesoria dla zwierząt
+            </Link>
           </nav>
 
           <div className="ml-auto flex items-center gap-3 text-xs text-white/40">

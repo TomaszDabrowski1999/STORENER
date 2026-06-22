@@ -48,6 +48,7 @@ model Order {
   status                    OrderStatus   @default(NOWE)
   fullName                  String
   email                     String
+  phone                     String?
   address                   String
   city                      String
   postalCode                String
@@ -59,6 +60,8 @@ model Order {
   shippingPrice             Float         @default(16.99)
   shippingPoint             String?
   shippingEstimatedDelivery String        @default("1-2 dni robocze")
+  trackingNumber            String?
+  trackingCarrier           String?
   user                      User?         @relation(fields: [userId], references: [id])
   items                     OrderItem[]
 }
