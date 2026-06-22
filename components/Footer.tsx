@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0a0a0a] text-white">
+    <footer className="bg-black text-white">
       {/* Trust bar */}
       <div className="border-b border-white/6">
         <div className="mx-auto max-w-7xl px-6">

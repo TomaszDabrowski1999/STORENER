@@ -137,7 +137,6 @@ exports.Prisma.ProductScalarFieldEnum = {
   slug: 'slug',
   isActive: 'isActive',
   category: 'category',
-  subcategory: 'subcategory',
   stock: 'stock',
   stockStatus: 'stockStatus',
   productDetails: 'productDetails'
@@ -157,6 +156,7 @@ exports.Prisma.OrderScalarFieldEnum = {
   status: 'status',
   fullName: 'fullName',
   email: 'email',
+  phone: 'phone',
   address: 'address',
   city: 'city',
   postalCode: 'postalCode',
@@ -167,7 +167,9 @@ exports.Prisma.OrderScalarFieldEnum = {
   shippingMethodName: 'shippingMethodName',
   shippingPrice: 'shippingPrice',
   shippingPoint: 'shippingPoint',
-  shippingEstimatedDelivery: 'shippingEstimatedDelivery'
+  shippingEstimatedDelivery: 'shippingEstimatedDelivery',
+  trackingNumber: 'trackingNumber',
+  trackingCarrier: 'trackingCarrier'
 };
 
 exports.Prisma.OrderItemScalarFieldEnum = {
@@ -217,14 +219,9 @@ exports.UserRole = exports.$Enums.UserRole = {
 exports.ProductCategory = exports.$Enums.ProductCategory = {
   NOWOSCI: 'NOWOSCI',
   WYPRZEDAZ: 'WYPRZEDAZ',
-  DOM: 'DOM',
-  OGROD: 'OGROD',
   DOM_I_OGROD: 'DOM_I_OGROD',
   MOTORYZACJA: 'MOTORYZACJA',
-  AKCESORIA_DLA_ZWIERZAT: 'AKCESORIA_DLA_ZWIERZAT'
-};
-
-exports.ProductSubcategory = exports.$Enums.ProductSubcategory = {
+  AKCESORIA_DLA_ZWIERZAT: 'AKCESORIA_DLA_ZWIERZAT',
   OGROD: 'OGROD',
   WYPOSAZENIE: 'WYPOSAZENIE'
 };

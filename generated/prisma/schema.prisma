@@ -18,17 +18,16 @@ model User {
 }
 
 model Product {
-  id             Int                 @id @default(autoincrement())
+  id             Int                @id @default(autoincrement())
   name           String
   price          Float
   description    String
   image          String
-  slug           String              @unique
-  isActive       Boolean             @default(true)
-  category       ProductCategory     @default(NOWOSCI)
-  subcategory    ProductSubcategory?
-  stock          Int                 @default(0)
-  stockStatus    ProductStockStatus  @default(BRAK)
+  slug           String             @unique
+  isActive       Boolean            @default(true)
+  category       ProductCategory    @default(NOWOSCI)
+  stock          Int                @default(0)
+  stockStatus    ProductStockStatus @default(BRAK)
   productDetails String?
   orderItems     OrderItem[]
   images         ProductImage[]
@@ -50,6 +49,7 @@ model Order {
   status                    OrderStatus   @default(NOWE)
   fullName                  String
   email                     String
+  phone                     String?
   address                   String
   city                      String
   postalCode                String
@@ -61,6 +61,8 @@ model Order {
   shippingPrice             Float         @default(16.99)
   shippingPoint             String?
   shippingEstimatedDelivery String        @default("1-2 dni robocze")
+  trackingNumber            String?
+  trackingCarrier           String?
   user                      User?         @relation(fields: [userId], references: [id])
   items                     OrderItem[]
 }
@@ -102,14 +104,9 @@ enum UserRole {
 enum ProductCategory {
   NOWOSCI
   WYPRZEDAZ
-  DOM
-  OGROD
   DOM_I_OGROD
   MOTORYZACJA
   AKCESORIA_DLA_ZWIERZAT
-}
-
-enum ProductSubcategory {
   OGROD
   WYPOSAZENIE
 }

@@ -13,7 +13,6 @@ type ProductForm = {
   description: string;
   image: string;
   category: string;
-  subcategory: string;
   galleryImages: string[];
   stock: string;
 };
@@ -38,7 +37,6 @@ export default function AddProductPage() {
     description: "",
     image: "",
     category: "NOWOSCI",
-    subcategory: "",
     galleryImages: [],
     stock: "0",
   });
@@ -63,15 +61,6 @@ export default function AddProductPage() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-
-    if (name === "category") {
-      setForm((prev) => ({
-        ...prev,
-        category: value,
-        subcategory: value === "DOM_I_OGROD" ? prev.subcategory : "",
-      }));
-      return;
-    }
 
     if (name === "slug") {
       setSlugManuallyEdited(true);
@@ -123,15 +112,12 @@ export default function AddProductPage() {
   const getCategoryLabel = (value: string) => {
     if (value === "NOWOSCI") return "Nowości";
     if (value === "WYPRZEDAZ") return "Wyprzedaż";
+    if (value === "DOM") return "Dom";
+    if (value === "OGROD") return "Ogród";
+    if (value === "WYPOSAZENIE") return "Wyposażenie";
     if (value === "DOM_I_OGROD") return "Dom i ogród";
     if (value === "MOTORYZACJA") return "Motoryzacja";
     if (value === "AKCESORIA_DLA_ZWIERZAT") return "Akcesoria dla zwierząt";
-    return value;
-  };
-
-  const getSubcategoryLabel = (value: string) => {
-    if (value === "OGROD") return "Ogród";
-    if (value === "WYPOSAZENIE") return "Wyposażenie";
     return value;
   };
 
@@ -150,13 +136,6 @@ export default function AddProductPage() {
 
     if (!selectedMainFile && !form.image.trim()) {
       const msg = "Dodaj główne zdjęcie produktu";
-      setError(msg);
-      toast.error(msg);
-      return;
-    }
-
-    if (form.category === "DOM_I_OGROD" && !form.subcategory) {
-      const msg = "Dla kategorii Dom i ogród wybierz podkategorię";
       setError(msg);
       toast.error(msg);
       return;
@@ -194,7 +173,6 @@ export default function AddProductPage() {
           description: form.description.trim(),
           image: mainImageUrl,
           category: form.category,
-          subcategory: form.category === "DOM_I_OGROD" ? form.subcategory : null,
           galleryImages: form.galleryImages,
           stock: Number(form.stock),
         }),
@@ -216,7 +194,6 @@ export default function AddProductPage() {
         description: "",
         image: "",
         category: "NOWOSCI",
-        subcategory: "",
         galleryImages: [],
         stock: "0",
       });
@@ -346,7 +323,7 @@ export default function AddProductPage() {
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700">
-                      Kategoria główna
+                      Kategoria
                     </label>
                     <select
                       name="category"
@@ -356,29 +333,13 @@ export default function AddProductPage() {
                     >
                       <option value="NOWOSCI">Nowości</option>
                       <option value="WYPRZEDAZ">Wyprzedaż</option>
-                      <option value="DOM_I_OGROD">Dom i ogród</option>
+                      <option value="DOM">Dom</option>
+                      <option value="OGROD">Ogród</option>
+                      <option value="WYPOSAZENIE">Wyposażenie</option>
                       <option value="MOTORYZACJA">Motoryzacja</option>
                       <option value="AKCESORIA_DLA_ZWIERZAT">Akcesoria dla zwierząt</option>
                     </select>
                   </div>
-
-                  {form.category === "DOM_I_OGROD" && (
-                    <div>
-                      <label className="mb-2 block text-sm font-medium text-gray-700">
-                        Podkategoria <span className="text-red-500">*</span>
-                      </label>
-                      <select
-                        name="subcategory"
-                        value={form.subcategory}
-                        onChange={handleChange}
-                        className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-black"
-                      >
-                        <option value="">Wybierz podkategorię</option>
-                        <option value="OGROD">Ogród</option>
-                        <option value="WYPOSAZENIE">Wyposażenie</option>
-                      </select>
-                    </div>
-                  )}
                 </div>
 
                 {/* Opis */}
@@ -493,9 +454,6 @@ export default function AddProductPage() {
 
                     <p className="mt-1 text-xs font-medium text-gray-400 uppercase tracking-wider">
                       {getCategoryLabel(form.category)}
-                      {form.category === "DOM_I_OGROD" && form.subcategory
-                        ? ` / ${getSubcategoryLabel(form.subcategory)}`
-                        : ""}
                     </p>
 
                     <p className="mt-3 text-2xl font-bold text-black">

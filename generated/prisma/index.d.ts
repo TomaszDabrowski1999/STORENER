@@ -64,22 +64,14 @@ export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 export const ProductCategory: {
   NOWOSCI: 'NOWOSCI',
   WYPRZEDAZ: 'WYPRZEDAZ',
-  DOM: 'DOM',
-  OGROD: 'OGROD',
   DOM_I_OGROD: 'DOM_I_OGROD',
   MOTORYZACJA: 'MOTORYZACJA',
-  AKCESORIA_DLA_ZWIERZAT: 'AKCESORIA_DLA_ZWIERZAT'
-};
-
-export type ProductCategory = (typeof ProductCategory)[keyof typeof ProductCategory]
-
-
-export const ProductSubcategory: {
+  AKCESORIA_DLA_ZWIERZAT: 'AKCESORIA_DLA_ZWIERZAT',
   OGROD: 'OGROD',
   WYPOSAZENIE: 'WYPOSAZENIE'
 };
 
-export type ProductSubcategory = (typeof ProductSubcategory)[keyof typeof ProductSubcategory]
+export type ProductCategory = (typeof ProductCategory)[keyof typeof ProductCategory]
 
 
 export const OrderStatus: {
@@ -127,10 +119,6 @@ export const UserRole: typeof $Enums.UserRole
 export type ProductCategory = $Enums.ProductCategory
 
 export const ProductCategory: typeof $Enums.ProductCategory
-
-export type ProductSubcategory = $Enums.ProductSubcategory
-
-export const ProductSubcategory: typeof $Enums.ProductSubcategory
 
 export type OrderStatus = $Enums.OrderStatus
 
@@ -2800,7 +2788,6 @@ export namespace Prisma {
     slug: string | null
     isActive: boolean | null
     category: $Enums.ProductCategory | null
-    subcategory: $Enums.ProductSubcategory | null
     stock: number | null
     stockStatus: $Enums.ProductStockStatus | null
     productDetails: string | null
@@ -2815,7 +2802,6 @@ export namespace Prisma {
     slug: string | null
     isActive: boolean | null
     category: $Enums.ProductCategory | null
-    subcategory: $Enums.ProductSubcategory | null
     stock: number | null
     stockStatus: $Enums.ProductStockStatus | null
     productDetails: string | null
@@ -2830,7 +2816,6 @@ export namespace Prisma {
     slug: number
     isActive: number
     category: number
-    subcategory: number
     stock: number
     stockStatus: number
     productDetails: number
@@ -2859,7 +2844,6 @@ export namespace Prisma {
     slug?: true
     isActive?: true
     category?: true
-    subcategory?: true
     stock?: true
     stockStatus?: true
     productDetails?: true
@@ -2874,7 +2858,6 @@ export namespace Prisma {
     slug?: true
     isActive?: true
     category?: true
-    subcategory?: true
     stock?: true
     stockStatus?: true
     productDetails?: true
@@ -2889,7 +2872,6 @@ export namespace Prisma {
     slug?: true
     isActive?: true
     category?: true
-    subcategory?: true
     stock?: true
     stockStatus?: true
     productDetails?: true
@@ -2991,7 +2973,6 @@ export namespace Prisma {
     slug: string
     isActive: boolean
     category: $Enums.ProductCategory
-    subcategory: $Enums.ProductSubcategory | null
     stock: number
     stockStatus: $Enums.ProductStockStatus
     productDetails: string | null
@@ -3025,7 +3006,6 @@ export namespace Prisma {
     slug?: boolean
     isActive?: boolean
     category?: boolean
-    subcategory?: boolean
     stock?: boolean
     stockStatus?: boolean
     productDetails?: boolean
@@ -3044,7 +3024,6 @@ export namespace Prisma {
     slug?: boolean
     isActive?: boolean
     category?: boolean
-    subcategory?: boolean
     stock?: boolean
     stockStatus?: boolean
     productDetails?: boolean
@@ -3059,7 +3038,6 @@ export namespace Prisma {
     slug?: boolean
     isActive?: boolean
     category?: boolean
-    subcategory?: boolean
     stock?: boolean
     stockStatus?: boolean
     productDetails?: boolean
@@ -3074,13 +3052,12 @@ export namespace Prisma {
     slug?: boolean
     isActive?: boolean
     category?: boolean
-    subcategory?: boolean
     stock?: boolean
     stockStatus?: boolean
     productDetails?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "price" | "description" | "image" | "slug" | "isActive" | "category" | "subcategory" | "stock" | "stockStatus" | "productDetails", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "price" | "description" | "image" | "slug" | "isActive" | "category" | "stock" | "stockStatus" | "productDetails", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orderItems?: boolean | Product$orderItemsArgs<ExtArgs>
     images?: boolean | Product$imagesArgs<ExtArgs>
@@ -3106,7 +3083,6 @@ export namespace Prisma {
       slug: string
       isActive: boolean
       category: $Enums.ProductCategory
-      subcategory: $Enums.ProductSubcategory | null
       stock: number
       stockStatus: $Enums.ProductStockStatus
       productDetails: string | null
@@ -3544,7 +3520,6 @@ export namespace Prisma {
     readonly slug: FieldRef<"Product", 'String'>
     readonly isActive: FieldRef<"Product", 'Boolean'>
     readonly category: FieldRef<"Product", 'ProductCategory'>
-    readonly subcategory: FieldRef<"Product", 'ProductSubcategory'>
     readonly stock: FieldRef<"Product", 'Int'>
     readonly stockStatus: FieldRef<"Product", 'ProductStockStatus'>
     readonly productDetails: FieldRef<"Product", 'String'>
@@ -5156,6 +5131,7 @@ export namespace Prisma {
     status: $Enums.OrderStatus | null
     fullName: string | null
     email: string | null
+    phone: string | null
     address: string | null
     city: string | null
     postalCode: string | null
@@ -5167,6 +5143,8 @@ export namespace Prisma {
     shippingPrice: number | null
     shippingPoint: string | null
     shippingEstimatedDelivery: string | null
+    trackingNumber: string | null
+    trackingCarrier: string | null
   }
 
   export type OrderMaxAggregateOutputType = {
@@ -5176,6 +5154,7 @@ export namespace Prisma {
     status: $Enums.OrderStatus | null
     fullName: string | null
     email: string | null
+    phone: string | null
     address: string | null
     city: string | null
     postalCode: string | null
@@ -5187,6 +5166,8 @@ export namespace Prisma {
     shippingPrice: number | null
     shippingPoint: string | null
     shippingEstimatedDelivery: string | null
+    trackingNumber: string | null
+    trackingCarrier: string | null
   }
 
   export type OrderCountAggregateOutputType = {
@@ -5196,6 +5177,7 @@ export namespace Prisma {
     status: number
     fullName: number
     email: number
+    phone: number
     address: number
     city: number
     postalCode: number
@@ -5207,6 +5189,8 @@ export namespace Prisma {
     shippingPrice: number
     shippingPoint: number
     shippingEstimatedDelivery: number
+    trackingNumber: number
+    trackingCarrier: number
     _all: number
   }
 
@@ -5232,6 +5216,7 @@ export namespace Prisma {
     status?: true
     fullName?: true
     email?: true
+    phone?: true
     address?: true
     city?: true
     postalCode?: true
@@ -5243,6 +5228,8 @@ export namespace Prisma {
     shippingPrice?: true
     shippingPoint?: true
     shippingEstimatedDelivery?: true
+    trackingNumber?: true
+    trackingCarrier?: true
   }
 
   export type OrderMaxAggregateInputType = {
@@ -5252,6 +5239,7 @@ export namespace Prisma {
     status?: true
     fullName?: true
     email?: true
+    phone?: true
     address?: true
     city?: true
     postalCode?: true
@@ -5263,6 +5251,8 @@ export namespace Prisma {
     shippingPrice?: true
     shippingPoint?: true
     shippingEstimatedDelivery?: true
+    trackingNumber?: true
+    trackingCarrier?: true
   }
 
   export type OrderCountAggregateInputType = {
@@ -5272,6 +5262,7 @@ export namespace Prisma {
     status?: true
     fullName?: true
     email?: true
+    phone?: true
     address?: true
     city?: true
     postalCode?: true
@@ -5283,6 +5274,8 @@ export namespace Prisma {
     shippingPrice?: true
     shippingPoint?: true
     shippingEstimatedDelivery?: true
+    trackingNumber?: true
+    trackingCarrier?: true
     _all?: true
   }
 
@@ -5379,6 +5372,7 @@ export namespace Prisma {
     status: $Enums.OrderStatus
     fullName: string
     email: string
+    phone: string | null
     address: string
     city: string
     postalCode: string
@@ -5390,6 +5384,8 @@ export namespace Prisma {
     shippingPrice: number
     shippingPoint: string | null
     shippingEstimatedDelivery: string
+    trackingNumber: string | null
+    trackingCarrier: string | null
     _count: OrderCountAggregateOutputType | null
     _avg: OrderAvgAggregateOutputType | null
     _sum: OrderSumAggregateOutputType | null
@@ -5418,6 +5414,7 @@ export namespace Prisma {
     status?: boolean
     fullName?: boolean
     email?: boolean
+    phone?: boolean
     address?: boolean
     city?: boolean
     postalCode?: boolean
@@ -5429,6 +5426,8 @@ export namespace Prisma {
     shippingPrice?: boolean
     shippingPoint?: boolean
     shippingEstimatedDelivery?: boolean
+    trackingNumber?: boolean
+    trackingCarrier?: boolean
     user?: boolean | Order$userArgs<ExtArgs>
     items?: boolean | Order$itemsArgs<ExtArgs>
     _count?: boolean | OrderCountOutputTypeDefaultArgs<ExtArgs>
@@ -5441,6 +5440,7 @@ export namespace Prisma {
     status?: boolean
     fullName?: boolean
     email?: boolean
+    phone?: boolean
     address?: boolean
     city?: boolean
     postalCode?: boolean
@@ -5452,6 +5452,8 @@ export namespace Prisma {
     shippingPrice?: boolean
     shippingPoint?: boolean
     shippingEstimatedDelivery?: boolean
+    trackingNumber?: boolean
+    trackingCarrier?: boolean
     user?: boolean | Order$userArgs<ExtArgs>
   }, ExtArgs["result"]["order"]>
 
@@ -5462,6 +5464,7 @@ export namespace Prisma {
     status?: boolean
     fullName?: boolean
     email?: boolean
+    phone?: boolean
     address?: boolean
     city?: boolean
     postalCode?: boolean
@@ -5473,6 +5476,8 @@ export namespace Prisma {
     shippingPrice?: boolean
     shippingPoint?: boolean
     shippingEstimatedDelivery?: boolean
+    trackingNumber?: boolean
+    trackingCarrier?: boolean
     user?: boolean | Order$userArgs<ExtArgs>
   }, ExtArgs["result"]["order"]>
 
@@ -5483,6 +5488,7 @@ export namespace Prisma {
     status?: boolean
     fullName?: boolean
     email?: boolean
+    phone?: boolean
     address?: boolean
     city?: boolean
     postalCode?: boolean
@@ -5494,9 +5500,11 @@ export namespace Prisma {
     shippingPrice?: boolean
     shippingPoint?: boolean
     shippingEstimatedDelivery?: boolean
+    trackingNumber?: boolean
+    trackingCarrier?: boolean
   }
 
-  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "total" | "status" | "fullName" | "email" | "address" | "city" | "postalCode" | "paymentMethod" | "paymentStatus" | "userId" | "shippingMethod" | "shippingMethodName" | "shippingPrice" | "shippingPoint" | "shippingEstimatedDelivery", ExtArgs["result"]["order"]>
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "total" | "status" | "fullName" | "email" | "phone" | "address" | "city" | "postalCode" | "paymentMethod" | "paymentStatus" | "userId" | "shippingMethod" | "shippingMethodName" | "shippingPrice" | "shippingPoint" | "shippingEstimatedDelivery" | "trackingNumber" | "trackingCarrier", ExtArgs["result"]["order"]>
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Order$userArgs<ExtArgs>
     items?: boolean | Order$itemsArgs<ExtArgs>
@@ -5522,6 +5530,7 @@ export namespace Prisma {
       status: $Enums.OrderStatus
       fullName: string
       email: string
+      phone: string | null
       address: string
       city: string
       postalCode: string
@@ -5533,6 +5542,8 @@ export namespace Prisma {
       shippingPrice: number
       shippingPoint: string | null
       shippingEstimatedDelivery: string
+      trackingNumber: string | null
+      trackingCarrier: string | null
     }, ExtArgs["result"]["order"]>
     composites: {}
   }
@@ -5964,6 +5975,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Order", 'OrderStatus'>
     readonly fullName: FieldRef<"Order", 'String'>
     readonly email: FieldRef<"Order", 'String'>
+    readonly phone: FieldRef<"Order", 'String'>
     readonly address: FieldRef<"Order", 'String'>
     readonly city: FieldRef<"Order", 'String'>
     readonly postalCode: FieldRef<"Order", 'String'>
@@ -5975,6 +5987,8 @@ export namespace Prisma {
     readonly shippingPrice: FieldRef<"Order", 'Float'>
     readonly shippingPoint: FieldRef<"Order", 'String'>
     readonly shippingEstimatedDelivery: FieldRef<"Order", 'String'>
+    readonly trackingNumber: FieldRef<"Order", 'String'>
+    readonly trackingCarrier: FieldRef<"Order", 'String'>
   }
     
 
@@ -9752,7 +9766,6 @@ export namespace Prisma {
     slug: 'slug',
     isActive: 'isActive',
     category: 'category',
-    subcategory: 'subcategory',
     stock: 'stock',
     stockStatus: 'stockStatus',
     productDetails: 'productDetails'
@@ -9778,6 +9791,7 @@ export namespace Prisma {
     status: 'status',
     fullName: 'fullName',
     email: 'email',
+    phone: 'phone',
     address: 'address',
     city: 'city',
     postalCode: 'postalCode',
@@ -9788,7 +9802,9 @@ export namespace Prisma {
     shippingMethodName: 'shippingMethodName',
     shippingPrice: 'shippingPrice',
     shippingPoint: 'shippingPoint',
-    shippingEstimatedDelivery: 'shippingEstimatedDelivery'
+    shippingEstimatedDelivery: 'shippingEstimatedDelivery',
+    trackingNumber: 'trackingNumber',
+    trackingCarrier: 'trackingCarrier'
   };
 
   export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
@@ -9931,20 +9947,6 @@ export namespace Prisma {
    * Reference to a field of type 'ProductCategory[]'
    */
   export type ListEnumProductCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductCategory[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'ProductSubcategory'
-   */
-  export type EnumProductSubcategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductSubcategory'>
-    
-
-
-  /**
-   * Reference to a field of type 'ProductSubcategory[]'
-   */
-  export type ListEnumProductSubcategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductSubcategory[]'>
     
 
 
@@ -10093,7 +10095,6 @@ export namespace Prisma {
     slug?: StringFilter<"Product"> | string
     isActive?: BoolFilter<"Product"> | boolean
     category?: EnumProductCategoryFilter<"Product"> | $Enums.ProductCategory
-    subcategory?: EnumProductSubcategoryNullableFilter<"Product"> | $Enums.ProductSubcategory | null
     stock?: IntFilter<"Product"> | number
     stockStatus?: EnumProductStockStatusFilter<"Product"> | $Enums.ProductStockStatus
     productDetails?: StringNullableFilter<"Product"> | string | null
@@ -10111,7 +10112,6 @@ export namespace Prisma {
     slug?: SortOrder
     isActive?: SortOrder
     category?: SortOrder
-    subcategory?: SortOrderInput | SortOrder
     stock?: SortOrder
     stockStatus?: SortOrder
     productDetails?: SortOrderInput | SortOrder
@@ -10132,7 +10132,6 @@ export namespace Prisma {
     image?: StringFilter<"Product"> | string
     isActive?: BoolFilter<"Product"> | boolean
     category?: EnumProductCategoryFilter<"Product"> | $Enums.ProductCategory
-    subcategory?: EnumProductSubcategoryNullableFilter<"Product"> | $Enums.ProductSubcategory | null
     stock?: IntFilter<"Product"> | number
     stockStatus?: EnumProductStockStatusFilter<"Product"> | $Enums.ProductStockStatus
     productDetails?: StringNullableFilter<"Product"> | string | null
@@ -10150,7 +10149,6 @@ export namespace Prisma {
     slug?: SortOrder
     isActive?: SortOrder
     category?: SortOrder
-    subcategory?: SortOrderInput | SortOrder
     stock?: SortOrder
     stockStatus?: SortOrder
     productDetails?: SortOrderInput | SortOrder
@@ -10173,7 +10171,6 @@ export namespace Prisma {
     slug?: StringWithAggregatesFilter<"Product"> | string
     isActive?: BoolWithAggregatesFilter<"Product"> | boolean
     category?: EnumProductCategoryWithAggregatesFilter<"Product"> | $Enums.ProductCategory
-    subcategory?: EnumProductSubcategoryNullableWithAggregatesFilter<"Product"> | $Enums.ProductSubcategory | null
     stock?: IntWithAggregatesFilter<"Product"> | number
     stockStatus?: EnumProductStockStatusWithAggregatesFilter<"Product"> | $Enums.ProductStockStatus
     productDetails?: StringNullableWithAggregatesFilter<"Product"> | string | null
@@ -10241,6 +10238,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
     fullName?: StringFilter<"Order"> | string
     email?: StringFilter<"Order"> | string
+    phone?: StringNullableFilter<"Order"> | string | null
     address?: StringFilter<"Order"> | string
     city?: StringFilter<"Order"> | string
     postalCode?: StringFilter<"Order"> | string
@@ -10252,6 +10250,8 @@ export namespace Prisma {
     shippingPrice?: FloatFilter<"Order"> | number
     shippingPoint?: StringNullableFilter<"Order"> | string | null
     shippingEstimatedDelivery?: StringFilter<"Order"> | string
+    trackingNumber?: StringNullableFilter<"Order"> | string | null
+    trackingCarrier?: StringNullableFilter<"Order"> | string | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     items?: OrderItemListRelationFilter
   }
@@ -10263,6 +10263,7 @@ export namespace Prisma {
     status?: SortOrder
     fullName?: SortOrder
     email?: SortOrder
+    phone?: SortOrderInput | SortOrder
     address?: SortOrder
     city?: SortOrder
     postalCode?: SortOrder
@@ -10274,6 +10275,8 @@ export namespace Prisma {
     shippingPrice?: SortOrder
     shippingPoint?: SortOrderInput | SortOrder
     shippingEstimatedDelivery?: SortOrder
+    trackingNumber?: SortOrderInput | SortOrder
+    trackingCarrier?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
     items?: OrderItemOrderByRelationAggregateInput
   }
@@ -10288,6 +10291,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
     fullName?: StringFilter<"Order"> | string
     email?: StringFilter<"Order"> | string
+    phone?: StringNullableFilter<"Order"> | string | null
     address?: StringFilter<"Order"> | string
     city?: StringFilter<"Order"> | string
     postalCode?: StringFilter<"Order"> | string
@@ -10299,6 +10303,8 @@ export namespace Prisma {
     shippingPrice?: FloatFilter<"Order"> | number
     shippingPoint?: StringNullableFilter<"Order"> | string | null
     shippingEstimatedDelivery?: StringFilter<"Order"> | string
+    trackingNumber?: StringNullableFilter<"Order"> | string | null
+    trackingCarrier?: StringNullableFilter<"Order"> | string | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     items?: OrderItemListRelationFilter
   }, "id">
@@ -10310,6 +10316,7 @@ export namespace Prisma {
     status?: SortOrder
     fullName?: SortOrder
     email?: SortOrder
+    phone?: SortOrderInput | SortOrder
     address?: SortOrder
     city?: SortOrder
     postalCode?: SortOrder
@@ -10321,6 +10328,8 @@ export namespace Prisma {
     shippingPrice?: SortOrder
     shippingPoint?: SortOrderInput | SortOrder
     shippingEstimatedDelivery?: SortOrder
+    trackingNumber?: SortOrderInput | SortOrder
+    trackingCarrier?: SortOrderInput | SortOrder
     _count?: OrderCountOrderByAggregateInput
     _avg?: OrderAvgOrderByAggregateInput
     _max?: OrderMaxOrderByAggregateInput
@@ -10338,6 +10347,7 @@ export namespace Prisma {
     status?: EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
     fullName?: StringWithAggregatesFilter<"Order"> | string
     email?: StringWithAggregatesFilter<"Order"> | string
+    phone?: StringNullableWithAggregatesFilter<"Order"> | string | null
     address?: StringWithAggregatesFilter<"Order"> | string
     city?: StringWithAggregatesFilter<"Order"> | string
     postalCode?: StringWithAggregatesFilter<"Order"> | string
@@ -10349,6 +10359,8 @@ export namespace Prisma {
     shippingPrice?: FloatWithAggregatesFilter<"Order"> | number
     shippingPoint?: StringNullableWithAggregatesFilter<"Order"> | string | null
     shippingEstimatedDelivery?: StringWithAggregatesFilter<"Order"> | string
+    trackingNumber?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    trackingCarrier?: StringNullableWithAggregatesFilter<"Order"> | string | null
   }
 
   export type OrderItemWhereInput = {
@@ -10599,7 +10611,6 @@ export namespace Prisma {
     slug: string
     isActive?: boolean
     category?: $Enums.ProductCategory
-    subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
     productDetails?: string | null
@@ -10617,7 +10628,6 @@ export namespace Prisma {
     slug: string
     isActive?: boolean
     category?: $Enums.ProductCategory
-    subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
     productDetails?: string | null
@@ -10634,7 +10644,6 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
-    subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10652,7 +10661,6 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
-    subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10670,7 +10678,6 @@ export namespace Prisma {
     slug: string
     isActive?: boolean
     category?: $Enums.ProductCategory
-    subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
     productDetails?: string | null
@@ -10684,7 +10691,6 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
-    subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10699,7 +10705,6 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
-    subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10756,6 +10761,7 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     fullName: string
     email: string
+    phone?: string | null
     address: string
     city: string
     postalCode: string
@@ -10766,6 +10772,8 @@ export namespace Prisma {
     shippingPrice?: number
     shippingPoint?: string | null
     shippingEstimatedDelivery?: string
+    trackingNumber?: string | null
+    trackingCarrier?: string | null
     user?: UserCreateNestedOneWithoutOrdersInput
     items?: OrderItemCreateNestedManyWithoutOrderInput
   }
@@ -10777,6 +10785,7 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     fullName: string
     email: string
+    phone?: string | null
     address: string
     city: string
     postalCode: string
@@ -10788,6 +10797,8 @@ export namespace Prisma {
     shippingPrice?: number
     shippingPoint?: string | null
     shippingEstimatedDelivery?: string
+    trackingNumber?: string | null
+    trackingCarrier?: string | null
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -10797,6 +10808,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
@@ -10807,6 +10819,8 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneWithoutOrdersNestedInput
     items?: OrderItemUpdateManyWithoutOrderNestedInput
   }
@@ -10818,6 +10832,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
@@ -10829,6 +10844,8 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -10839,6 +10856,7 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     fullName: string
     email: string
+    phone?: string | null
     address: string
     city: string
     postalCode: string
@@ -10850,6 +10868,8 @@ export namespace Prisma {
     shippingPrice?: number
     shippingPoint?: string | null
     shippingEstimatedDelivery?: string
+    trackingNumber?: string | null
+    trackingCarrier?: string | null
   }
 
   export type OrderUpdateManyMutationInput = {
@@ -10858,6 +10878,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
@@ -10868,6 +10889,8 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OrderUncheckedUpdateManyInput = {
@@ -10877,6 +10900,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
@@ -10888,6 +10912,8 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OrderItemCreateInput = {
@@ -11204,13 +11230,6 @@ export namespace Prisma {
     not?: NestedEnumProductCategoryFilter<$PrismaModel> | $Enums.ProductCategory
   }
 
-  export type EnumProductSubcategoryNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProductSubcategory | EnumProductSubcategoryFieldRefInput<$PrismaModel> | null
-    in?: $Enums.ProductSubcategory[] | ListEnumProductSubcategoryFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.ProductSubcategory[] | ListEnumProductSubcategoryFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumProductSubcategoryNullableFilter<$PrismaModel> | $Enums.ProductSubcategory | null
-  }
-
   export type EnumProductStockStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ProductStockStatus | EnumProductStockStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ProductStockStatus[] | ListEnumProductStockStatusFieldRefInput<$PrismaModel>
@@ -11267,7 +11286,6 @@ export namespace Prisma {
     slug?: SortOrder
     isActive?: SortOrder
     category?: SortOrder
-    subcategory?: SortOrder
     stock?: SortOrder
     stockStatus?: SortOrder
     productDetails?: SortOrder
@@ -11288,7 +11306,6 @@ export namespace Prisma {
     slug?: SortOrder
     isActive?: SortOrder
     category?: SortOrder
-    subcategory?: SortOrder
     stock?: SortOrder
     stockStatus?: SortOrder
     productDetails?: SortOrder
@@ -11303,7 +11320,6 @@ export namespace Prisma {
     slug?: SortOrder
     isActive?: SortOrder
     category?: SortOrder
-    subcategory?: SortOrder
     stock?: SortOrder
     stockStatus?: SortOrder
     productDetails?: SortOrder
@@ -11347,16 +11363,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumProductCategoryFilter<$PrismaModel>
     _max?: NestedEnumProductCategoryFilter<$PrismaModel>
-  }
-
-  export type EnumProductSubcategoryNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProductSubcategory | EnumProductSubcategoryFieldRefInput<$PrismaModel> | null
-    in?: $Enums.ProductSubcategory[] | ListEnumProductSubcategoryFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.ProductSubcategory[] | ListEnumProductSubcategoryFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumProductSubcategoryNullableWithAggregatesFilter<$PrismaModel> | $Enums.ProductSubcategory | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumProductSubcategoryNullableFilter<$PrismaModel>
-    _max?: NestedEnumProductSubcategoryNullableFilter<$PrismaModel>
   }
 
   export type EnumProductStockStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -11480,6 +11486,7 @@ export namespace Prisma {
     status?: SortOrder
     fullName?: SortOrder
     email?: SortOrder
+    phone?: SortOrder
     address?: SortOrder
     city?: SortOrder
     postalCode?: SortOrder
@@ -11491,6 +11498,8 @@ export namespace Prisma {
     shippingPrice?: SortOrder
     shippingPoint?: SortOrder
     shippingEstimatedDelivery?: SortOrder
+    trackingNumber?: SortOrder
+    trackingCarrier?: SortOrder
   }
 
   export type OrderAvgOrderByAggregateInput = {
@@ -11507,6 +11516,7 @@ export namespace Prisma {
     status?: SortOrder
     fullName?: SortOrder
     email?: SortOrder
+    phone?: SortOrder
     address?: SortOrder
     city?: SortOrder
     postalCode?: SortOrder
@@ -11518,6 +11528,8 @@ export namespace Prisma {
     shippingPrice?: SortOrder
     shippingPoint?: SortOrder
     shippingEstimatedDelivery?: SortOrder
+    trackingNumber?: SortOrder
+    trackingCarrier?: SortOrder
   }
 
   export type OrderMinOrderByAggregateInput = {
@@ -11527,6 +11539,7 @@ export namespace Prisma {
     status?: SortOrder
     fullName?: SortOrder
     email?: SortOrder
+    phone?: SortOrder
     address?: SortOrder
     city?: SortOrder
     postalCode?: SortOrder
@@ -11538,6 +11551,8 @@ export namespace Prisma {
     shippingPrice?: SortOrder
     shippingPoint?: SortOrder
     shippingEstimatedDelivery?: SortOrder
+    trackingNumber?: SortOrder
+    trackingCarrier?: SortOrder
   }
 
   export type OrderSumOrderByAggregateInput = {
@@ -11886,10 +11901,6 @@ export namespace Prisma {
     set?: $Enums.ProductCategory
   }
 
-  export type NullableEnumProductSubcategoryFieldUpdateOperationsInput = {
-    set?: $Enums.ProductSubcategory | null
-  }
-
   export type EnumProductStockStatusFieldUpdateOperationsInput = {
     set?: $Enums.ProductStockStatus
   }
@@ -12232,13 +12243,6 @@ export namespace Prisma {
     not?: NestedEnumProductCategoryFilter<$PrismaModel> | $Enums.ProductCategory
   }
 
-  export type NestedEnumProductSubcategoryNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProductSubcategory | EnumProductSubcategoryFieldRefInput<$PrismaModel> | null
-    in?: $Enums.ProductSubcategory[] | ListEnumProductSubcategoryFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.ProductSubcategory[] | ListEnumProductSubcategoryFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumProductSubcategoryNullableFilter<$PrismaModel> | $Enums.ProductSubcategory | null
-  }
-
   export type NestedEnumProductStockStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ProductStockStatus | EnumProductStockStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ProductStockStatus[] | ListEnumProductStockStatusFieldRefInput<$PrismaModel>
@@ -12294,27 +12298,6 @@ export namespace Prisma {
     _max?: NestedEnumProductCategoryFilter<$PrismaModel>
   }
 
-  export type NestedEnumProductSubcategoryNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ProductSubcategory | EnumProductSubcategoryFieldRefInput<$PrismaModel> | null
-    in?: $Enums.ProductSubcategory[] | ListEnumProductSubcategoryFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.ProductSubcategory[] | ListEnumProductSubcategoryFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumProductSubcategoryNullableWithAggregatesFilter<$PrismaModel> | $Enums.ProductSubcategory | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumProductSubcategoryNullableFilter<$PrismaModel>
-    _max?: NestedEnumProductSubcategoryNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedEnumProductStockStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ProductStockStatus | EnumProductStockStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ProductStockStatus[] | ListEnumProductStockStatusFieldRefInput<$PrismaModel>
@@ -12340,6 +12323,17 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -12451,6 +12445,7 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     fullName: string
     email: string
+    phone?: string | null
     address: string
     city: string
     postalCode: string
@@ -12461,6 +12456,8 @@ export namespace Prisma {
     shippingPrice?: number
     shippingPoint?: string | null
     shippingEstimatedDelivery?: string
+    trackingNumber?: string | null
+    trackingCarrier?: string | null
     items?: OrderItemCreateNestedManyWithoutOrderInput
   }
 
@@ -12471,6 +12468,7 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     fullName: string
     email: string
+    phone?: string | null
     address: string
     city: string
     postalCode: string
@@ -12481,6 +12479,8 @@ export namespace Prisma {
     shippingPrice?: number
     shippingPoint?: string | null
     shippingEstimatedDelivery?: string
+    trackingNumber?: string | null
+    trackingCarrier?: string | null
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -12547,6 +12547,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
     fullName?: StringFilter<"Order"> | string
     email?: StringFilter<"Order"> | string
+    phone?: StringNullableFilter<"Order"> | string | null
     address?: StringFilter<"Order"> | string
     city?: StringFilter<"Order"> | string
     postalCode?: StringFilter<"Order"> | string
@@ -12558,6 +12559,8 @@ export namespace Prisma {
     shippingPrice?: FloatFilter<"Order"> | number
     shippingPoint?: StringNullableFilter<"Order"> | string | null
     shippingEstimatedDelivery?: StringFilter<"Order"> | string
+    trackingNumber?: StringNullableFilter<"Order"> | string | null
+    trackingCarrier?: StringNullableFilter<"Order"> | string | null
   }
 
   export type ProductReviewUpsertWithWhereUniqueWithoutUserInput = {
@@ -12734,7 +12737,6 @@ export namespace Prisma {
     slug: string
     isActive?: boolean
     category?: $Enums.ProductCategory
-    subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
     productDetails?: string | null
@@ -12751,7 +12753,6 @@ export namespace Prisma {
     slug: string
     isActive?: boolean
     category?: $Enums.ProductCategory
-    subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
     productDetails?: string | null
@@ -12783,7 +12784,6 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
-    subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12800,7 +12800,6 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
-    subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12901,6 +12900,7 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     fullName: string
     email: string
+    phone?: string | null
     address: string
     city: string
     postalCode: string
@@ -12911,6 +12911,8 @@ export namespace Prisma {
     shippingPrice?: number
     shippingPoint?: string | null
     shippingEstimatedDelivery?: string
+    trackingNumber?: string | null
+    trackingCarrier?: string | null
     user?: UserCreateNestedOneWithoutOrdersInput
   }
 
@@ -12921,6 +12923,7 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     fullName: string
     email: string
+    phone?: string | null
     address: string
     city: string
     postalCode: string
@@ -12932,6 +12935,8 @@ export namespace Prisma {
     shippingPrice?: number
     shippingPoint?: string | null
     shippingEstimatedDelivery?: string
+    trackingNumber?: string | null
+    trackingCarrier?: string | null
   }
 
   export type OrderCreateOrConnectWithoutItemsInput = {
@@ -12947,7 +12952,6 @@ export namespace Prisma {
     slug: string
     isActive?: boolean
     category?: $Enums.ProductCategory
-    subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
     productDetails?: string | null
@@ -12964,7 +12968,6 @@ export namespace Prisma {
     slug: string
     isActive?: boolean
     category?: $Enums.ProductCategory
-    subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
     productDetails?: string | null
@@ -12994,6 +12997,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
@@ -13004,6 +13008,8 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneWithoutOrdersNestedInput
   }
 
@@ -13014,6 +13020,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
@@ -13025,6 +13032,8 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductUpsertWithoutOrderItemsInput = {
@@ -13046,7 +13055,6 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
-    subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13063,7 +13071,6 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
-    subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13079,7 +13086,6 @@ export namespace Prisma {
     slug: string
     isActive?: boolean
     category?: $Enums.ProductCategory
-    subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
     productDetails?: string | null
@@ -13096,7 +13102,6 @@ export namespace Prisma {
     slug: string
     isActive?: boolean
     category?: $Enums.ProductCategory
-    subcategory?: $Enums.ProductSubcategory | null
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
     productDetails?: string | null
@@ -13150,7 +13155,6 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
-    subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13167,7 +13171,6 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
-    subcategory?: NullableEnumProductSubcategoryFieldUpdateOperationsInput | $Enums.ProductSubcategory | null
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13210,6 +13213,7 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     fullName: string
     email: string
+    phone?: string | null
     address: string
     city: string
     postalCode: string
@@ -13220,6 +13224,8 @@ export namespace Prisma {
     shippingPrice?: number
     shippingPoint?: string | null
     shippingEstimatedDelivery?: string
+    trackingNumber?: string | null
+    trackingCarrier?: string | null
   }
 
   export type ProductReviewCreateManyUserInput = {
@@ -13237,6 +13243,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
@@ -13247,6 +13254,8 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
     items?: OrderItemUpdateManyWithoutOrderNestedInput
   }
 
@@ -13257,6 +13266,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
@@ -13267,6 +13277,8 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -13277,6 +13289,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
     postalCode?: StringFieldUpdateOperationsInput | string
@@ -13287,6 +13300,8 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductReviewUpdateWithoutUserInput = {

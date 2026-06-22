@@ -3,6 +3,7 @@ export const CATEGORY_OPTIONS = [
   { value: "WYPRZEDAZ", label: "Wyprzedaż" },
   { value: "DOM", label: "Dom" },
   { value: "OGROD", label: "Ogród" },
+  { value: "WYPOSAZENIE", label: "Wyposażenie" },
   { value: "MOTORYZACJA", label: "Motoryzacja" },
   { value: "AKCESORIA_DLA_ZWIERZAT", label: "Akcesoria dla zwierząt" },
 ];

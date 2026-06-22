@@ -13,7 +13,7 @@ const categories = [
   { label: "Wszystkie produkty", href: "/produkty", icon: null },
   { label: "Nowości", href: "/produkty?category=NOWOSCI", icon: Sparkles, color: "text-violet-500" },
   { label: "Wyprzedaż", href: "/produkty?category=WYPRZEDAZ", icon: Tag, color: "text-red-500" },
-  // { label: "Dom i ogród", href: "/produkty?category=DOM_I_OGROD", icon: Home, color: "text-green-600" }, // chwilowo ukryte
+  { label: "Dom", href: "/produkty?category=DOM", icon: Home, color: "text-green-600" },
   { label: "Ogród", href: "/produkty?category=OGROD", icon: Leaf, color: "text-emerald-500" },
   { label: "Wyposażenie", href: "/produkty?category=WYPOSAZENIE", icon: Sofa, color: "text-teal-500" },
   { label: "Motoryzacja", href: "/produkty?category=MOTORYZACJA", icon: Car, color: "text-blue-500" },
@@ -61,7 +61,7 @@ export default function Navbar() {
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-[#0a0a0a]/98 backdrop-blur-xl shadow-[0_4px_32px_rgba(0,0,0,0.32)]" : "bg-[#0a0a0a]"
+        scrolled ? "bg-black/98 backdrop-blur-xl shadow-[0_4px_32px_rgba(0,0,0,0.32)]" : "bg-black"
       }`}
     >
       {/* Top strip */}
@@ -162,20 +162,22 @@ export default function Navbar() {
           <div className="mx-2 h-4 w-px bg-white/10" />
 
           <nav className="flex items-center gap-0.5 text-[13px] font-semibold text-white/70">
-            <Link href="/produkty?category=NOWOSCI" onClick={close} className="flex items-center gap-1.5 rounded-lg px-3 py-2 transition hover:bg-white/8 hover:text-white">
-              <Sparkles className="h-3.5 w-3.5 text-violet-400" /> Nowości
-            </Link>
-            <Link href="/produkty?category=WYPRZEDAZ" onClick={close} className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-[#4caf3d] transition hover:bg-white/8">
-              <Tag className="h-3.5 w-3.5" /> Wyprzedaż
-            </Link>
-            {/* Dom i ogród – chwilowo ukryte, nie usuwać */}
-            {/* <Link href="/produkty?category=DOM_I_OGROD" onClick={close} className="rounded-lg px-3 py-2 transition hover:bg-white/8 hover:text-white">Dom i ogród</Link> */}
-            <Link href="/produkty?category=OGROD" onClick={close} className="rounded-lg px-3 py-2 transition hover:bg-white/8 hover:text-white">Ogród</Link>
-            <Link href="/produkty?category=WYPOSAZENIE" onClick={close} className="rounded-lg px-3 py-2 transition hover:bg-white/8 hover:text-white">Wyposażenie</Link>
-            <Link href="/produkty?category=MOTORYZACJA" onClick={close} className="rounded-lg px-3 py-2 transition hover:bg-white/8 hover:text-white">Motoryzacja</Link>
-            <Link href="/produkty?category=AKCESORIA_DLA_ZWIERZAT" onClick={close} className="flex items-center gap-1.5 rounded-lg px-3 py-2 transition hover:bg-white/8 hover:text-white">
-              <PawPrint className="h-3.5 w-3.5 text-orange-400" /> Akcesoria dla zwierząt
-            </Link>
+            {categories
+              .filter((cat) => cat.href !== "/produkty")
+              .map((cat) => {
+                const Icon = cat.icon;
+                return (
+                  <Link
+                    key={cat.href}
+                    href={cat.href}
+                    onClick={close}
+                    className="flex items-center gap-1.5 rounded-lg px-3 py-2 transition hover:bg-white/8 hover:text-white"
+                  >
+                    {Icon && <Icon className={`h-3.5 w-3.5 ${cat.color}`} />}
+                    {cat.label}
+                  </Link>
+                );
+              })}
           </nav>
 
           <div className="ml-auto flex items-center gap-3 text-xs text-white/40">
@@ -187,7 +189,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="border-t border-white/8 bg-[#0a0a0a] md:hidden">
+        <div className="border-t border-white/8 bg-black md:hidden">
           <div className="px-4 py-3">
             <form action="/produkty" className="flex h-10 overflow-hidden rounded-xl bg-white/10">
               <input name="q" type="text" placeholder="Szukaj…" className="flex-1 bg-transparent px-4 text-sm text-white placeholder-white/40 outline-none" />
