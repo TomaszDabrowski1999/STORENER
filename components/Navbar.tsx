@@ -13,7 +13,7 @@ const categories = [
   { label: "Wszystkie produkty", href: "/produkty", icon: null },
   { label: "Nowości", href: "/produkty?category=NOWOSCI", icon: Sparkles, color: "text-violet-500" },
   { label: "Wyprzedaż", href: "/produkty?category=WYPRZEDAZ", icon: Tag, color: "text-red-500" },
-  { label: "Dom", href: "/produkty?category=DOM", icon: Home, color: "text-green-600" },
+  // { label: "Dom", href: "/produkty?category=DOM", icon: Home, color: "text-green-600" }, // ukryte w menu – nie usuwać (link i panel admina nadal działają)
   { label: "Ogród", href: "/produkty?category=OGROD", icon: Leaf, color: "text-emerald-500" },
   { label: "Wyposażenie", href: "/produkty?category=WYPOSAZENIE", icon: Sofa, color: "text-teal-500" },
   { label: "Motoryzacja", href: "/produkty?category=MOTORYZACJA", icon: Car, color: "text-blue-500" },
