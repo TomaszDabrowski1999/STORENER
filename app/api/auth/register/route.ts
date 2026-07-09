@@ -16,8 +16,17 @@ export async function POST(request: Request) {
       );
     }
 
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
+    if (String(password).length < 6) {
+      return NextResponse.json(
+        { error: "Hasło musi mieć co najmniej 6 znaków" },
+        { status: 400 }
+      );
+    }
+
+    const normalizedEmail = String(email).trim().toLowerCase();
+
+    const existingUser = await prisma.user.findFirst({
+      where: { email: { equals: normalizedEmail, mode: "insensitive" } },
     });
 
     if (existingUser) {
@@ -31,8 +40,8 @@ export async function POST(request: Request) {
 
     const user = await prisma.user.create({
       data: {
-        fullName,
-        email,
+        fullName: String(fullName).trim(),
+        email: normalizedEmail,
         password: hashedPassword,
       },
     });

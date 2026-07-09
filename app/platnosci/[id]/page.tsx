@@ -1,6 +1,7 @@
 import Link from "next/link";
 import PaymentAction from "./PaymentAction";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { auth } from "../../../auth";
 import { prisma } from "../../../lib/prisma";
 
 const formatPrice = (value: number) =>
@@ -11,14 +12,22 @@ const formatPrice = (value: number) =>
 
 type Props = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ powrot?: string }>;
 };
 
-export default async function PaymentPage({ params }: Props) {
+export default async function PaymentPage({ params, searchParams }: Props) {
   const { id } = await params;
+  const { powrot } = await searchParams;
   const orderId = Number(id);
 
   if (!orderId || Number.isNaN(orderId)) {
     notFound();
+  }
+
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect(`/logowanie`);
   }
 
   const order = await prisma.order.findUnique({
@@ -42,6 +51,16 @@ export default async function PaymentPage({ params }: Props) {
     notFound();
   }
 
+  const sessionUserId = Number(session.user.id);
+  const isAdmin = session.user.role === "ADMIN";
+
+  if (!isAdmin && (Number.isNaN(sessionUserId) || order.userId !== sessionUserId)) {
+    notFound();
+  }
+
+  const isPaid = order.paymentStatus === "OPLACONA";
+  const isReturnFromGateway = powrot === "1";
+
   const productsTotal = order.items.reduce(
     (sum, item) => sum + item.product.price * item.quantity,
     0
@@ -55,11 +74,32 @@ export default async function PaymentPage({ params }: Props) {
             płatność zamówienia
           </p>
           <h1 className="mt-3 text-4xl font-black tracking-tight text-gray-950">
-            Zamówienie #{order.id} zostało utworzone
+            {isPaid
+              ? `Zamówienie #${order.id} zostało opłacone`
+              : `Zamówienie #${order.id} zostało utworzone`}
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-gray-600">
-            Teraz możesz przejść do płatności. Zamówienie jest już zapisane w bazie i będzie widoczne w sekcji „Moje zamówienia”.
+            {isPaid
+              ? "Dziękujemy! Płatność została zaksięgowana. Szczegóły znajdziesz w sekcji „Moje zamówienia”."
+              : "Teraz możesz przejść do płatności. Zamówienie jest już zapisane w bazie i będzie widoczne w sekcji „Moje zamówienia”."}
           </p>
+
+          {isReturnFromGateway && !isPaid ? (
+            <div className="mt-6 max-w-2xl rounded-2xl border border-yellow-200 bg-yellow-50 px-5 py-4 text-sm leading-6 text-yellow-800">
+              <p className="font-bold">Płatność jest jeszcze przetwarzana.</p>
+              <p className="mt-1">
+                Jeśli dokonano wpłaty, status zamówienia zaktualizuje się automatycznie w ciągu
+                kilku chwil — odśwież tę stronę. Jeśli płatność się nie powiodła, możesz spróbować
+                ponownie poniższym przyciskiem.
+              </p>
+            </div>
+          ) : null}
+
+          {isReturnFromGateway && isPaid ? (
+            <div className="mt-6 max-w-2xl rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-semibold leading-6 text-emerald-800">
+              Płatność potwierdzona przez Przelewy24. Dziękujemy!
+            </div>
+          ) : null}
         </div>
       </section>
 
@@ -104,9 +144,19 @@ export default async function PaymentPage({ params }: Props) {
 
           <div className="mt-6 rounded-2xl bg-gray-50 p-4 text-sm text-gray-600">
             <p className="font-bold text-gray-950">Metoda płatności</p>
-            <p className="mt-1">{order.paymentMethod}</p>
+            <p className="mt-1">
+              {order.paymentMethod === "POBRANIE"
+                ? "Płatność przy odbiorze (pobranie)"
+                : "Płatność online — Przelewy24"}
+            </p>
             <p className="mt-3 font-bold text-gray-950">Status płatności</p>
-            <p className="mt-1">{order.paymentStatus}</p>
+            <p className="mt-1">
+              {order.paymentStatus === "OPLACONA"
+                ? "Opłacona"
+                : order.paymentStatus === "NIEUDANA"
+                  ? "Nieudana"
+                  : "Oczekuje na płatność"}
+            </p>
           </div>
 
           <PaymentAction

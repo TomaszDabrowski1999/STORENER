@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { auth } from "../../../auth";
 import { prisma } from "../../../lib/prisma";
 import { formatShippingMethod } from "../../../lib/shipping";
 
@@ -12,7 +14,13 @@ export default async function OrderSuccessPage({ params }: Props) {
   const { id } = await params;
   const orderId = Number(id);
 
-  const order = await (prisma.order as any).findUnique({
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/logowanie");
+  }
+
+  const order = await prisma.order.findUnique({
     where: { id: orderId },
     include: {
       items: {
@@ -22,6 +30,37 @@ export default async function OrderSuccessPage({ params }: Props) {
       },
     },
   });
+
+  // Szczegóły zamówienia (dane osobowe, adres) może zobaczyć tylko
+  // właściciel zamówienia albo administrator.
+  const sessionUserId = Number(session.user.id);
+  const isAdmin = session.user.role === "ADMIN";
+  const isOwner =
+    order && !Number.isNaN(sessionUserId) && order.userId === sessionUserId;
+
+  if (order && !isOwner && !isAdmin) {
+    return (
+      <main className="min-h-screen bg-gray-50 px-6 py-12">
+        <div className="mx-auto max-w-5xl rounded-3xl bg-white p-8 shadow-sm">
+          <h1 className="text-3xl font-bold text-gray-900">
+            Brak dostępu do tego zamówienia
+          </h1>
+          <p className="mt-3 text-gray-600">
+            To zamówienie nie należy do Twojego konta. Jeśli chcesz sprawdzić
+            status zamówienia złożonego na inny adres e-mail, skorzystaj ze
+            strony sprawdzania statusu zamówienia.
+          </p>
+
+          <Link
+            href="/status-zamowienia"
+            className="mt-6 inline-block rounded-xl bg-black px-5 py-3 font-medium text-white transition hover:opacity-90"
+          >
+            Sprawdź status zamówienia
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   if (!order) {
     return (

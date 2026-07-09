@@ -47,7 +47,7 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
       address: "",
       city: "",
       postalCode: "",
-      paymentMethod: "KARTA",
+      paymentMethod: "PRZELEW",
       shippingMethod: "INPOST_KURIER",
       shippingPoint: "",
     },
@@ -57,11 +57,12 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
     setCart(getCart());
     setValue("fullName", sessionUser.fullName);
     setValue("email", sessionUser.email);
-    setValue("paymentMethod", "KARTA");
+    setValue("paymentMethod", "PRZELEW");
     setValue("shippingMethod", "INPOST_KURIER");
   }, [sessionUser, setValue]);
 
   const selectedShippingMethod = watch("shippingMethod");
+  const selectedPaymentMethod = watch("paymentMethod");
   const selectedShipping = getShippingOption(selectedShippingMethod) || shippingOptions[1];
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const shippingPrice = cart.length > 0 ? selectedShipping.price : 0;
@@ -114,7 +115,7 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
         address: "",
         city: "",
         postalCode: "",
-        paymentMethod: "KARTA",
+        paymentMethod: "PRZELEW",
         shippingMethod: "INPOST_KURIER",
         shippingPoint: "",
       });
@@ -223,10 +224,27 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
                 <div className="flex-1">
                   <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">krok 3</p>
                   <h2 className="mt-1 text-2xl font-bold text-gray-950">Płatność</h2>
-                  <div className="mt-4 rounded-none border border-gray-100 bg-gray-50 p-4">
-                    <p className="font-semibold text-gray-950">Płatność przy zamówieniu</p>
-                    <p className="mt-1 text-sm text-gray-500">Metoda jest ustawiona automatycznie. Po złożeniu zamówienia klient otrzymuje potwierdzenie.</p>
+
+                  <div className="mt-4 grid gap-3">
+                    <label className={`cursor-pointer border p-4 transition ${selectedPaymentMethod !== "POBRANIE" ? "border-emerald-700 bg-emerald-50" : "border-gray-100 bg-white hover:border-gray-300"}`}>
+                      <input type="radio" value="PRZELEW" className="sr-only" {...register("paymentMethod")} />
+                      <span className="flex items-center justify-between gap-4">
+                        <span>
+                          <span className="block text-base font-bold text-gray-950">Płatność online — Przelewy24</span>
+                          <span className="mt-1 block text-sm leading-5 text-gray-500">BLIK, karta płatnicza lub szybki przelew. Po złożeniu zamówienia przejdziesz do bezpiecznej bramki płatności.</span>
+                        </span>
+                        <Image src="/przelewy24.png" alt="Przelewy24" width={88} height={24} className="h-6 w-auto shrink-0" />
+                      </span>
+                    </label>
+
+                    <label className={`cursor-pointer border p-4 transition ${selectedPaymentMethod === "POBRANIE" ? "border-emerald-700 bg-emerald-50" : "border-gray-100 bg-white hover:border-gray-300"}`}>
+                      <input type="radio" value="POBRANIE" className="sr-only" {...register("paymentMethod")} />
+                      <span className="block text-base font-bold text-gray-950">Płatność przy odbiorze (pobranie)</span>
+                      <span className="mt-1 block text-sm leading-5 text-gray-500">Zapłacisz kurierowi gotówką lub kartą przy dostawie.</span>
+                    </label>
                   </div>
+
+                  {errors.paymentMethod?.message && <p className="mt-3 text-sm font-medium text-red-600">{errors.paymentMethod.message}</p>}
                 </div>
               </div>
             </Card>

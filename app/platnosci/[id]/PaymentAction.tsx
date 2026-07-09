@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -28,21 +29,25 @@ export default function PaymentAction({ orderId, paymentMethod, paymentStatus }:
     try {
       setIsLoading(true);
 
-      const response = await fetch(`/api/orders/${orderId}/pay`, {
+      const response = await fetch("/api/payments/przelewy24/create", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId }),
       });
+
       const data = await response.json();
 
-      if (!response.ok) {
-        setError(data.error || "Nie udało się potwierdzić płatności");
+      if (!response.ok || !data.redirectUrl) {
+        setError(data.error || "Nie udało się rozpocząć płatności");
+        setIsLoading(false);
         return;
       }
 
-      router.push(`/zamowienia/${orderId}`);
-      router.refresh();
+      // Przekierowanie do bramki Przelewy24 – celowo nie zdejmujemy
+      // stanu ładowania, bo strona zaraz się zmieni.
+      window.location.href = data.redirectUrl;
     } catch {
       setError("Wystąpił błąd połączenia z płatnością");
-    } finally {
       setIsLoading(false);
     }
   };
@@ -56,19 +61,25 @@ export default function PaymentAction({ orderId, paymentMethod, paymentStatus }:
         className="block w-full rounded-2xl bg-gray-950 px-6 py-4 text-center font-black text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isLoading
-          ? "Przetwarzanie płatności..."
+          ? "Przekierowanie do płatności..."
           : isCashOnDelivery
             ? "Potwierdź zamówienie za pobraniem"
             : isPaid
               ? "Zobacz zamówienie"
-              : "Zapłać i zakończ zamówienie"}
+              : "Zapłać przez Przelewy24"}
       </button>
 
       {!isCashOnDelivery && !isPaid ? (
-        <p className="mt-3 text-center text-xs leading-5 text-gray-500">
-          To jest bezpieczny etap płatności. Po podłączeniu bramki płatności
-          ten przycisk można zastąpić przekierowaniem do operatora płatności.
-        </p>
+        <div className="mt-3 flex items-center justify-center gap-2 text-xs leading-5 text-gray-500">
+          <Image
+            src="/przelewy24.png"
+            alt="Przelewy24"
+            width={72}
+            height={20}
+            className="h-5 w-auto"
+          />
+          <span>BLIK, karta lub szybki przelew — bezpieczna płatność online.</span>
+        </div>
       ) : null}
 
       {error ? (

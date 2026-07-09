@@ -299,8 +299,14 @@ export async function POST(request: Request) {
           ${shippingPoint ? `<p><strong>Punkt odbioru:</strong> ${escapeHtml(shippingPoint)}</p>` : ""}
           <p><strong>Przewidywany czas dostawy:</strong> ${escapeHtml(shippingOption.estimatedDelivery)}</p>
 
-          <p><strong>Metoda płatności:</strong> ${escapeHtml(paymentMethod)}</p>
-          <p><strong>Status płatności:</strong> ${escapeHtml(paymentStatus)}</p>
+          <p><strong>Metoda płatności:</strong> ${escapeHtml(
+            paymentMethod === "POBRANIE"
+              ? "Płatność przy odbiorze (pobranie)"
+              : "Płatność online — Przelewy24"
+          )}</p>
+          <p><strong>Status płatności:</strong> ${escapeHtml(
+            paymentMethod === "POBRANIE" ? "Płatne przy odbiorze" : "Oczekuje na płatność"
+          )}</p>
 
           <p>Powiadomimy Cię o kolejnych etapach realizacji zamówienia.</p>
         </div>
