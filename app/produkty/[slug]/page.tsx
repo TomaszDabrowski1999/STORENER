@@ -1,13 +1,44 @@
 import Link from "next/link";
-import { RefreshCcw, ShieldCheck, Truck, Star, ChevronRight, Package, Heart } from "lucide-react";
+import { notFound } from "next/navigation";
+import { RefreshCcw, ShieldCheck, Truck, Star, ChevronRight } from "lucide-react";
 import AddToCartButton from "../../../components/AddToCartButton";
 import ProductGallery from "../../../components/ProductGallery";
 import ProductCard from "../../../components/ProductCard";
 import { prisma } from "../../../lib/prisma";
 import { getCategoryLabel } from "../../../lib/categories";
-import { formatDescriptionHtml } from "../../../lib/format";
+import { formatDescriptionHtml, polishPlural } from "../../../lib/format";
 
 type Props = { params: Promise<{ slug: string }> };
+
+// Metadane per produkt: tytuł, opis i obrazek OG – ważne dla SEO i podglądów linków.
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
+  const product = await prisma.product.findUnique({
+    where: { slug },
+    select: { name: true, description: true, image: true },
+  });
+
+  if (!product) {
+    return { title: "Nie znaleziono produktu" };
+  }
+
+  // Opis może zawierać HTML – do meta description bierzemy czysty tekst.
+  const plainDescription = (product.description || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 160);
+
+  return {
+    title: product.name,
+    description: plainDescription || undefined,
+    openGraph: {
+      title: product.name,
+      description: plainDescription || undefined,
+      images: product.image ? [{ url: product.image }] : undefined,
+    },
+  };
+}
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
@@ -20,19 +51,9 @@ export default async function ProductPage({ params }: Props) {
     },
   });
 
+  // notFound() zwraca prawdziwy status 404 (istotne dla SEO) i renderuje app/not-found.tsx.
   if (!product) {
-    return (
-      <main className="min-h-screen" style={{ background: "var(--surface)" }}>
-        <div className="mx-auto max-w-4xl px-6 py-16 text-center">
-          <Package className="mx-auto mb-4 h-16 w-16 text-gray-200" />
-          <h1 className="text-2xl font-bold text-gray-950">Nie znaleziono produktu</h1>
-          <p className="mt-2 text-gray-500">Produkt nie istnieje lub został usunięty.</p>
-          <Link href="/" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#0a0a0a] px-6 py-3 font-semibold text-white transition hover:bg-[#1a1a1a]">
-            Wróć na stronę główną
-          </Link>
-        </div>
-      </main>
-    );
+    notFound();
   }
 
   const [similarProductsRaw] = await Promise.all([
@@ -104,7 +125,7 @@ export default async function ProductPage({ params }: Props) {
                     {[1,2,3,4,5].map(s => <Star key={s} className={`h-4 w-4 ${s <= Math.round(avgRating) ? "fill-amber-400 text-amber-400" : "fill-gray-100 text-gray-200"}`} />)}
                   </div>
                   <span className="text-sm font-semibold text-gray-700">{avgRating.toFixed(1)}</span>
-                  <span className="text-sm text-gray-400">({reviewCount} {reviewCount === 1 ? "opinia" : "opinii"})</span>
+                  <span className="text-sm text-gray-400">({reviewCount} {polishPlural(reviewCount, "opinia", "opinie", "opinii")})</span>
                 </div>
               )}
 
@@ -134,7 +155,7 @@ export default async function ProductPage({ params }: Props) {
 
               {/* CTA */}
               <div className="mt-6">
-                <AddToCartButton id={product.id} name={product.name} price={product.price} image={product.image} stock={product.stock} />
+                <AddToCartButton id={product.id} name={product.name} price={product.price} image={product.image} stock={product.stock} slug={product.slug} />
               </div>
 
               {product.stock > 0 && (

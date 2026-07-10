@@ -5,10 +5,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ShoppingCart, X, ArrowRight, Check } from "lucide-react";
 
-type CartItem = { id: number; name: string; price: number; image: string; quantity: number };
-type Props = { id: number; name: string; price: number; image: string; stock?: number };
+type CartItem = { id: number; name: string; price: number; image: string; quantity: number; slug?: string };
+type Props = { id: number; name: string; price: number; image: string; stock?: number; slug?: string };
 
-export default function AddToCartButton({ id, name, price, image, stock = 0 }: Props) {
+export default function AddToCartButton({ id, name, price, image, stock = 0, slug }: Props) {
   const [visible, setVisible] = useState(false);
   const [adding, setAdding] = useState(false);
 
@@ -27,8 +27,9 @@ export default function AddToCartButton({ id, name, price, image, stock = 0 }: P
     if (existing) {
       if (existing.quantity >= stock) { setAdding(false); return; }
       existing.quantity += 1;
+      if (slug && !existing.slug) existing.slug = slug;
     } else {
-      cart.push({ id, name, price, image, quantity: 1 });
+      cart.push({ id, name, price, image, quantity: 1, slug });
     }
     localStorage.setItem("cart", JSON.stringify(cart));
     window.dispatchEvent(new Event("storage"));

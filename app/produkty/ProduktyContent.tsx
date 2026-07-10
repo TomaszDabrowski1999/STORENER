@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import ProductCard from "../../components/ProductCard";
+import { polishPlural } from "../../lib/format";
 import {
   Search, SlidersHorizontal, X, ChevronDown, ArrowUpDown,
   Sparkles, Tag, Home, Leaf, Sofa, Car, PawPrint, Grid3x3
@@ -122,7 +123,7 @@ export default function ProduktyContent() {
                 {activeCat && activeCat.value ? activeCat.label : "Wszystkie produkty"}
                 {search && <span className="ml-2 text-lg font-normal text-gray-400">„{search}"</span>}
               </h1>
-              {!isLoading && <p className="mt-1 text-sm text-gray-500">{products.length} produktów</p>}
+              {!isLoading && <p className="mt-1 text-sm text-gray-500">{products.length} {polishPlural(products.length, "produkt", "produkty", "produktów")}</p>}
             </div>
 
             {/* Sort */}

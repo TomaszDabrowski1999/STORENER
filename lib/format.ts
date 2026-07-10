@@ -1,3 +1,21 @@
+// Polska odmiana rzeczownika po liczebniku:
+// 1 produkt, 2-4 produkty, 5+ produktów (z wyjątkiem 12-14).
+export function polishPlural(
+  count: number,
+  one: string,
+  few: string,
+  many: string
+): string {
+  const n = Math.abs(count);
+  if (n === 1) return one;
+  const lastDigit = n % 10;
+  const lastTwo = n % 100;
+  if (lastDigit >= 2 && lastDigit <= 4 && !(lastTwo >= 12 && lastTwo <= 14)) {
+    return few;
+  }
+  return many;
+}
+
 // Renderowanie opisu produktu.
 //
 // Problem: opis wpisywany w panelu to zwykły tekst z enterami (znaki "\n").
@@ -21,13 +39,29 @@ function escapeHtml(value: string): string {
     .replace(/'/g, "&#039;");
 }
 
+// Prosta sanityzacja HTML z panelu admina przed dangerouslySetInnerHTML:
+// usuwa niebezpieczne tagi, atrybuty zdarzeń (onclick itd.) i URL-e javascript:.
+function sanitizeHtml(html: string): string {
+  return html
+    // całe bloki niebezpiecznych tagów
+    .replace(/<(script|style|iframe|object|embed|form)\b[\s\S]*?<\/\1>/gi, "")
+    // samotne tagi otwierające/zamykające tych elementów
+    .replace(/<\/?(script|style|iframe|object|embed|form|meta|link|base)\b[^>]*>/gi, "")
+    // atrybuty zdarzeń: onclick="...", onerror='...', onload=...
+    .replace(/\son\w+\s*=\s*"[^"]*"/gi, "")
+    .replace(/\son\w+\s*=\s*'[^']*'/gi, "")
+    .replace(/\son\w+\s*=\s*[^\s>]+/gi, "")
+    // javascript: / vbscript: / data:text/html w href i src
+    .replace(/\s(href|src)\s*=\s*(["']?)\s*(javascript|vbscript|data:text\/html)[^"'\s>]*\2/gi, "");
+}
+
 export function formatDescriptionHtml(raw: string | null | undefined): string {
   const text = (raw || "").trim();
   if (!text) return "";
 
-  // Opis zapisany jako HTML – nie ruszamy, żeby nie zepsuć formatowania.
+  // Opis zapisany jako HTML – sanityzujemy, ale nie zmieniamy formatowania.
   if (BLOCK_HTML_REGEX.test(text)) {
-    return text;
+    return sanitizeHtml(text);
   }
 
   // Zwykły tekst: normalizujemy końce linii i budujemy akapity.

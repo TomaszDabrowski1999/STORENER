@@ -24,7 +24,10 @@ export async function GET(request: Request) {
       where: {
         isActive: true,
         ...(search ? {
-          name: { contains: search, mode: "insensitive" },
+          OR: [
+            { name: { contains: search, mode: "insensitive" } },
+            { description: { contains: search, mode: "insensitive" } },
+          ],
         } : {}),
         price: { gte: minPrice, lte: maxPrice },
         ...(category ? { category: category as any } : {}),

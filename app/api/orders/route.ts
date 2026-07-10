@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "../../../auth";
 import { prisma } from "@/lib/prisma";
 import { Resend } from "resend";
-import { getShippingOption, formatShippingMethod } from "@/lib/shipping";
+import { getShippingOption, computeShippingPrice, formatShippingMethod } from "@/lib/shipping";
 import type { Prisma } from "@/generated/prisma";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -167,7 +167,9 @@ export async function POST(request: Request) {
       return sum + Number(product?.price || 0) * item.quantity;
     }, 0);
 
-    const shippingPrice = shippingOption.price;
+    // Darmowa dostawa od FREE_SHIPPING_THRESHOLD (199 zł) – liczona po stronie serwera,
+    // żeby kwota płatności zawsze zgadzała się z tym, co obiecujemy w koszyku.
+    const shippingPrice = computeShippingPrice(subtotal, shippingOption);
     const total = subtotal + shippingPrice;
 
     const paymentStatus = "OCZEKUJE";

@@ -3,13 +3,30 @@
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type HomeBannerSliderProps = {
   onSaleClick: () => void;
   onNewClick: () => void;
 };
 
-const slides = [
+type Slide = {
+  id: number;
+  image: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  primaryLabel: string;
+  secondaryLabel: string;
+  primaryAction?: "sale" | "new";
+  secondaryAction?: "sale" | "new";
+  primaryHref?: string;
+  secondaryHref?: string;
+  badge: string;
+  statLabel: string;
+};
+
+const slides: Slide[] = [
   {
     id: 1,
     image: "/banners/banner-1.jpg",
@@ -45,10 +62,10 @@ const slides = [
     title: "Styl i funkcjonalność do domu i ogrodu",
     description:
       "Wybierz produkty do wyposażenia wnętrz i akcesoria ogrodowe, które łączą estetykę, wygodę i praktyczne zastosowanie.",
-    primaryLabel: "Przeglądaj ofertę",
-    secondaryLabel: "Zobacz promocje",
-    primaryAction: "new",
-    secondaryAction: "sale",
+    primaryLabel: "Przeglądaj ogród",
+    secondaryLabel: "Zobacz wyposażenie",
+    primaryHref: "/produkty?category=OGROD",
+    secondaryHref: "/produkty?category=WYPOSAZENIE",
     badge: "HOME",
     statLabel: "Wybrane inspiracje",
   },
@@ -58,6 +75,7 @@ export default function HomeBannerSlider({
   onSaleClick,
   onNewClick,
 }: HomeBannerSliderProps) {
+  const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
 
   const goToSlide = (index: number) => {
@@ -72,20 +90,27 @@ export default function HomeBannerSlider({
     setActiveIndex((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
+  // Autoplay restartuje się po każdej zmianie slajdu (także ręcznej),
+  // dzięki czemu strzałki nie "walczą" z automatycznym przełączaniem.
   useEffect(() => {
     const interval = setInterval(() => {
-      nextSlide();
+      setActiveIndex((prev) => (prev + 1) % slides.length);
     }, 6000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [activeIndex]);
 
-  const handleAction = (action: string) => {
+  const handleAction = (slide: Slide, which: "primary" | "secondary") => {
+    const href = which === "primary" ? slide.primaryHref : slide.secondaryHref;
+    if (href) {
+      router.push(href);
+      return;
+    }
+    const action = which === "primary" ? slide.primaryAction : slide.secondaryAction;
     if (action === "sale") {
       onSaleClick();
       return;
     }
-
     onNewClick();
   };
 
@@ -100,6 +125,7 @@ export default function HomeBannerSlider({
             alt={activeSlide.title}
             fill
             priority
+            sizes="(max-width: 1200px) 100vw, 1152px"
             className="object-cover opacity-55 transition duration-700"
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.92)_0%,rgba(0,0,0,0.72)_42%,rgba(0,0,0,0.18)_100%)]" />
@@ -150,7 +176,7 @@ export default function HomeBannerSlider({
             <div className="mt-8 flex flex-wrap gap-4">
               <button
                 type="button"
-                onClick={() => handleAction(activeSlide.primaryAction)}
+                onClick={() => handleAction(activeSlide, "primary")}
                 className="rounded-2xl bg-white px-6 py-3.5 text-sm font-semibold text-black transition hover:scale-[1.02] hover:opacity-95"
               >
                 {activeSlide.primaryLabel}
@@ -158,7 +184,7 @@ export default function HomeBannerSlider({
 
               <button
                 type="button"
-                onClick={() => handleAction(activeSlide.secondaryAction)}
+                onClick={() => handleAction(activeSlide, "secondary")}
                 className="rounded-2xl border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white hover:text-black"
               >
                 {activeSlide.secondaryLabel}

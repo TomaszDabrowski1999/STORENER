@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { ShieldCheck, Sparkles, Truck, Tag, ArrowRight, Zap } from "lucide-react";
+import { ShieldCheck, Sparkles, Truck, ArrowRight } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import HomeBannerSlider from "../components/HomeBannerSlider";
 import Link from "next/link";
@@ -170,11 +170,8 @@ export default function HomeContent() {
       {/* Search results */}
       <section className="mx-auto max-w-6xl px-6 pb-16">
         {isLoading && (
-          <div className="rounded-[28px] bg-white p-10 text-center" style={{ boxShadow: "var(--shadow-md)" }}>
-            <div className="inline-flex items-center gap-3 text-gray-500">
-              <Zap className="h-5 w-5 animate-pulse text-[#4caf3d]" />
-              <span className="font-medium">Ładowanie produktów…</span>
-            </div>
+          <div className="grid gap-5 pt-10 sm:grid-cols-2 xl:grid-cols-4">
+            {[...Array(8)].map((_, i) => <div key={i} className="h-[360px] rounded-[26px] skeleton" />)}
           </div>
         )}
         {error && (

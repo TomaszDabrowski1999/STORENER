@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CartItem } from "../../types/cart";
 import { getCart, removeFromCart, increaseQuantity, decreaseQuantity } from "../../lib/cart";
+import { polishPlural } from "../../lib/format";
 import { ShoppingCart, Trash2, Plus, Minus, ArrowRight, ShieldCheck, Truck, RefreshCcw, Tag } from "lucide-react";
 
 export default function CartPage() {
@@ -32,7 +33,7 @@ export default function CartPage() {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-950" style={{ fontFamily: "'Syne', system-ui, sans-serif" }}>Koszyk</h1>
-              <p className="text-sm text-gray-500">{totalItems > 0 ? `${totalItems} ${totalItems === 1 ? "produkt" : "produktów"}` : "Twój koszyk jest pusty"}</p>
+              <p className="text-sm text-gray-500">{totalItems > 0 ? `${totalItems} ${polishPlural(totalItems, "produkt", "produkty", "produktów")}` : "Twój koszyk jest pusty"}</p>
             </div>
           </div>
 
@@ -80,7 +81,7 @@ export default function CartPage() {
               {cart.map((item) => (
                 <div key={item.id} className="group rounded-2xl bg-white p-4 transition-shadow hover:shadow-md" style={{ border: "1px solid var(--border)" }}>
                   <div className="flex gap-4">
-                    <Link href={`/produkty/${item.id}`} className="shrink-0">
+                    <Link href={item.slug ? `/produkty/${item.slug}` : "/produkty"} className="shrink-0">
                       <img src={item.image} alt={item.name} className="h-24 w-24 rounded-xl object-cover transition group-hover:opacity-90" />
                     </Link>
                     <div className="flex flex-1 flex-col justify-between min-w-0">
@@ -88,6 +89,7 @@ export default function CartPage() {
                         <h3 className="font-semibold text-gray-900 leading-snug line-clamp-2">{item.name}</h3>
                         <button
                           onClick={() => { removeFromCart(item.id); refresh(); }}
+                          aria-label={`Usuń ${item.name} z koszyka`}
                           className="shrink-0 flex h-7 w-7 items-center justify-center rounded-lg text-gray-300 transition hover:bg-red-50 hover:text-red-500"
                         >
                           <Trash2 className="h-3.5 w-3.5" />

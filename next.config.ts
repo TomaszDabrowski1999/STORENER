@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "res.cloudinary.com",
       },
+      {
+        // obrazy przykładowych produktów z prisma/seed.ts
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
     ],
   },
 };
