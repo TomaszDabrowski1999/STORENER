@@ -9,13 +9,17 @@ type ProductGalleryProps = {
 };
 
 export default function ProductGallery({ images, name }: ProductGalleryProps) {
-const validImages = images.filter(
-  (image) =>
-    typeof image === "string" &&
-    image.trim() !== "" &&
-    image !== "null" &&
-    image !== "undefined" &&
-    !image.startsWith("/uploads")
+const validImages = Array.from(
+  new Set(
+    images.filter(
+      (image) =>
+        typeof image === "string" &&
+        image.trim() !== "" &&
+        image !== "null" &&
+        image !== "undefined" &&
+        !image.startsWith("/uploads")
+    )
+  )
 );
 
   const [activeImage, setActiveImage] = useState(validImages[0] || "");

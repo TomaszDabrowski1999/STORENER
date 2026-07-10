@@ -40,7 +40,7 @@ export default function Page() {
 
       <InfoCard className="bg-[#0a0a0a] text-white">
         <p className="text-sm leading-relaxed text-white/70">
-          Darmowa dostawa obowiązuje dla zamówień od <strong className="text-[#4caf3d]">199 zł</strong>.
+          Darmowa dostawa obowiązuje dla zamówień od <strong className="text-[#4caf3d]">1000 zł</strong>.
           Zamówienia złożone w dni robocze do godz. 12:00 realizujemy zwykle tego samego dnia.
         </p>
       </InfoCard>

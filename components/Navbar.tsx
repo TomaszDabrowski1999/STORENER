@@ -67,7 +67,7 @@ export default function Navbar() {
       {/* Top strip */}
       <div className="hidden border-b border-white/5 md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2 text-xs text-white/40">
-          <span>Darmowa dostawa od 199 zł</span>
+          <span>Darmowa dostawa od 1000 zł</span>
           <div className="flex items-center gap-4">
             <Link href="/kontakt" className="transition hover:text-white/70">Kontakt</Link>
             <Link href="/faq" className="transition hover:text-white/70">FAQ</Link>

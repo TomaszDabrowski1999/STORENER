@@ -167,7 +167,7 @@ export async function POST(request: Request) {
       return sum + Number(product?.price || 0) * item.quantity;
     }, 0);
 
-    // Darmowa dostawa od FREE_SHIPPING_THRESHOLD (199 zł) – liczona po stronie serwera,
+    // Darmowa dostawa od FREE_SHIPPING_THRESHOLD – liczona po stronie serwera,
     // żeby kwota płatności zawsze zgadzała się z tym, co obiecujemy w koszyku.
     const shippingPrice = computeShippingPrice(subtotal, shippingOption);
     const total = subtotal + shippingPrice;

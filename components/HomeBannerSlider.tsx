@@ -153,7 +153,7 @@ export default function HomeBannerSlider({
           <ChevronRight className="h-5 w-5" />
         </button>
 
-        <div className="relative grid min-h-[500px] gap-10 px-8 py-10 md:px-12 md:py-12 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="relative grid min-h-[500px] gap-10 px-8 py-10 md:px-12 md:py-12 lg:h-[560px] lg:grid-cols-[1.1fr_0.9fr]">
           <div className="flex max-w-2xl flex-col justify-center">
             <div className="flex flex-wrap items-center gap-3">
               <span className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-white/90 backdrop-blur-md">

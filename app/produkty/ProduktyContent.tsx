@@ -241,7 +241,7 @@ export default function ProduktyContent() {
 
         {/* Products */}
         {isLoading && (
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {[...Array(6)].map((_, i) => <div key={i} className="h-[360px] rounded-[26px] skeleton" />)}
           </div>
         )}
@@ -257,7 +257,7 @@ export default function ProduktyContent() {
         )}
 
         {!isLoading && !error && products.length > 0 && (
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {products.map(p => (
               <ProductCard key={p.id} slug={p.slug} name={p.name} price={p.price} image={p.image} category={p.category} stock={p.stock} stockStatus={p.stockStatus} averageRating={p.averageRating} reviewsCount={p.reviewsCount} />
             ))}

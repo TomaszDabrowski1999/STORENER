@@ -68,7 +68,7 @@ export const shippingOptions: ShippingOption[] = [
 
 // Próg darmowej dostawy – jedna stała dla całego sklepu
 // (navbar, koszyk, checkout i API zamówień korzystają z tej samej wartości).
-export const FREE_SHIPPING_THRESHOLD = 199;
+export const FREE_SHIPPING_THRESHOLD = 1000;
 
 export function getShippingOption(method: string | null | undefined) {
   return shippingOptions.find((option) => option.id === method);

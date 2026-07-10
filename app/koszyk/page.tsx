@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { CartItem } from "../../types/cart";
 import { getCart, removeFromCart, increaseQuantity, decreaseQuantity } from "../../lib/cart";
 import { polishPlural } from "../../lib/format";
+import { FREE_SHIPPING_THRESHOLD } from "../../lib/shipping";
 import { ShoppingCart, Trash2, Plus, Minus, ArrowRight, ShieldCheck, Truck, RefreshCcw, Tag } from "lucide-react";
 
 export default function CartPage() {
@@ -19,7 +20,7 @@ export default function CartPage() {
 
   const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
-  const freeShippingThreshold = 199;
+  const freeShippingThreshold = FREE_SHIPPING_THRESHOLD;
   const remaining = Math.max(0, freeShippingThreshold - total);
 
   return (
