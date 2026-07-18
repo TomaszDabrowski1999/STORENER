@@ -103,6 +103,15 @@ export const PaymentStatus: {
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
 
+export const PackageSize: {
+  MALA: 'MALA',
+  SREDNIA: 'SREDNIA',
+  DUZA: 'DUZA'
+};
+
+export type PackageSize = (typeof PackageSize)[keyof typeof PackageSize]
+
+
 export const ProductStockStatus: {
   DOSTEPNY: 'DOSTEPNY',
   MALO_SZTUK: 'MALO_SZTUK',
@@ -132,6 +141,10 @@ export const PaymentMethod: typeof $Enums.PaymentMethod
 export type PaymentStatus = $Enums.PaymentStatus
 
 export const PaymentStatus: typeof $Enums.PaymentStatus
+
+export type PackageSize = $Enums.PackageSize
+
+export const PackageSize: typeof $Enums.PackageSize
 
 export type ProductStockStatus = $Enums.ProductStockStatus
 
@@ -2791,6 +2804,7 @@ export namespace Prisma {
     category: $Enums.ProductCategory | null
     stock: number | null
     stockStatus: $Enums.ProductStockStatus | null
+    packageSize: $Enums.PackageSize | null
     productDetails: string | null
   }
 
@@ -2805,6 +2819,7 @@ export namespace Prisma {
     category: $Enums.ProductCategory | null
     stock: number | null
     stockStatus: $Enums.ProductStockStatus | null
+    packageSize: $Enums.PackageSize | null
     productDetails: string | null
   }
 
@@ -2819,6 +2834,7 @@ export namespace Prisma {
     category: number
     stock: number
     stockStatus: number
+    packageSize: number
     productDetails: number
     _all: number
   }
@@ -2847,6 +2863,7 @@ export namespace Prisma {
     category?: true
     stock?: true
     stockStatus?: true
+    packageSize?: true
     productDetails?: true
   }
 
@@ -2861,6 +2878,7 @@ export namespace Prisma {
     category?: true
     stock?: true
     stockStatus?: true
+    packageSize?: true
     productDetails?: true
   }
 
@@ -2875,6 +2893,7 @@ export namespace Prisma {
     category?: true
     stock?: true
     stockStatus?: true
+    packageSize?: true
     productDetails?: true
     _all?: true
   }
@@ -2976,6 +2995,7 @@ export namespace Prisma {
     category: $Enums.ProductCategory
     stock: number
     stockStatus: $Enums.ProductStockStatus
+    packageSize: $Enums.PackageSize
     productDetails: string | null
     _count: ProductCountAggregateOutputType | null
     _avg: ProductAvgAggregateOutputType | null
@@ -3009,6 +3029,7 @@ export namespace Prisma {
     category?: boolean
     stock?: boolean
     stockStatus?: boolean
+    packageSize?: boolean
     productDetails?: boolean
     orderItems?: boolean | Product$orderItemsArgs<ExtArgs>
     images?: boolean | Product$imagesArgs<ExtArgs>
@@ -3027,6 +3048,7 @@ export namespace Prisma {
     category?: boolean
     stock?: boolean
     stockStatus?: boolean
+    packageSize?: boolean
     productDetails?: boolean
   }, ExtArgs["result"]["product"]>
 
@@ -3041,6 +3063,7 @@ export namespace Prisma {
     category?: boolean
     stock?: boolean
     stockStatus?: boolean
+    packageSize?: boolean
     productDetails?: boolean
   }, ExtArgs["result"]["product"]>
 
@@ -3055,10 +3078,11 @@ export namespace Prisma {
     category?: boolean
     stock?: boolean
     stockStatus?: boolean
+    packageSize?: boolean
     productDetails?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "price" | "description" | "image" | "slug" | "isActive" | "category" | "stock" | "stockStatus" | "productDetails", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "price" | "description" | "image" | "slug" | "isActive" | "category" | "stock" | "stockStatus" | "packageSize" | "productDetails", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orderItems?: boolean | Product$orderItemsArgs<ExtArgs>
     images?: boolean | Product$imagesArgs<ExtArgs>
@@ -3086,6 +3110,7 @@ export namespace Prisma {
       category: $Enums.ProductCategory
       stock: number
       stockStatus: $Enums.ProductStockStatus
+      packageSize: $Enums.PackageSize
       productDetails: string | null
     }, ExtArgs["result"]["product"]>
     composites: {}
@@ -3523,6 +3548,7 @@ export namespace Prisma {
     readonly category: FieldRef<"Product", 'ProductCategory'>
     readonly stock: FieldRef<"Product", 'Int'>
     readonly stockStatus: FieldRef<"Product", 'ProductStockStatus'>
+    readonly packageSize: FieldRef<"Product", 'PackageSize'>
     readonly productDetails: FieldRef<"Product", 'String'>
   }
     
@@ -5144,6 +5170,7 @@ export namespace Prisma {
     shippingPrice: number | null
     shippingPoint: string | null
     shippingEstimatedDelivery: string | null
+    packageSize: string | null
     trackingNumber: string | null
     trackingCarrier: string | null
   }
@@ -5167,6 +5194,7 @@ export namespace Prisma {
     shippingPrice: number | null
     shippingPoint: string | null
     shippingEstimatedDelivery: string | null
+    packageSize: string | null
     trackingNumber: string | null
     trackingCarrier: string | null
   }
@@ -5190,6 +5218,7 @@ export namespace Prisma {
     shippingPrice: number
     shippingPoint: number
     shippingEstimatedDelivery: number
+    packageSize: number
     trackingNumber: number
     trackingCarrier: number
     _all: number
@@ -5229,6 +5258,7 @@ export namespace Prisma {
     shippingPrice?: true
     shippingPoint?: true
     shippingEstimatedDelivery?: true
+    packageSize?: true
     trackingNumber?: true
     trackingCarrier?: true
   }
@@ -5252,6 +5282,7 @@ export namespace Prisma {
     shippingPrice?: true
     shippingPoint?: true
     shippingEstimatedDelivery?: true
+    packageSize?: true
     trackingNumber?: true
     trackingCarrier?: true
   }
@@ -5275,6 +5306,7 @@ export namespace Prisma {
     shippingPrice?: true
     shippingPoint?: true
     shippingEstimatedDelivery?: true
+    packageSize?: true
     trackingNumber?: true
     trackingCarrier?: true
     _all?: true
@@ -5385,6 +5417,7 @@ export namespace Prisma {
     shippingPrice: number
     shippingPoint: string | null
     shippingEstimatedDelivery: string
+    packageSize: string
     trackingNumber: string | null
     trackingCarrier: string | null
     _count: OrderCountAggregateOutputType | null
@@ -5427,6 +5460,7 @@ export namespace Prisma {
     shippingPrice?: boolean
     shippingPoint?: boolean
     shippingEstimatedDelivery?: boolean
+    packageSize?: boolean
     trackingNumber?: boolean
     trackingCarrier?: boolean
     user?: boolean | Order$userArgs<ExtArgs>
@@ -5453,6 +5487,7 @@ export namespace Prisma {
     shippingPrice?: boolean
     shippingPoint?: boolean
     shippingEstimatedDelivery?: boolean
+    packageSize?: boolean
     trackingNumber?: boolean
     trackingCarrier?: boolean
     user?: boolean | Order$userArgs<ExtArgs>
@@ -5477,6 +5512,7 @@ export namespace Prisma {
     shippingPrice?: boolean
     shippingPoint?: boolean
     shippingEstimatedDelivery?: boolean
+    packageSize?: boolean
     trackingNumber?: boolean
     trackingCarrier?: boolean
     user?: boolean | Order$userArgs<ExtArgs>
@@ -5501,11 +5537,12 @@ export namespace Prisma {
     shippingPrice?: boolean
     shippingPoint?: boolean
     shippingEstimatedDelivery?: boolean
+    packageSize?: boolean
     trackingNumber?: boolean
     trackingCarrier?: boolean
   }
 
-  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "total" | "status" | "fullName" | "email" | "phone" | "address" | "city" | "postalCode" | "paymentMethod" | "paymentStatus" | "userId" | "shippingMethod" | "shippingMethodName" | "shippingPrice" | "shippingPoint" | "shippingEstimatedDelivery" | "trackingNumber" | "trackingCarrier", ExtArgs["result"]["order"]>
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "total" | "status" | "fullName" | "email" | "phone" | "address" | "city" | "postalCode" | "paymentMethod" | "paymentStatus" | "userId" | "shippingMethod" | "shippingMethodName" | "shippingPrice" | "shippingPoint" | "shippingEstimatedDelivery" | "packageSize" | "trackingNumber" | "trackingCarrier", ExtArgs["result"]["order"]>
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Order$userArgs<ExtArgs>
     items?: boolean | Order$itemsArgs<ExtArgs>
@@ -5543,6 +5580,7 @@ export namespace Prisma {
       shippingPrice: number
       shippingPoint: string | null
       shippingEstimatedDelivery: string
+      packageSize: string
       trackingNumber: string | null
       trackingCarrier: string | null
     }, ExtArgs["result"]["order"]>
@@ -5988,6 +6026,7 @@ export namespace Prisma {
     readonly shippingPrice: FieldRef<"Order", 'Float'>
     readonly shippingPoint: FieldRef<"Order", 'String'>
     readonly shippingEstimatedDelivery: FieldRef<"Order", 'String'>
+    readonly packageSize: FieldRef<"Order", 'String'>
     readonly trackingNumber: FieldRef<"Order", 'String'>
     readonly trackingCarrier: FieldRef<"Order", 'String'>
   }
@@ -9769,6 +9808,7 @@ export namespace Prisma {
     category: 'category',
     stock: 'stock',
     stockStatus: 'stockStatus',
+    packageSize: 'packageSize',
     productDetails: 'productDetails'
   };
 
@@ -9804,6 +9844,7 @@ export namespace Prisma {
     shippingPrice: 'shippingPrice',
     shippingPoint: 'shippingPoint',
     shippingEstimatedDelivery: 'shippingEstimatedDelivery',
+    packageSize: 'packageSize',
     trackingNumber: 'trackingNumber',
     trackingCarrier: 'trackingCarrier'
   };
@@ -9966,6 +10007,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'PackageSize'
+   */
+  export type EnumPackageSizeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PackageSize'>
+    
+
+
+  /**
+   * Reference to a field of type 'PackageSize[]'
+   */
+  export type ListEnumPackageSizeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PackageSize[]'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -10098,6 +10153,7 @@ export namespace Prisma {
     category?: EnumProductCategoryFilter<"Product"> | $Enums.ProductCategory
     stock?: IntFilter<"Product"> | number
     stockStatus?: EnumProductStockStatusFilter<"Product"> | $Enums.ProductStockStatus
+    packageSize?: EnumPackageSizeFilter<"Product"> | $Enums.PackageSize
     productDetails?: StringNullableFilter<"Product"> | string | null
     orderItems?: OrderItemListRelationFilter
     images?: ProductImageListRelationFilter
@@ -10115,6 +10171,7 @@ export namespace Prisma {
     category?: SortOrder
     stock?: SortOrder
     stockStatus?: SortOrder
+    packageSize?: SortOrder
     productDetails?: SortOrderInput | SortOrder
     orderItems?: OrderItemOrderByRelationAggregateInput
     images?: ProductImageOrderByRelationAggregateInput
@@ -10135,6 +10192,7 @@ export namespace Prisma {
     category?: EnumProductCategoryFilter<"Product"> | $Enums.ProductCategory
     stock?: IntFilter<"Product"> | number
     stockStatus?: EnumProductStockStatusFilter<"Product"> | $Enums.ProductStockStatus
+    packageSize?: EnumPackageSizeFilter<"Product"> | $Enums.PackageSize
     productDetails?: StringNullableFilter<"Product"> | string | null
     orderItems?: OrderItemListRelationFilter
     images?: ProductImageListRelationFilter
@@ -10152,6 +10210,7 @@ export namespace Prisma {
     category?: SortOrder
     stock?: SortOrder
     stockStatus?: SortOrder
+    packageSize?: SortOrder
     productDetails?: SortOrderInput | SortOrder
     _count?: ProductCountOrderByAggregateInput
     _avg?: ProductAvgOrderByAggregateInput
@@ -10174,6 +10233,7 @@ export namespace Prisma {
     category?: EnumProductCategoryWithAggregatesFilter<"Product"> | $Enums.ProductCategory
     stock?: IntWithAggregatesFilter<"Product"> | number
     stockStatus?: EnumProductStockStatusWithAggregatesFilter<"Product"> | $Enums.ProductStockStatus
+    packageSize?: EnumPackageSizeWithAggregatesFilter<"Product"> | $Enums.PackageSize
     productDetails?: StringNullableWithAggregatesFilter<"Product"> | string | null
   }
 
@@ -10251,6 +10311,7 @@ export namespace Prisma {
     shippingPrice?: FloatFilter<"Order"> | number
     shippingPoint?: StringNullableFilter<"Order"> | string | null
     shippingEstimatedDelivery?: StringFilter<"Order"> | string
+    packageSize?: StringFilter<"Order"> | string
     trackingNumber?: StringNullableFilter<"Order"> | string | null
     trackingCarrier?: StringNullableFilter<"Order"> | string | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -10276,6 +10337,7 @@ export namespace Prisma {
     shippingPrice?: SortOrder
     shippingPoint?: SortOrderInput | SortOrder
     shippingEstimatedDelivery?: SortOrder
+    packageSize?: SortOrder
     trackingNumber?: SortOrderInput | SortOrder
     trackingCarrier?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
@@ -10304,6 +10366,7 @@ export namespace Prisma {
     shippingPrice?: FloatFilter<"Order"> | number
     shippingPoint?: StringNullableFilter<"Order"> | string | null
     shippingEstimatedDelivery?: StringFilter<"Order"> | string
+    packageSize?: StringFilter<"Order"> | string
     trackingNumber?: StringNullableFilter<"Order"> | string | null
     trackingCarrier?: StringNullableFilter<"Order"> | string | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -10329,6 +10392,7 @@ export namespace Prisma {
     shippingPrice?: SortOrder
     shippingPoint?: SortOrderInput | SortOrder
     shippingEstimatedDelivery?: SortOrder
+    packageSize?: SortOrder
     trackingNumber?: SortOrderInput | SortOrder
     trackingCarrier?: SortOrderInput | SortOrder
     _count?: OrderCountOrderByAggregateInput
@@ -10360,6 +10424,7 @@ export namespace Prisma {
     shippingPrice?: FloatWithAggregatesFilter<"Order"> | number
     shippingPoint?: StringNullableWithAggregatesFilter<"Order"> | string | null
     shippingEstimatedDelivery?: StringWithAggregatesFilter<"Order"> | string
+    packageSize?: StringWithAggregatesFilter<"Order"> | string
     trackingNumber?: StringNullableWithAggregatesFilter<"Order"> | string | null
     trackingCarrier?: StringNullableWithAggregatesFilter<"Order"> | string | null
   }
@@ -10614,6 +10679,7 @@ export namespace Prisma {
     category?: $Enums.ProductCategory
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    packageSize?: $Enums.PackageSize
     productDetails?: string | null
     orderItems?: OrderItemCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -10631,6 +10697,7 @@ export namespace Prisma {
     category?: $Enums.ProductCategory
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    packageSize?: $Enums.PackageSize
     productDetails?: string | null
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -10647,6 +10714,7 @@ export namespace Prisma {
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    packageSize?: EnumPackageSizeFieldUpdateOperationsInput | $Enums.PackageSize
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -10664,6 +10732,7 @@ export namespace Prisma {
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    packageSize?: EnumPackageSizeFieldUpdateOperationsInput | $Enums.PackageSize
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -10681,6 +10750,7 @@ export namespace Prisma {
     category?: $Enums.ProductCategory
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    packageSize?: $Enums.PackageSize
     productDetails?: string | null
   }
 
@@ -10694,6 +10764,7 @@ export namespace Prisma {
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    packageSize?: EnumPackageSizeFieldUpdateOperationsInput | $Enums.PackageSize
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -10708,6 +10779,7 @@ export namespace Prisma {
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    packageSize?: EnumPackageSizeFieldUpdateOperationsInput | $Enums.PackageSize
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -10773,6 +10845,7 @@ export namespace Prisma {
     shippingPrice?: number
     shippingPoint?: string | null
     shippingEstimatedDelivery?: string
+    packageSize?: string
     trackingNumber?: string | null
     trackingCarrier?: string | null
     user?: UserCreateNestedOneWithoutOrdersInput
@@ -10798,6 +10871,7 @@ export namespace Prisma {
     shippingPrice?: number
     shippingPoint?: string | null
     shippingEstimatedDelivery?: string
+    packageSize?: string
     trackingNumber?: string | null
     trackingCarrier?: string | null
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -10820,6 +10894,7 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneWithoutOrdersNestedInput
@@ -10845,6 +10920,7 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -10869,6 +10945,7 @@ export namespace Prisma {
     shippingPrice?: number
     shippingPoint?: string | null
     shippingEstimatedDelivery?: string
+    packageSize?: string
     trackingNumber?: string | null
     trackingCarrier?: string | null
   }
@@ -10890,6 +10967,7 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -10913,6 +10991,7 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -11238,6 +11317,13 @@ export namespace Prisma {
     not?: NestedEnumProductStockStatusFilter<$PrismaModel> | $Enums.ProductStockStatus
   }
 
+  export type EnumPackageSizeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PackageSize | EnumPackageSizeFieldRefInput<$PrismaModel>
+    in?: $Enums.PackageSize[] | ListEnumPackageSizeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PackageSize[] | ListEnumPackageSizeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPackageSizeFilter<$PrismaModel> | $Enums.PackageSize
+  }
+
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -11289,6 +11375,7 @@ export namespace Prisma {
     category?: SortOrder
     stock?: SortOrder
     stockStatus?: SortOrder
+    packageSize?: SortOrder
     productDetails?: SortOrder
   }
 
@@ -11309,6 +11396,7 @@ export namespace Prisma {
     category?: SortOrder
     stock?: SortOrder
     stockStatus?: SortOrder
+    packageSize?: SortOrder
     productDetails?: SortOrder
   }
 
@@ -11323,6 +11411,7 @@ export namespace Prisma {
     category?: SortOrder
     stock?: SortOrder
     stockStatus?: SortOrder
+    packageSize?: SortOrder
     productDetails?: SortOrder
   }
 
@@ -11374,6 +11463,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumProductStockStatusFilter<$PrismaModel>
     _max?: NestedEnumProductStockStatusFilter<$PrismaModel>
+  }
+
+  export type EnumPackageSizeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PackageSize | EnumPackageSizeFieldRefInput<$PrismaModel>
+    in?: $Enums.PackageSize[] | ListEnumPackageSizeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PackageSize[] | ListEnumPackageSizeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPackageSizeWithAggregatesFilter<$PrismaModel> | $Enums.PackageSize
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPackageSizeFilter<$PrismaModel>
+    _max?: NestedEnumPackageSizeFilter<$PrismaModel>
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -11499,6 +11598,7 @@ export namespace Prisma {
     shippingPrice?: SortOrder
     shippingPoint?: SortOrder
     shippingEstimatedDelivery?: SortOrder
+    packageSize?: SortOrder
     trackingNumber?: SortOrder
     trackingCarrier?: SortOrder
   }
@@ -11529,6 +11629,7 @@ export namespace Prisma {
     shippingPrice?: SortOrder
     shippingPoint?: SortOrder
     shippingEstimatedDelivery?: SortOrder
+    packageSize?: SortOrder
     trackingNumber?: SortOrder
     trackingCarrier?: SortOrder
   }
@@ -11552,6 +11653,7 @@ export namespace Prisma {
     shippingPrice?: SortOrder
     shippingPoint?: SortOrder
     shippingEstimatedDelivery?: SortOrder
+    packageSize?: SortOrder
     trackingNumber?: SortOrder
     trackingCarrier?: SortOrder
   }
@@ -11906,6 +12008,10 @@ export namespace Prisma {
     set?: $Enums.ProductStockStatus
   }
 
+  export type EnumPackageSizeFieldUpdateOperationsInput = {
+    set?: $Enums.PackageSize
+  }
+
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
   }
@@ -12251,6 +12357,13 @@ export namespace Prisma {
     not?: NestedEnumProductStockStatusFilter<$PrismaModel> | $Enums.ProductStockStatus
   }
 
+  export type NestedEnumPackageSizeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PackageSize | EnumPackageSizeFieldRefInput<$PrismaModel>
+    in?: $Enums.PackageSize[] | ListEnumPackageSizeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PackageSize[] | ListEnumPackageSizeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPackageSizeFilter<$PrismaModel> | $Enums.PackageSize
+  }
+
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -12307,6 +12420,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumProductStockStatusFilter<$PrismaModel>
     _max?: NestedEnumProductStockStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPackageSizeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PackageSize | EnumPackageSizeFieldRefInput<$PrismaModel>
+    in?: $Enums.PackageSize[] | ListEnumPackageSizeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PackageSize[] | ListEnumPackageSizeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPackageSizeWithAggregatesFilter<$PrismaModel> | $Enums.PackageSize
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPackageSizeFilter<$PrismaModel>
+    _max?: NestedEnumPackageSizeFilter<$PrismaModel>
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -12457,6 +12580,7 @@ export namespace Prisma {
     shippingPrice?: number
     shippingPoint?: string | null
     shippingEstimatedDelivery?: string
+    packageSize?: string
     trackingNumber?: string | null
     trackingCarrier?: string | null
     items?: OrderItemCreateNestedManyWithoutOrderInput
@@ -12480,6 +12604,7 @@ export namespace Prisma {
     shippingPrice?: number
     shippingPoint?: string | null
     shippingEstimatedDelivery?: string
+    packageSize?: string
     trackingNumber?: string | null
     trackingCarrier?: string | null
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -12560,6 +12685,7 @@ export namespace Prisma {
     shippingPrice?: FloatFilter<"Order"> | number
     shippingPoint?: StringNullableFilter<"Order"> | string | null
     shippingEstimatedDelivery?: StringFilter<"Order"> | string
+    packageSize?: StringFilter<"Order"> | string
     trackingNumber?: StringNullableFilter<"Order"> | string | null
     trackingCarrier?: StringNullableFilter<"Order"> | string | null
   }
@@ -12740,6 +12866,7 @@ export namespace Prisma {
     category?: $Enums.ProductCategory
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    packageSize?: $Enums.PackageSize
     productDetails?: string | null
     orderItems?: OrderItemCreateNestedManyWithoutProductInput
     reviews?: ProductReviewCreateNestedManyWithoutProductInput
@@ -12756,6 +12883,7 @@ export namespace Prisma {
     category?: $Enums.ProductCategory
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    packageSize?: $Enums.PackageSize
     productDetails?: string | null
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutProductInput
     reviews?: ProductReviewUncheckedCreateNestedManyWithoutProductInput
@@ -12787,6 +12915,7 @@ export namespace Prisma {
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    packageSize?: EnumPackageSizeFieldUpdateOperationsInput | $Enums.PackageSize
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUpdateManyWithoutProductNestedInput
     reviews?: ProductReviewUpdateManyWithoutProductNestedInput
@@ -12803,6 +12932,7 @@ export namespace Prisma {
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    packageSize?: EnumPackageSizeFieldUpdateOperationsInput | $Enums.PackageSize
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUncheckedUpdateManyWithoutProductNestedInput
     reviews?: ProductReviewUncheckedUpdateManyWithoutProductNestedInput
@@ -12912,6 +13042,7 @@ export namespace Prisma {
     shippingPrice?: number
     shippingPoint?: string | null
     shippingEstimatedDelivery?: string
+    packageSize?: string
     trackingNumber?: string | null
     trackingCarrier?: string | null
     user?: UserCreateNestedOneWithoutOrdersInput
@@ -12936,6 +13067,7 @@ export namespace Prisma {
     shippingPrice?: number
     shippingPoint?: string | null
     shippingEstimatedDelivery?: string
+    packageSize?: string
     trackingNumber?: string | null
     trackingCarrier?: string | null
   }
@@ -12955,6 +13087,7 @@ export namespace Prisma {
     category?: $Enums.ProductCategory
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    packageSize?: $Enums.PackageSize
     productDetails?: string | null
     images?: ProductImageCreateNestedManyWithoutProductInput
     reviews?: ProductReviewCreateNestedManyWithoutProductInput
@@ -12971,6 +13104,7 @@ export namespace Prisma {
     category?: $Enums.ProductCategory
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    packageSize?: $Enums.PackageSize
     productDetails?: string | null
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     reviews?: ProductReviewUncheckedCreateNestedManyWithoutProductInput
@@ -13009,6 +13143,7 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneWithoutOrdersNestedInput
@@ -13033,6 +13168,7 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -13058,6 +13194,7 @@ export namespace Prisma {
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    packageSize?: EnumPackageSizeFieldUpdateOperationsInput | $Enums.PackageSize
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductImageUpdateManyWithoutProductNestedInput
     reviews?: ProductReviewUpdateManyWithoutProductNestedInput
@@ -13074,6 +13211,7 @@ export namespace Prisma {
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    packageSize?: EnumPackageSizeFieldUpdateOperationsInput | $Enums.PackageSize
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     reviews?: ProductReviewUncheckedUpdateManyWithoutProductNestedInput
@@ -13089,6 +13227,7 @@ export namespace Prisma {
     category?: $Enums.ProductCategory
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    packageSize?: $Enums.PackageSize
     productDetails?: string | null
     orderItems?: OrderItemCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -13105,6 +13244,7 @@ export namespace Prisma {
     category?: $Enums.ProductCategory
     stock?: number
     stockStatus?: $Enums.ProductStockStatus
+    packageSize?: $Enums.PackageSize
     productDetails?: string | null
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -13158,6 +13298,7 @@ export namespace Prisma {
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    packageSize?: EnumPackageSizeFieldUpdateOperationsInput | $Enums.PackageSize
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -13174,6 +13315,7 @@ export namespace Prisma {
     category?: EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
     stock?: IntFieldUpdateOperationsInput | number
     stockStatus?: EnumProductStockStatusFieldUpdateOperationsInput | $Enums.ProductStockStatus
+    packageSize?: EnumPackageSizeFieldUpdateOperationsInput | $Enums.PackageSize
     productDetails?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -13225,6 +13367,7 @@ export namespace Prisma {
     shippingPrice?: number
     shippingPoint?: string | null
     shippingEstimatedDelivery?: string
+    packageSize?: string
     trackingNumber?: string | null
     trackingCarrier?: string | null
   }
@@ -13255,6 +13398,7 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
     items?: OrderItemUpdateManyWithoutOrderNestedInput
@@ -13278,6 +13422,7 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -13301,6 +13446,7 @@ export namespace Prisma {
     shippingPrice?: FloatFieldUpdateOperationsInput | number
     shippingPoint?: NullableStringFieldUpdateOperationsInput | string | null
     shippingEstimatedDelivery?: StringFieldUpdateOperationsInput | string
+    packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
   }

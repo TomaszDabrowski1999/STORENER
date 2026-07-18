@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import {
+  normalizePackageSize,
+  formatPackageSize,
+  PACKAGE_DIMENSIONS,
+  getCourier,
+} from "@/lib/shipping";
 
 export const dynamic = "force-dynamic";
 
@@ -112,8 +118,18 @@ function formatOrderForFurgonetka(order: any) {
     shipping: {
       method: order.shippingMethod,
       method_name: order.shippingMethodName,
+      service: getCourier(order.shippingMethod)?.furgonetkaService || null,
       price: order.shippingPrice,
       point: order.shippingPoint || null,
+      // Wielkość paczki (MALA/SREDNIA/DUZA) + sugerowane wymiary i waga,
+      // żeby Furgonetka tworzyła przesyłkę z właściwym gabarytem.
+      package_size: normalizePackageSize(order.packageSize),
+      package_size_name: formatPackageSize(order.packageSize),
+      parcel: {
+        ...PACKAGE_DIMENSIONS[normalizePackageSize(order.packageSize)],
+        dimension_unit: "cm",
+        weight_unit: "kg",
+      },
     },
     tracking: {
       number: order.trackingNumber || null,

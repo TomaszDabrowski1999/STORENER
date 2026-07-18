@@ -16,6 +16,7 @@ type ProductForm = {
   image: string;
   category: string;
   subcategory: string;
+  packageSize: string;
   galleryImages: string[];
   stock: string;
 };
@@ -57,6 +58,7 @@ export default function EditProductPage({ params }: Props) {
     image: "",
     category: "NOWOSCI",
     subcategory: "",
+    packageSize: "MALA",
     galleryImages: [],
     stock: "0",
   });
@@ -118,6 +120,7 @@ export default function EditProductPage({ params }: Props) {
           image: product.image,
           category: getPublicCategoryValue(product.category, product.subcategory) || "NOWOSCI",
           subcategory: "",
+          packageSize: (product as { packageSize?: string }).packageSize || "MALA",
           galleryImages: product.images
             ? product.images
                 .sort((a, b) => a.position - b.position)
@@ -242,6 +245,7 @@ const handleGenerateSlug = () => {
           image: mainImageUrl,
           category: categoryPayload.category,
           subcategory: categoryPayload.subcategory,
+          packageSize: form.packageSize,
           galleryImages: form.galleryImages,
           stock: Number(form.stock),
         }),
@@ -264,6 +268,7 @@ const handleGenerateSlug = () => {
         image: data.image,
         category: data.category || form.category,
         subcategory: data.subcategory || "",
+        packageSize: (data as { packageSize?: string }).packageSize || form.packageSize,
         galleryImages: data.images
           ? data.images
               .sort(
@@ -416,6 +421,25 @@ const handleGenerateSlug = () => {
                           </option>
                         ))}
                       </select>
+                    </div>
+
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-gray-700">
+                        Wielkość paczki (cennik dostawy)
+                      </label>
+                      <select
+                        name="packageSize"
+                        value={form.packageSize}
+                        onChange={handleChange}
+                        className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-black"
+                      >
+                        <option value="MALA">Mała paczka (gabaryt A)</option>
+                        <option value="SREDNIA">Średnia paczka (gabaryt B)</option>
+                        <option value="DUZA">Duża paczka (gabaryt C)</option>
+                      </select>
+                      <p className="mt-1.5 text-xs text-gray-400">
+                        Od wielkości paczki zależy cennik i lista kurierów w checkoucie.
+                      </p>
                     </div>
                   </div>
 

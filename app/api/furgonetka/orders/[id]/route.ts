@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@/generated/prisma";
+import {
+  normalizePackageSize,
+  formatPackageSize,
+  PACKAGE_DIMENSIONS,
+  getCourier,
+} from "@/lib/shipping";
 
 export const dynamic = "force-dynamic";
 
@@ -133,8 +139,18 @@ export async function GET(request: Request, context: RouteContext) {
       shipping: {
         method: order.shippingMethod,
         method_name: order.shippingMethodName,
+        service: getCourier(order.shippingMethod)?.furgonetkaService || null,
         price: order.shippingPrice,
         point: order.shippingPoint || null,
+        package_size: normalizePackageSize((order as { packageSize?: string | null }).packageSize),
+        package_size_name: formatPackageSize((order as { packageSize?: string | null }).packageSize),
+        parcel: {
+          ...PACKAGE_DIMENSIONS[
+            normalizePackageSize((order as { packageSize?: string | null }).packageSize)
+          ],
+          dimension_unit: "cm",
+          weight_unit: "kg",
+        },
       },
       tracking: {
         number: o.trackingNumber || null,

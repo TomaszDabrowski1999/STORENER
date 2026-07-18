@@ -4,6 +4,12 @@ import { useState } from "react";
 import AdminGuard from "../../../components/AdminGuard";
 import { Copy, Check, ExternalLink, Info, Truck, Key, Globe, Package } from "lucide-react";
 import Link from "next/link";
+import {
+  PACKAGE_SIZES,
+  PACKAGE_SIZE_LABELS,
+  PACKAGE_DIMENSIONS,
+  getShippingOptionsForSize,
+} from "../../../lib/shipping";
 
 export default function FurgonetkaIntegrationPage() {
   const [copied, setCopied] = useState<string | null>(null);
@@ -151,6 +157,45 @@ export default function FurgonetkaIntegrationPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Cenniki dostaw wg wielkości paczki */}
+          <div className="rounded-2xl bg-white p-6" style={{ border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)" }}>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#0a0a0a] text-sm font-bold text-white">4</div>
+              <h2 className="font-bold text-gray-950">Cenniki dostaw (3 wielkości paczek)</h2>
+            </div>
+            <p className="mb-5 text-sm text-gray-600">
+              Każdy produkt ma przypisaną wielkość paczki (w formularzu produktu). Wielkość
+              zamówienia = największa paczka w koszyku. Furgonetka otrzymuje wielkość oraz
+              wymiary i wagę przesyłki w polu <code className="rounded-md bg-gray-100 px-1.5 py-0.5 font-mono text-xs">shipping.parcel</code>.
+              Ceny i listę kurierów edytujesz w pliku{" "}
+              <code className="rounded-md bg-gray-100 px-1.5 py-0.5 font-mono text-xs">lib/shipping.ts</code>.
+            </p>
+
+            <div className="grid gap-4 lg:grid-cols-3">
+              {PACKAGE_SIZES.map((size) => {
+                const dims = PACKAGE_DIMENSIONS[size];
+                return (
+                  <div key={size} className="rounded-xl border bg-gray-50 p-4" style={{ borderColor: "var(--border)" }}>
+                    <p className="text-sm font-bold text-gray-950">{PACKAGE_SIZE_LABELS[size]}</p>
+                    <p className="mt-0.5 text-[11px] text-gray-400">
+                      do {dims.length}×{dims.width}×{dims.height} cm, {dims.weight} kg
+                    </p>
+                    <ul className="mt-3 space-y-1.5">
+                      {getShippingOptionsForSize(size)
+                        .filter((option) => option.id !== "ODBIOR_OSOBISTY")
+                        .map((option) => (
+                          <li key={option.id} className="flex items-center justify-between gap-2 text-sm">
+                            <span className="text-gray-600">{option.name}</span>
+                            <span className="font-semibold text-gray-950">{option.price.toFixed(2)} zł</span>
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                );
+              })}
             </div>
           </div>
 

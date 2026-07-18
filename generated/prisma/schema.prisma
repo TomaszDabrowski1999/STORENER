@@ -28,6 +28,7 @@ model Product {
   category       ProductCategory    @default(NOWOSCI)
   stock          Int                @default(0)
   stockStatus    ProductStockStatus @default(BRAK)
+  packageSize    PackageSize        @default(MALA)
   productDetails String?
   orderItems     OrderItem[]
   images         ProductImage[]
@@ -61,6 +62,7 @@ model Order {
   shippingPrice             Float         @default(16.99)
   shippingPoint             String?
   shippingEstimatedDelivery String        @default("1-2 dni robocze")
+  packageSize               String        @default("MALA")
   trackingNumber            String?
   trackingCarrier           String?
   user                      User?         @relation(fields: [userId], references: [id])
@@ -129,6 +131,12 @@ enum PaymentStatus {
   OCZEKUJE
   OPLACONA
   NIEUDANA
+}
+
+enum PackageSize {
+  MALA
+  SREDNIA
+  DUZA
 }
 
 enum ProductStockStatus {

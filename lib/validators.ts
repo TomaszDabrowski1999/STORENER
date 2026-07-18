@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { shippingOptions } from "./shipping";
+import { getCourier, SHIPPING_METHOD_IDS } from "./shipping";
 
 export const checkoutSchema = z.object({
   fullName: z
@@ -25,21 +25,14 @@ export const checkoutSchema = z.object({
  paymentMethod: z.enum(["BLIK", "KARTA", "PRZELEW", "POBRANIE"], {
   message: "Wybierz metodę płatności",
 }),
-  shippingMethod: z.enum([
-    "INPOST_PACZKOMAT",
-    "INPOST_KURIER",
-    "DPD",
-    "DHL",
-    "ORLEN_PACZKA",
-    "ODBIOR_OSOBISTY",
-  ], {
+  shippingMethod: z.enum(SHIPPING_METHOD_IDS, {
     message: "Wybierz metodę dostawy",
   }),
   shippingPoint: z.string().optional(),
 }).superRefine((data, ctx) => {
-  const option = shippingOptions.find((item) => item.id === data.shippingMethod);
+  const courier = getCourier(data.shippingMethod);
 
-  if (option?.requiresPoint && !data.shippingPoint?.trim()) {
+  if (courier?.requiresPoint && !data.shippingPoint?.trim()) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       path: ["shippingPoint"],

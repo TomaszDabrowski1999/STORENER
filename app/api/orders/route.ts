@@ -2,7 +2,14 @@ import { NextResponse } from "next/server";
 import { auth } from "../../../auth";
 import { prisma } from "@/lib/prisma";
 import { Resend } from "resend";
-import { getShippingOption, computeShippingPrice, formatShippingMethod } from "@/lib/shipping";
+import {
+  getShippingOption,
+  computeShippingPrice,
+  formatShippingMethod,
+  getOrderPackageSize,
+  formatPackageSize,
+  getCourier,
+} from "@/lib/shipping";
 import type { Prisma } from "@/generated/prisma";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -87,18 +94,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const shippingOption = getShippingOption(shippingMethod);
-
-    if (!shippingOption) {
+    if (!getCourier(shippingMethod)) {
       return NextResponse.json(
         { error: "Nieprawidłowa metoda dostawy" },
-        { status: 400 }
-      );
-    }
-
-    if (shippingOption.requiresPoint && !String(shippingPoint || "").trim()) {
-      return NextResponse.json(
-        { error: "Podaj punkt odbioru lub numer paczkomatu" },
         { status: 400 }
       );
     }
@@ -125,7 +123,7 @@ export async function POST(request: Request) {
 
     const productIds = normalizedItems.map((item: { id: number }) => item.id);
 
-    const dbProducts = await prisma.product.findMany({
+    const dbProducts = (await prisma.product.findMany({
       where: {
         id: { in: productIds },
         isActive: true,
@@ -135,8 +133,17 @@ export async function POST(request: Request) {
         name: true,
         price: true,
         stock: true,
-      },
-    });
+        packageSize: true,
+      } as never,
+      // Typ rzutujemy ręcznie – lokalny klient Prisma pozna packageSize
+      // dopiero po `prisma generate` (kolumna jest w bazie po migracji).
+    })) as Array<{
+      id: number;
+      name: string;
+      price: number;
+      stock: number;
+      packageSize?: string | null;
+    }>;
 
     if (dbProducts.length !== productIds.length) {
       return NextResponse.json(
@@ -160,6 +167,32 @@ export async function POST(request: Request) {
           { status: 400 }
         );
       }
+    }
+
+    // Wielkość paczki całego zamówienia = największa wielkość spośród produktów.
+    // Liczona po stronie serwera z danych w bazie – klientowi nie ufamy.
+    const packageSize = getOrderPackageSize(
+      dbProducts.map((product) => product.packageSize)
+    );
+
+    // Cennik zależy od wielkości paczki. Jeśli wybrany kurier nie obsługuje
+    // tej wielkości (np. Orlen Paczka dla dużego gabarytu) – zwracamy błąd.
+    const shippingOption = getShippingOption(shippingMethod, packageSize);
+
+    if (!shippingOption) {
+      return NextResponse.json(
+        {
+          error: `Metoda dostawy „${formatShippingMethod(shippingMethod)}” nie jest dostępna dla przesyłki typu ${formatPackageSize(packageSize).toLowerCase()}. Wybierz innego kuriera.`,
+        },
+        { status: 400 }
+      );
+    }
+
+    if (shippingOption.requiresPoint && !String(shippingPoint || "").trim()) {
+      return NextResponse.json(
+        { error: "Podaj punkt odbioru lub numer paczkomatu" },
+        { status: 400 }
+      );
     }
 
     const subtotal = normalizedItems.reduce((sum: number, item: any) => {
@@ -223,6 +256,7 @@ export async function POST(request: Request) {
           shippingPrice,
           shippingPoint: shippingPoint?.trim() || null,
           shippingEstimatedDelivery: shippingOption.estimatedDelivery,
+          packageSize,
           paymentStatus,
           userId,
           items: {
@@ -297,7 +331,7 @@ export async function POST(request: Request) {
             tel. ${escapeHtml(phone)}
           </p>
 
-          <p><strong>Metoda dostawy:</strong> ${escapeHtml(formatShippingMethod(shippingMethod))}</p>
+          <p><strong>Metoda dostawy:</strong> ${escapeHtml(formatShippingMethod(shippingMethod))} – ${escapeHtml(formatPackageSize(packageSize).toLowerCase())}</p>
           ${shippingPoint ? `<p><strong>Punkt odbioru:</strong> ${escapeHtml(shippingPoint)}</p>` : ""}
           <p><strong>Przewidywany czas dostawy:</strong> ${escapeHtml(shippingOption.estimatedDelivery)}</p>
 

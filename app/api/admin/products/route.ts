@@ -10,6 +10,13 @@ function getStockStatus(stock: number) {
   if (stock <= 5) return "MALO_SZTUK";
   return "DOSTEPNY";
 }
+
+const PACKAGE_SIZES = ["MALA", "SREDNIA", "DUZA"];
+
+function normalizePackageSize(value: unknown) {
+  return PACKAGE_SIZES.includes(String(value)) ? String(value) : "MALA";
+}
+
  
 export async function GET() {
   const admin = await requireAdmin();
@@ -42,7 +49,7 @@ export async function POST(request: Request) {
  
   try {
     const body = await request.json();
-    const { name, slug, price, description, image, category, galleryImages, stock } = body;
+    const { name, slug, price, description, image, category, galleryImages, stock, packageSize } = body;
  
     if (!name || !slug || price === undefined || !description || !image || !category || stock === undefined) {
       return NextResponse.json({ error: "Uzupełnij wszystkie pola" }, { status: 400 });
@@ -71,7 +78,7 @@ export async function POST(request: Request) {
       : [];
  
     const product = await prisma.product.create({
-      data: {
+      data: ({
         name,
         slug,
         price: Number(price),
@@ -81,13 +88,15 @@ export async function POST(request: Request) {
         category,
         stock: stockValue,
         stockStatus: getStockStatus(stockValue),
+        // Wielkość paczki decyduje o cenniku dostaw (mała/średnia/duża).
+        packageSize: normalizePackageSize(packageSize),
         images: {
           create: validGalleryImages.map((url: string, index: number) => ({
             url,
             position: index,
           })),
         },
-      },
+      } as never),
       include: {
         images: { orderBy: { position: "asc" } },
       },

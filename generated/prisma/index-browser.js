@@ -139,6 +139,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   category: 'category',
   stock: 'stock',
   stockStatus: 'stockStatus',
+  packageSize: 'packageSize',
   productDetails: 'productDetails'
 };
 
@@ -168,6 +169,7 @@ exports.Prisma.OrderScalarFieldEnum = {
   shippingPrice: 'shippingPrice',
   shippingPoint: 'shippingPoint',
   shippingEstimatedDelivery: 'shippingEstimatedDelivery',
+  packageSize: 'packageSize',
   trackingNumber: 'trackingNumber',
   trackingCarrier: 'trackingCarrier'
 };
@@ -231,6 +233,12 @@ exports.ProductStockStatus = exports.$Enums.ProductStockStatus = {
   DOSTEPNY: 'DOSTEPNY',
   MALO_SZTUK: 'MALO_SZTUK',
   BRAK: 'BRAK'
+};
+
+exports.PackageSize = exports.$Enums.PackageSize = {
+  MALA: 'MALA',
+  SREDNIA: 'SREDNIA',
+  DUZA: 'DUZA'
 };
 
 exports.OrderStatus = exports.$Enums.OrderStatus = {

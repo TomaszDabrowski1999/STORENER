@@ -13,6 +13,7 @@ type ProductForm = {
   description: string;
   image: string;
   category: string;
+  packageSize: string;
   galleryImages: string[];
   stock: string;
 };
@@ -37,6 +38,7 @@ export default function AddProductPage() {
     description: "",
     image: "",
     category: "NOWOSCI",
+    packageSize: "MALA",
     galleryImages: [],
     stock: "0",
   });
@@ -173,6 +175,7 @@ export default function AddProductPage() {
           description: form.description.trim(),
           image: mainImageUrl,
           category: form.category,
+          packageSize: form.packageSize,
           galleryImages: form.galleryImages,
           stock: Number(form.stock),
         }),
@@ -194,6 +197,7 @@ export default function AddProductPage() {
         description: "",
         image: "",
         category: "NOWOSCI",
+        packageSize: "MALA",
         galleryImages: [],
         stock: "0",
       });
@@ -339,6 +343,25 @@ export default function AddProductPage() {
                       <option value="MOTORYZACJA">Motoryzacja</option>
                       <option value="AKCESORIA_DLA_ZWIERZAT">Akcesoria dla zwierząt</option>
                     </select>
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      Wielkość paczki (cennik dostawy)
+                    </label>
+                    <select
+                      name="packageSize"
+                      value={form.packageSize}
+                      onChange={handleChange}
+                      className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-black"
+                    >
+                      <option value="MALA">Mała paczka (gabaryt A)</option>
+                      <option value="SREDNIA">Średnia paczka (gabaryt B)</option>
+                      <option value="DUZA">Duża paczka (gabaryt C)</option>
+                    </select>
+                    <p className="mt-1.5 text-xs text-gray-400">
+                      Od wielkości paczki zależy cennik i lista kurierów w checkoucie.
+                    </p>
                   </div>
                 </div>
 

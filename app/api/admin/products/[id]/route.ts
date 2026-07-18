@@ -16,6 +16,13 @@ function getStockStatus(stock: number) {
   return "DOSTEPNY";
 }
 
+const PACKAGE_SIZES = ["MALA", "SREDNIA", "DUZA"];
+
+function normalizePackageSize(value: unknown) {
+  return PACKAGE_SIZES.includes(String(value)) ? String(value) : "MALA";
+}
+
+
 export async function PUT(request: Request, context: RouteContext) {
   const admin = await requireAdmin();
 
@@ -45,6 +52,7 @@ export async function PUT(request: Request, context: RouteContext) {
 
       galleryImages,
       stock,
+      packageSize,
     } = body;
 
     if (
@@ -106,7 +114,7 @@ export async function PUT(request: Request, context: RouteContext) {
       where: {
         id: productId,
       },
-      data: {
+      data: ({
         name,
         slug,
         price: Number(price),
@@ -116,13 +124,14 @@ export async function PUT(request: Request, context: RouteContext) {
 
         stock: stockValue,
         stockStatus: getStockStatus(stockValue),
+        packageSize: normalizePackageSize(packageSize),
         images: {
           create: validGalleryImages.map((url: string, index: number) => ({
             url,
             position: index,
           })),
         },
-      },
+      } as never),
       include: {
         images: {
           orderBy: {

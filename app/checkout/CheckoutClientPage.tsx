@@ -12,7 +12,15 @@ import { checkoutSchema, CheckoutFormData } from "../../lib/validators";
 import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import Input from "../../components/ui/Input";
-import { getShippingOption, shippingOptions, computeShippingPrice, FREE_SHIPPING_THRESHOLD } from "../../lib/shipping";
+import {
+  getShippingOptionsForSize,
+  computeShippingPrice,
+  normalizePackageSize,
+  formatPackageSize,
+  FREE_SHIPPING_THRESHOLD,
+  type PackageSize,
+  type ShippingOption,
+} from "../../lib/shipping";
 
 type SessionUser = {
   id: string;
@@ -30,6 +38,7 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [serverError, setServerError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [packageSize, setPackageSize] = useState<PackageSize>("MALA");
 
   const {
     register,
@@ -61,14 +70,54 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
     setValue("shippingMethod", "INPOST_KURIER");
   }, [sessionUser, setValue]);
 
+  // Wielkość paczki zamówienia (mała/średnia/duża) wyznacza serwer na
+  // podstawie produktów w koszyku – od niej zależy właściwy cennik dostaw.
+  useEffect(() => {
+    if (cart.length === 0) return;
+
+    const ids = cart.map((item) => item.id).join(",");
+    let cancelled = false;
+
+    fetch(`/api/shipping/options?ids=${ids}`)
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
+        if (!cancelled && data?.packageSize) {
+          setPackageSize(normalizePackageSize(data.packageSize));
+        }
+      })
+      .catch(() => {
+        // W razie problemów zostajemy przy małej paczce – serwer i tak
+        // zweryfikuje wybór przy składaniu zamówienia.
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [cart]);
+
   const selectedShippingMethod = watch("shippingMethod");
   const selectedPaymentMethod = watch("paymentMethod");
-  const selectedShipping = getShippingOption(selectedShippingMethod) || shippingOptions[1];
+  const availableShippingOptions: ShippingOption[] = getShippingOptionsForSize(packageSize);
+  const selectedShipping =
+    availableShippingOptions.find((option) => option.id === selectedShippingMethod) ||
+    availableShippingOptions[0];
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const hasFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
   const shippingPrice = cart.length > 0 ? computeShippingPrice(subtotal, selectedShipping) : 0;
   const total = subtotal + shippingPrice;
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  // Gdy zmieni się wielkość paczki, a wybrany kurier jej nie obsługuje
+  // (np. Orlen Paczka przy dużym gabarycie), przełączamy na pierwszą dostępną opcję.
+  useEffect(() => {
+    const stillAvailable = availableShippingOptions.some(
+      (option) => option.id === selectedShippingMethod
+    );
+    if (!stillAvailable && availableShippingOptions.length > 0) {
+      setValue("shippingMethod", availableShippingOptions[0].id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [packageSize]);
 
   const onSubmit = async (values: CheckoutFormData) => {
     setServerError("");
@@ -189,6 +238,9 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
                   <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">krok 2</p>
                   <h2 className="mt-1 text-2xl font-bold text-gray-950">Wybierz dostawę</h2>
                   <p className="mt-1 text-sm text-gray-500">Wszystkie produkty są w jednej przesyłce od jednego dostawcy.</p>
+                  <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-gray-600">
+                    <PackageCheck size={13} /> {formatPackageSize(packageSize)}
+                  </span>
                 </div>
               </div>
 
@@ -199,7 +251,7 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
               )}
 
               <div className="grid gap-3 sm:grid-cols-2">
-                {shippingOptions.map((option) => (
+                {availableShippingOptions.map((option) => (
                   <label key={option.id} className={`cursor-pointer rounded-2xl border p-4 transition ${selectedShippingMethod === option.id ? "border-emerald-700 bg-emerald-50" : "border-gray-100 bg-white hover:border-gray-300"}`}>
                     <input type="radio" value={option.id} className="sr-only" {...register("shippingMethod")} />
                     <span className="flex items-start justify-between gap-4">
