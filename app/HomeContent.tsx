@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { ShieldCheck, Sparkles, Truck, ArrowRight } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import HomeBannerSlider from "../components/HomeBannerSlider";
@@ -22,7 +22,6 @@ const CATEGORY_SECTIONS = [
 
 export default function HomeContent() {
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
@@ -55,19 +54,6 @@ export default function HomeContent() {
     loadProducts(s, c, so);
   }, [searchParams]);
 
-  const updateUrl = (s: string, c: string, so: string) => {
-    const p = new URLSearchParams();
-    if (s) p.set("search", s);
-    if (c) p.set("category", c);
-    if (so) p.set("sort", so);
-    router.push(p.toString() ? `/?${p}` : "/");
-  };
-
-  const selectCategory = (c: string) => {
-    setCategory(c);
-    updateUrl(search, c, sort);
-  };
-
   const showFeatured = !category && !search;
 
   const sectionProducts = useMemo(() => {
@@ -82,10 +68,7 @@ export default function HomeContent() {
     <div className="min-h-screen" style={{ background: "var(--surface)" }}>
       {/* Hero banner */}
       <section className="bg-white">
-        <HomeBannerSlider
-          onSaleClick={() => selectCategory("WYPRZEDAZ")}
-          onNewClick={() => selectCategory("NOWOSCI")}
-        />
+        <HomeBannerSlider />
       </section>
 
       {/* Trust badges */}

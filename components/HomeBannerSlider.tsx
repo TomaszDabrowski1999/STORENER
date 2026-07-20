@@ -1,260 +1,144 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
-type HomeBannerSliderProps = {
-  onSaleClick: () => void;
-  onNewClick: () => void;
-};
+/**
+ * Slider banerów na stronie głównej.
+ *
+ * Banery to gotowe projekty graficzne (tekst + przycisk „Sprawdź ofertę”
+ * są częścią grafiki), dlatego cały slajd jest jednym linkiem do kategorii.
+ *
+ * Responsywność: na desktopie pokazujemy pełny, szeroki baner (1983×793),
+ * a na mobile dedykowany kadr z lewym panelem tekstowym (912×793),
+ * żeby napisy pozostały czytelne na wąskim ekranie.
+ */
 
 type Slide = {
   id: number;
-  image: string;
-  eyebrow: string;
-  title: string;
-  description: string;
-  primaryLabel: string;
-  secondaryLabel: string;
-  primaryAction?: "sale" | "new";
-  secondaryAction?: "sale" | "new";
-  primaryHref?: string;
-  secondaryHref?: string;
-  badge: string;
-  statLabel: string;
+  /** Pełny baner na ekrany >= md */
+  imageDesktop: string;
+  /** Kadr z tekstem na ekrany < md */
+  imageMobile: string;
+  href: string;
+  alt: string;
 };
 
 const slides: Slide[] = [
   {
     id: 1,
-    image: "/banners/banner-1.jpg",
-    eyebrow: "oferta specjalna",
-    title: "Wyprzedaż do -50% na wybrane produkty",
-    description:
-      "Odkryj starannie wyselekcjonowane promocje i skorzystaj z najlepszych cen na wybrane produkty w ofercie sklepu.",
-    primaryLabel: "Przejdź do wyprzedaży",
-    secondaryLabel: "Zobacz nowości",
-    primaryAction: "sale",
-    secondaryAction: "new",
-    badge: "-50%",
-    statLabel: "Na wybrane produkty",
+    imageDesktop: "/banners/banner-zwierzeta.jpg",
+    imageMobile: "/banners/banner-zwierzeta-mobile.jpg",
+    href: "/produkty?category=AKCESORIA_DLA_ZWIERZAT",
+    alt: "Wysokiej jakości akcesoria dla zwierząt – legowiska, miski, zabawki, smycze z dostawą w 24h. Sprawdź ofertę.",
   },
   {
     id: 2,
-    image: "/banners/banner-2.jpg",
-    eyebrow: "nowa kolekcja",
-    title: "Nowości dostępne już teraz",
-    description:
-      "Poznaj najnowsze produkty dodane do sklepu i przeglądaj świeżą ofertę przygotowaną z myślą o nowoczesnych zakupach.",
-    primaryLabel: "Zobacz nowości",
-    secondaryLabel: "Sprawdź promocje",
-    primaryAction: "new",
-    secondaryAction: "sale",
-    badge: "NEW",
-    statLabel: "Świeżo dodane produkty",
-  },
-  {
-    id: 3,
-    image: "/banners/banner-3.jpg",
-    eyebrow: "dom i ogród",
-    title: "Styl i funkcjonalność do domu i ogrodu",
-    description:
-      "Wybierz produkty do wyposażenia wnętrz i akcesoria ogrodowe, które łączą estetykę, wygodę i praktyczne zastosowanie.",
-    primaryLabel: "Przeglądaj ogród",
-    secondaryLabel: "Zobacz wyposażenie",
-    primaryHref: "/produkty?category=OGROD",
-    secondaryHref: "/produkty?category=WYPOSAZENIE",
-    badge: "HOME",
-    statLabel: "Wybrane inspiracje",
+    imageDesktop: "/banners/banner-ogrod.jpg",
+    imageMobile: "/banners/banner-ogrod-mobile.jpg",
+    href: "/produkty?category=OGROD",
+    alt: "Wysokiej jakości wyposażenie ogrodu – meble ogrodowe, hamaki, krzesła, stoliki z dostawą w 24h. Sprawdź ofertę.",
   },
 ];
 
-export default function HomeBannerSlider({
-  onSaleClick,
-  onNewClick,
-}: HomeBannerSliderProps) {
-  const router = useRouter();
+const AUTOPLAY_MS = 6000;
+
+export default function HomeBannerSlider() {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const goToSlide = (index: number) => {
-    setActiveIndex(index);
-  };
-
-  const nextSlide = () => {
-    setActiveIndex((prev) => (prev + 1) % slides.length);
-  };
-
-  const prevSlide = () => {
+  const nextSlide = () => setActiveIndex((prev) => (prev + 1) % slides.length);
+  const prevSlide = () =>
     setActiveIndex((prev) => (prev - 1 + slides.length) % slides.length);
-  };
 
   // Autoplay restartuje się po każdej zmianie slajdu (także ręcznej),
   // dzięki czemu strzałki nie "walczą" z automatycznym przełączaniem.
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % slides.length);
-    }, 6000);
-
+    const interval = setInterval(nextSlide, AUTOPLAY_MS);
     return () => clearInterval(interval);
   }, [activeIndex]);
 
-  const handleAction = (slide: Slide, which: "primary" | "secondary") => {
-    const href = which === "primary" ? slide.primaryHref : slide.secondaryHref;
-    if (href) {
-      router.push(href);
-      return;
-    }
-    const action = which === "primary" ? slide.primaryAction : slide.secondaryAction;
-    if (action === "sale") {
-      onSaleClick();
-      return;
-    }
-    onNewClick();
-  };
-
-  const activeSlide = slides[activeIndex];
-
   return (
-    <section className="mx-auto max-w-6xl px-6 py-8">
-      <div className="relative overflow-hidden rounded-[36px] bg-black shadow-[0_30px_80px_rgba(0,0,0,0.24)]">
-        <div className="absolute inset-0">
-          <Image
-            src={activeSlide.image}
-            alt={activeSlide.title}
-            fill
-            priority
-            sizes="(max-width: 1200px) 100vw, 1152px"
-            className="object-cover opacity-55 transition duration-700"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.92)_0%,rgba(0,0,0,0.72)_42%,rgba(0,0,0,0.18)_100%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.18),transparent_30%)]" />
-        </div>
+    <section className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+      <div className="relative overflow-hidden rounded-3xl bg-black shadow-[0_24px_60px_rgba(0,0,0,0.22)] sm:rounded-[36px]">
+        {/* Proporcje kontenera = proporcje grafiki, więc baner nigdy nie jest
+            przycinany ani rozciągany: mobile 912/793, desktop 1983/793. */}
+        <div className="relative aspect-[912/793] w-full md:aspect-[1983/793]">
+          {slides.map((slide, index) => (
+            <Link
+              key={slide.id}
+              href={slide.href}
+              aria-label={slide.alt}
+              aria-hidden={index !== activeIndex}
+              tabIndex={index === activeIndex ? 0 : -1}
+              className={`absolute inset-0 transition-opacity duration-700 ${
+                index === activeIndex
+                  ? "z-10 opacity-100"
+                  : "pointer-events-none z-0 opacity-0"
+              }`}
+            >
+              {/* Desktop – pełny baner */}
+              <Image
+                src={slide.imageDesktop}
+                alt={slide.alt}
+                fill
+                priority={index === 0}
+                sizes="(min-width: 768px) min(100vw, 1152px), 1px"
+                className="hidden object-cover md:block"
+              />
+              {/* Mobile – kadr z panelem tekstowym */}
+              <Image
+                src={slide.imageMobile}
+                alt={slide.alt}
+                fill
+                priority={index === 0}
+                sizes="(max-width: 767px) 100vw, 1px"
+                className="block object-cover md:hidden"
+              />
+            </Link>
+          ))}
 
-        <div className="absolute inset-x-0 top-0 h-px bg-white/20" />
-        <div className="absolute inset-x-0 bottom-0 h-px bg-white/10" />
+          <button
+            type="button"
+            onClick={prevSlide}
+            aria-label="Poprzedni baner"
+            className="absolute left-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur-md transition hover:bg-white hover:text-black sm:left-5 sm:h-12 sm:w-12"
+          >
+            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+          </button>
 
-        <button
-          type="button"
-          onClick={prevSlide}
-          aria-label="Poprzedni slajd"
-          className="absolute left-5 top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-md transition hover:bg-white hover:text-black"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
+          <button
+            type="button"
+            onClick={nextSlide}
+            aria-label="Następny baner"
+            className="absolute right-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur-md transition hover:bg-white hover:text-black sm:right-5 sm:h-12 sm:w-12"
+          >
+            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
+          </button>
 
-        <button
-          type="button"
-          onClick={nextSlide}
-          aria-label="Następny slajd"
-          className="absolute right-5 top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-md transition hover:bg-white hover:text-black"
-        >
-          <ChevronRight className="h-5 w-5" />
-        </button>
-
-        <div className="relative grid min-h-[500px] gap-10 px-8 py-10 md:px-12 md:py-12 lg:h-[560px] lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="flex max-w-2xl flex-col justify-center">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-white/90 backdrop-blur-md">
-                {activeSlide.eyebrow}
-              </span>
-
-              <span className="rounded-full bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-black">
-                {activeSlide.badge}
-              </span>
-            </div>
-
-            <h2 className="mt-6 max-w-3xl text-4xl font-bold leading-[1.05] tracking-tight text-white md:text-5xl xl:text-6xl">
-              {activeSlide.title}
-            </h2>
-
-            <p className="mt-6 max-w-xl text-base leading-8 text-white/78 md:text-lg">
-              {activeSlide.description}
-            </p>
-
-            <div className="mt-8 flex flex-wrap gap-4">
+          {/* Kropki nawigacji */}
+          <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2.5 sm:bottom-5">
+            {slides.map((slide, index) => (
               <button
+                key={slide.id}
                 type="button"
-                onClick={() => handleAction(activeSlide, "primary")}
-                className="rounded-2xl bg-white px-6 py-3.5 text-sm font-semibold text-black transition hover:scale-[1.02] hover:opacity-95"
-              >
-                {activeSlide.primaryLabel}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleAction(activeSlide, "secondary")}
-                className="rounded-2xl border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white hover:text-black"
-              >
-                {activeSlide.secondaryLabel}
-              </button>
-            </div>
-
-            <div className="mt-10 flex flex-wrap items-center gap-6 text-sm text-white/70">
-              <div>
-                <p className="text-2xl font-bold text-white">24/7</p>
-                <p className="mt-1">Zakupy online</p>
-              </div>
-              <div className="h-10 w-px bg-white/15" />
-              <div>
-                <p className="text-2xl font-bold text-white">Premium</p>
-                <p className="mt-1">{activeSlide.statLabel}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-end justify-end">
-            <div className="w-full max-w-sm rounded-[28px] border border-white/15 bg-white/10 p-5 text-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] backdrop-blur-xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/60">
-                aktualna kolekcja
-              </p>
-
-              <div className="mt-5 space-y-4">
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <p className="text-sm text-white/60">Oferta</p>
-                  <p className="mt-2 text-2xl font-bold text-white">
-                    {activeSlide.badge}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <p className="text-sm text-white/60">Korzyść</p>
-                  <p className="mt-2 text-lg font-semibold text-white">
-                    {activeSlide.statLabel}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <p className="text-sm text-white/60">Wyróżnik</p>
-                  <p className="mt-2 text-lg font-semibold text-white">
-                    Starannie dobrana oferta
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-6 flex items-center gap-3">
-                {slides.map((slide, index) => (
-                  <button
-                    key={slide.id}
-                    type="button"
-                    onClick={() => goToSlide(index)}
-                    aria-label={`Przejdź do slajdu ${index + 1}`}
-                    className={`h-2.5 rounded-full transition-all duration-300 ${
-                      activeIndex === index
-                        ? "w-10 bg-white"
-                        : "w-2.5 bg-white/40 hover:bg-white/70"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
+                onClick={() => setActiveIndex(index)}
+                aria-label={`Przejdź do banera ${index + 1}`}
+                className={`h-2.5 rounded-full transition-all duration-300 ${
+                  activeIndex === index
+                    ? "w-8 bg-white"
+                    : "w-2.5 bg-white/45 hover:bg-white/75"
+                }`}
+              />
+            ))}
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 h-1 w-full bg-white/10">
+        {/* Pasek postępu autoplay */}
+        <div className="absolute bottom-0 left-0 z-20 h-1 w-full bg-white/10">
           <div
-            className="h-full bg-white transition-all duration-700"
+            className="h-full bg-[#4caf3d] transition-all duration-700"
             style={{ width: `${((activeIndex + 1) / slides.length) * 100}%` }}
           />
         </div>
