@@ -4,10 +4,14 @@ import { getCourier, SHIPPING_METHOD_IDS } from "./shipping";
 export const checkoutSchema = z.object({
   fullName: z
     .string()
-    .min(3, "Imię i nazwisko musi mieć co najmniej 3 znaki"),
+    .trim()
+    .min(3, "Imię i nazwisko musi mieć co najmniej 3 znaki")
+    .max(120, "Imię i nazwisko jest zbyt długie"),
   email: z
     .string()
-    .email("Podaj poprawny adres email"),
+    .trim()
+    .email("Podaj poprawny adres email")
+    .max(200, "Adres e-mail jest zbyt długi"),
   phone: z
     .string()
     .trim()
@@ -15,13 +19,18 @@ export const checkoutSchema = z.object({
     .regex(/^[+]?[0-9\s-]{9,20}$/, "Numer telefonu może zawierać tylko cyfry, spacje, myślniki i +"),
   address: z
     .string()
-    .min(5, "Adres musi mieć co najmniej 5 znaków"),
+    .trim()
+    .min(5, "Adres musi mieć co najmniej 5 znaków")
+    .max(200, "Adres jest zbyt długi"),
   city: z
     .string()
-    .min(2, "Miasto musi mieć co najmniej 2 znaki"),
+    .trim()
+    .min(2, "Miasto musi mieć co najmniej 2 znaki")
+    .max(100, "Nazwa miasta jest zbyt długa"),
   postalCode: z
     .string()
-    .min(5, "Kod pocztowy jest za krótki"),
+    .trim()
+    .regex(/^\d{2}-\d{3}$/, "Kod pocztowy musi mieć format 00-000"),
  paymentMethod: z.enum(["BLIK", "KARTA", "PRZELEW", "POBRANIE"], {
   message: "Wybierz metodę płatności",
 }),
@@ -46,13 +55,18 @@ export type CheckoutFormData = z.infer<typeof checkoutSchema>;
 export const registerSchema = z.object({
   fullName: z
     .string()
-    .min(3, "Imię i nazwisko musi mieć co najmniej 3 znaki"),
+    .trim()
+    .min(3, "Imię i nazwisko musi mieć co najmniej 3 znaki")
+    .max(120, "Imię i nazwisko jest zbyt długie"),
   email: z
     .string()
-    .email("Podaj poprawny adres email"),
+    .trim()
+    .email("Podaj poprawny adres email")
+    .max(200, "Adres e-mail jest zbyt długi"),
   password: z
     .string()
-    .min(6, "Hasło musi mieć co najmniej 6 znaków"),
+    .min(8, "Hasło musi mieć co najmniej 8 znaków")
+    .max(72, "Hasło może mieć maksymalnie 72 znaki"),
 });
 
 export type RegisterFormData = z.infer<typeof registerSchema>;

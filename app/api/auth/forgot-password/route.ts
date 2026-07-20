@@ -18,8 +18,12 @@ export async function POST(request: Request) {
       );
     }
 
+    // Rejestracja zapisuje e-maile małymi literami – tutaj też normalizujemy,
+    // inaczej "Jan@X.pl" nie znalazłby konta "jan@x.pl".
+    const normalizedEmail = String(email).trim().toLowerCase();
+
     const user = await prisma.user.findUnique({
-      where: { email },
+      where: { email: normalizedEmail },
     });
 
     if (!user) {
@@ -32,10 +36,16 @@ export async function POST(request: Request) {
     const token = crypto.randomBytes(32).toString("hex");
     const expiresAt = new Date(Date.now() + 1000 * 60 * 30);
 
+    // Poprzednie tokeny dla tego adresu unieważniamy – aktywny powinien być
+    // zawsze tylko najnowszy link resetujący.
+    await prisma.passwordResetToken.deleteMany({
+      where: { email: normalizedEmail },
+    });
+
     await prisma.passwordResetToken.create({
       data: {
         token,
-        email,
+        email: normalizedEmail,
         expiresAt,
       },
     });
@@ -45,7 +55,7 @@ export async function POST(request: Request) {
 
     const { error } = await resend.emails.send({
       from: process.env.EMAIL_FROM || "Sklep <onboarding@resend.dev>",
-      to: email,
+      to: normalizedEmail,
       subject: "Reset hasła - sklep",
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6;">

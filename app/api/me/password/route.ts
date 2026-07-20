@@ -26,9 +26,16 @@ export async function PUT(request: Request) {
       );
     }
 
-    if (newPassword.length < 6) {
+    if (newPassword.length < 8) {
       return NextResponse.json(
-        { error: "Nowe hasło musi mieć co najmniej 6 znaków" },
+        { error: "Nowe hasło musi mieć co najmniej 8 znaków" },
+        { status: 400 }
+      );
+    }
+
+    if (newPassword.length > 72) {
+      return NextResponse.json(
+        { error: "Nowe hasło może mieć maksymalnie 72 znaki" },
         { status: 400 }
       );
     }

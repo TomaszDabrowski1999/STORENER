@@ -15,9 +15,16 @@ export async function POST(request: Request) {
       );
     }
 
-    if (password.length < 6) {
+    if (password.length < 8) {
       return NextResponse.json(
-        { error: "Hasło musi mieć co najmniej 6 znaków" },
+        { error: "Hasło musi mieć co najmniej 8 znaków" },
+        { status: 400 }
+      );
+    }
+
+    if (String(password).length > 72) {
+      return NextResponse.json(
+        { error: "Hasło może mieć maksymalnie 72 znaki" },
         { status: 400 }
       );
     }
@@ -54,8 +61,10 @@ export async function POST(request: Request) {
       data: { password: hashedPassword },
     });
 
-    await prisma.passwordResetToken.delete({
-      where: { token },
+    // Po udanym resecie unieważniamy WSZYSTKIE tokeny tego adresu,
+    // nie tylko użyty – starsze linki z maili nie mogą dalej działać.
+    await prisma.passwordResetToken.deleteMany({
+      where: { email: resetToken.email },
     });
 
     return NextResponse.json({

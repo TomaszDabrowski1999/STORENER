@@ -6,7 +6,7 @@ import UserGuard from "../../components/UserGuard";
 import { Package, CreditCard, Truck, Clock, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, ShoppingBag } from "lucide-react";
 
 type OrderItem = {
-  id: number; quantity: number;
+  id: number; quantity: number; price?: number;
   product: { id: number; name: string; price: number; image?: string | null; slug?: string | null };
 };
 
@@ -178,7 +178,7 @@ export default function MyOrdersPage() {
                                 )}
                                 <div className="min-w-0 flex-1">
                                   <p className="truncate text-sm font-medium text-gray-800">{item.product.name}</p>
-                                  <p className="text-xs text-gray-400">{item.quantity} szt. × {item.product.price.toFixed(2)} zł</p>
+                                  <p className="text-xs text-gray-400">{item.quantity} szt. × {(item.price || item.product.price).toFixed(2)} zł</p>
                                 </div>
                               </div>
                             ))}

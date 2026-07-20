@@ -33,7 +33,7 @@ export default function ChangePasswordPage() {
     setMessage(""); setError("");
     if (!current || !newPass || !confirm) { toast.error("Uzupełnij wszystkie pola"); return; }
     if (newPass !== confirm) { toast.error("Hasła nie są takie same"); return; }
-    if (newPass.length < 6) { toast.error("Hasło musi mieć min. 6 znaków"); return; }
+    if (newPass.length < 8) { toast.error("Hasło musi mieć min. 8 znaków"); return; }
     const tid = toast.loading("Zmienianie hasła…");
     try {
       setIsSaving(true);

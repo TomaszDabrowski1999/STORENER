@@ -44,15 +44,24 @@ export async function POST(request: Request, context: RouteContext) {
 
     const numericRating = Number(rating);
 
+    const trimmedTitle = String(title ?? "").trim();
+    const trimmedComment = String(comment ?? "").trim();
+
     if (
       Number.isNaN(numericRating) ||
+      !Number.isInteger(numericRating) ||
       numericRating < 1 ||
       numericRating > 5 ||
-      !title ||
-      !comment
+      !trimmedTitle ||
+      !trimmedComment ||
+      trimmedTitle.length > 100 ||
+      trimmedComment.length > 2000
     ) {
       return NextResponse.json(
-        { error: "Uzupełnij poprawnie wszystkie pola opinii" },
+        {
+          error:
+            "Uzupełnij poprawnie wszystkie pola opinii (tytuł do 100, treść do 2000 znaków)",
+        },
         { status: 400 }
       );
     }
@@ -83,11 +92,24 @@ export async function POST(request: Request, context: RouteContext) {
       );
     }
 
+    // Jedna opinia użytkownika na produkt – standard w sklepach internetowych.
+    const existingReview = await prisma.productReview.findFirst({
+      where: { userId: user.id, productId },
+      select: { id: true },
+    });
+
+    if (existingReview) {
+      return NextResponse.json(
+        { error: "Dodałeś już opinię do tego produktu" },
+        { status: 409 }
+      );
+    }
+
     const review = await prisma.productReview.create({
       data: {
         rating: numericRating,
-        title,
-        comment,
+        title: trimmedTitle,
+        comment: trimmedComment,
         userId: user.id,
         productId,
       },

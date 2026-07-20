@@ -61,8 +61,11 @@ export default async function PaymentPage({ params, searchParams }: Props) {
   const isPaid = order.paymentStatus === "OPLACONA";
   const isReturnFromGateway = powrot === "1";
 
+  const unitPriceOf = (item: { product: { price: number } }) =>
+    (item as { price?: number }).price || item.product.price;
+
   const productsTotal = order.items.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
+    (sum, item) => sum + unitPriceOf(item) * item.quantity,
     0
   );
 
@@ -112,11 +115,11 @@ export default async function PaymentPage({ params, searchParams }: Props) {
                 <div>
                   <p className="font-bold text-gray-950">{item.product.name}</p>
                   <p className="mt-1 text-sm text-gray-500">
-                    {item.quantity} × {formatPrice(item.product.price)}
+                    {item.quantity} × {formatPrice(unitPriceOf(item))}
                   </p>
                 </div>
                 <p className="font-black text-gray-950">
-                  {formatPrice(item.product.price * item.quantity)}
+                  {formatPrice(unitPriceOf(item) * item.quantity)}
                 </p>
               </div>
             ))}

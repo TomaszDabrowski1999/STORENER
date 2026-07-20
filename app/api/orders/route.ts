@@ -23,6 +23,20 @@ function getStockStatus(stock: number) {
 }
 
 
+const MAX_ITEMS_IN_ORDER = 50;
+const MAX_QUANTITY_PER_ITEM = 99;
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const POSTAL_CODE_REGEX = /^\d{2}-\d{3}$/;
+
+function isNonEmptyString(value: unknown, maxLength: number) {
+  return (
+    typeof value === "string" &&
+    value.trim().length > 0 &&
+    value.trim().length <= maxLength
+  );
+}
+
 function escapeHtml(value: unknown) {
   return String(value)
     .replace(/&/g, "&amp;")
@@ -57,16 +71,37 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!fullName || !email || !address || !city || !postalCode) {
+    if (
+      !isNonEmptyString(fullName, 120) ||
+      !isNonEmptyString(email, 200) ||
+      !isNonEmptyString(address, 200) ||
+      !isNonEmptyString(city, 100) ||
+      !isNonEmptyString(postalCode, 10)
+    ) {
       return NextResponse.json(
-        { error: "Brak danych klienta" },
+        { error: "Brak lub nieprawidłowe dane klienta" },
         { status: 400 }
       );
     }
 
-    if (!phone || !String(phone).trim()) {
+    if (!EMAIL_REGEX.test(String(email).trim())) {
       return NextResponse.json(
-        { error: "Podaj numer telefonu" },
+        { error: "Podaj poprawny adres e-mail" },
+        { status: 400 }
+      );
+    }
+
+    if (!POSTAL_CODE_REGEX.test(String(postalCode).trim())) {
+      return NextResponse.json(
+        { error: "Kod pocztowy musi mieć format 00-000" },
+        { status: 400 }
+      );
+    }
+
+    const phoneDigits = String(phone || "").replace(/[\s\-()+]/g, "");
+    if (!phone || phoneDigits.length < 9 || phoneDigits.length > 15 || !/^\d+$/.test(phoneDigits)) {
+      return NextResponse.json(
+        { error: "Podaj poprawny numer telefonu" },
         { status: 400 }
       );
     }
@@ -101,18 +136,35 @@ export async function POST(request: Request) {
       );
     }
 
-    const normalizedItems = items.map((item: any) => ({
-      id: Number(item.id),
-      quantity: Number(item.quantity),
-    }));
+    if (!Array.isArray(items) || items.length > MAX_ITEMS_IN_ORDER) {
+      return NextResponse.json(
+        { error: "Nieprawidłowa zawartość koszyka" },
+        { status: 400 }
+      );
+    }
+
+    // Scalanie duplikatów tego samego produktu (ochrona przed obejściem
+    // limitu ilości przez wysłanie kilku pozycji z tym samym id).
+    const quantityById = new Map<number, number>();
+    for (const item of items as Array<{ id: unknown; quantity: unknown }>) {
+      const id = Number(item.id);
+      const quantity = Number(item.quantity);
+      quantityById.set(id, (quantityById.get(id) || 0) + quantity);
+    }
+
+    const normalizedItems = Array.from(quantityById.entries()).map(
+      ([id, quantity]) => ({ id, quantity })
+    );
 
     if (
       normalizedItems.some(
         (item: { id: number; quantity: number }) =>
           !item.id ||
           Number.isNaN(item.id) ||
+          !Number.isInteger(item.id) ||
           !Number.isInteger(item.quantity) ||
-          item.quantity <= 0
+          item.quantity <= 0 ||
+          item.quantity > MAX_QUANTITY_PER_ITEM
       )
     ) {
       return NextResponse.json(
@@ -263,6 +315,9 @@ export async function POST(request: Request) {
             create: normalizedItems.map((item: any) => ({
               productId: item.id,
               quantity: item.quantity,
+              // Snapshot ceny w momencie zakupu – zmiana ceny produktu
+              // nie może zmieniać historycznych zamówień.
+              price: Number(productById.get(item.id)?.price || 0),
             })),
           },
           // phone jest w bazie po migracji; rzutujemy przez unknown, bo lokalny
@@ -280,7 +335,13 @@ export async function POST(request: Request) {
 
     const orderItemsHtml = order.items
       .map((item) => {
-        const price = item.product.price;
+        // item.price to snapshot z chwili zakupu; fallback na cenę produktu
+        // zostawiamy tylko na wypadek starych rekordów sprzed migracji.
+        const itemWithPrice = item as typeof item & { price?: number };
+        const price =
+          itemWithPrice.price && itemWithPrice.price > 0
+            ? itemWithPrice.price
+            : item.product.price;
         const itemTotal = price * item.quantity;
 
         return `

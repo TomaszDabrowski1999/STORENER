@@ -10,7 +10,7 @@ import {
   ArrowRight, BarChart3, Plus, ClipboardList, List, Truck as TruckIcon
 } from "lucide-react";
 
-type OrderItem = { id: number; quantity: number; product: { name: string; price: number } };
+type OrderItem = { id: number; quantity: number; price?: number; product: { name: string; price: number } };
 type Order = {
   id: number; createdAt: string; total: number;
   status: "NOWE" | "W_REALIZACJI" | "WYSLANE";
@@ -219,7 +219,7 @@ export default function AdminOrdersPage() {
                                 {order.items.map(item => (
                                   <div key={item.id} className="flex justify-between text-sm">
                                     <span className="text-gray-700">{item.product.name} × {item.quantity}</span>
-                                    <span className="font-medium text-gray-900">{(item.product.price * item.quantity).toFixed(2)} zł</span>
+                                    <span className="font-medium text-gray-900">{(((item as { price?: number }).price || item.product.price) * item.quantity).toFixed(2)} zł</span>
                                   </div>
                                 ))}
                               </div>

@@ -16,14 +16,40 @@ export async function POST(request: Request) {
       );
     }
 
-    if (String(password).length < 6) {
+    if (String(password).length < 8) {
       return NextResponse.json(
-        { error: "Hasło musi mieć co najmniej 6 znaków" },
+        { error: "Hasło musi mieć co najmniej 8 znaków" },
+        { status: 400 }
+      );
+    }
+
+    // bcrypt uwzględnia tylko pierwsze 72 bajty hasła – dłuższe odrzucamy,
+    // żeby nie tworzyć fałszywego poczucia bezpieczeństwa.
+    if (String(password).length > 72) {
+      return NextResponse.json(
+        { error: "Hasło może mieć maksymalnie 72 znaki" },
+        { status: 400 }
+      );
+    }
+
+    if (String(fullName).trim().length > 120) {
+      return NextResponse.json(
+        { error: "Imię i nazwisko jest zbyt długie" },
         { status: 400 }
       );
     }
 
     const normalizedEmail = String(email).trim().toLowerCase();
+
+    if (
+      normalizedEmail.length > 200 ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(normalizedEmail)
+    ) {
+      return NextResponse.json(
+        { error: "Podaj poprawny adres e-mail" },
+        { status: 400 }
+      );
+    }
 
     const existingUser = await prisma.user.findFirst({
       where: { email: { equals: normalizedEmail, mode: "insensitive" } },

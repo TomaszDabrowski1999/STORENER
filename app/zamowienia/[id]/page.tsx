@@ -186,7 +186,10 @@ export default async function OrderSuccessPage({ params }: Props) {
               </h2>
 
               <div className="mt-6 space-y-4">
-                {order.items.map((item) => (
+                {order.items.map((item) => {
+                  const unitPrice =
+                    (item as { price?: number }).price || item.product.price;
+                  return (
                   <div
                     key={item.id}
                     className="flex flex-col gap-4 rounded-2xl border border-gray-100 p-4 sm:flex-row sm:items-center sm:justify-between"
@@ -199,15 +202,16 @@ export default async function OrderSuccessPage({ params }: Props) {
                         Ilość: {item.quantity}
                       </p>
                       <p className="mt-1 text-sm text-gray-500">
-                        Cena za sztukę: {item.product.price.toFixed(2)} zł
+                        Cena za sztukę: {unitPrice.toFixed(2)} zł
                       </p>
                     </div>
 
                     <p className="text-xl font-bold text-black">
-                      {(item.product.price * item.quantity).toFixed(2)} zł
+                      {(unitPrice * item.quantity).toFixed(2)} zł
                     </p>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
