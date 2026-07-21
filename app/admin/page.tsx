@@ -58,6 +58,7 @@ export default function AdminPage() {
               { href: "/admin/produkty", label: "Produkty", icon: Package },
               { href: "/admin/produkty/dodaj", label: "Dodaj produkt", icon: Plus },
               { href: "/admin/zamowienia", label: "Zamówienia", icon: ClipboardList },
+              { href: "/admin/klienci", label: "Klienci", icon: Users },
               { href: "/admin/furgonetka", label: "Furgonetka", icon: TruckIcon },
             ].map(({ href, label, icon: Icon, active }) => (
               <Link key={href} href={href} className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${active ? "bg-white/10 text-white" : "text-white/50 hover:bg-white/6 hover:text-white/80"}`}>
@@ -108,7 +109,7 @@ export default function AdminPage() {
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                   {[
                     { label: "Produkty", value: data.productsCount, sub: "w ofercie sklepu", icon: Package, color: "bg-blue-50 text-blue-600", href: "/admin/produkty" },
-                    { label: "Użytkownicy", value: data.usersCount, sub: "zarejestrowanych", icon: Users, color: "bg-purple-50 text-purple-600", href: null },
+                    { label: "Użytkownicy", value: data.usersCount, sub: "zarejestrowanych", icon: Users, color: "bg-purple-50 text-purple-600", href: "/admin/klienci" },
                     { label: "Zamówienia", value: data.ordersCount, sub: "wszystkich", icon: ShoppingBag, color: "bg-amber-50 text-amber-600", href: "/admin/zamowienia" },
                     { label: "Przychód", value: fmt(data.revenue), sub: "łączna wartość", icon: TrendingUp, color: "bg-green-50 text-green-600", href: null, big: true },
                   ].map(({ label, value, sub, icon: Icon, color, href, big }) => (

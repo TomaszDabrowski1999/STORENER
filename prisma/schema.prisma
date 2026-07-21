@@ -15,6 +15,7 @@ model User {
   // Data akceptacji regulaminu przy rejestracji – dowód zgody, wymagany
   // dla e-commerce (por. ustawa o prawach konsumenta / RODO).
   termsAcceptedAt DateTime?
+  createdAt DateTime @default(now())
   orders   Order[]
   reviews  ProductReview[]
 }

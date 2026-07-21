@@ -65,7 +65,7 @@ export default function RegisterPage() {
       }
 
       toast.success("Konto zostało utworzone", { id: toastId });
-      router.push("/logowanie");
+      router.push("/logowanie?zarejestrowano=1");
     } catch {
       setLocalError("Wystąpił błąd połączenia");
       toast.error("Wystąpił błąd połączenia", { id: toastId });

@@ -7,7 +7,7 @@ import AdminGuard from "../../../components/AdminGuard";
 import { formatShippingMethod } from "../../../lib/shipping";
 import {
   Search, Download, Package, Clock, Truck, ChevronDown, ChevronUp,
-  ArrowRight, BarChart3, Plus, ClipboardList, List, Truck as TruckIcon
+  ArrowRight, BarChart3, Plus, ClipboardList, List, Truck as TruckIcon, Users
 } from "lucide-react";
 
 type OrderItem = { id: number; quantity: number; price?: number; product: { name: string; price: number } };
@@ -97,6 +97,7 @@ export default function AdminOrdersPage() {
               { href: "/admin/produkty", label: "Produkty", icon: Package },
               { href: "/admin/produkty/dodaj", label: "Dodaj produkt", icon: Plus },
               { href: "/admin/zamowienia", label: "Zamówienia", icon: ClipboardList, active: true },
+              { href: "/admin/klienci", label: "Klienci", icon: Users },
               { href: "/admin/furgonetka", label: "Furgonetka", icon: TruckIcon },
             ].map(({ href, label, icon: Icon, active }) => (
               <Link key={href} href={href} className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${active ? "bg-white/10 text-white" : "text-white/50 hover:bg-white/6 hover:text-white/80"}`}>
