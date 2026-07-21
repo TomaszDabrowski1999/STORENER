@@ -15,6 +15,7 @@ export default function RegisterPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [localError, setLocalError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -26,6 +27,12 @@ export default function RegisterPage() {
     if (!fullName || !email || !password) {
       setLocalError("Uzupełnij wszystkie pola");
       toast.error("Uzupełnij wszystkie pola");
+      return;
+    }
+
+    if (!acceptedTerms) {
+      setLocalError("Musisz zaakceptować regulamin sklepu, aby założyć konto");
+      toast.error("Zaakceptuj regulamin sklepu");
       return;
     }
 
@@ -43,6 +50,7 @@ export default function RegisterPage() {
           fullName,
           email,
           password,
+          acceptedTerms,
         }),
       });
 
@@ -97,6 +105,27 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+
+            <label className="flex items-start gap-3 text-sm text-gray-600">
+              <input
+                type="checkbox"
+                checked={acceptedTerms}
+                onChange={(e) => setAcceptedTerms(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-gray-300 text-black focus:ring-black"
+                required
+              />
+              <span>
+                Akceptuję{" "}
+                <Link
+                  href="/regulamin"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-black underline transition hover:opacity-70"
+                >
+                  regulamin sklepu
+                </Link>
+              </span>
+            </label>
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Tworzenie konta..." : "Załóż konto"}

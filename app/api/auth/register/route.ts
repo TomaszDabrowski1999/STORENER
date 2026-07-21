@@ -7,11 +7,20 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { fullName, email, password } = body;
+    const { fullName, email, password, acceptedTerms } = body;
 
     if (!fullName || !email || !password) {
       return NextResponse.json(
         { error: "Uzupełnij wszystkie pola" },
+        { status: 400 }
+      );
+    }
+
+    // Nie ufamy samemu frontowi – wymóg akceptacji regulaminu musi być
+    // wymuszony też po stronie serwera.
+    if (acceptedTerms !== true) {
+      return NextResponse.json(
+        { error: "Musisz zaakceptować regulamin sklepu" },
         { status: 400 }
       );
     }
@@ -69,6 +78,7 @@ export async function POST(request: Request) {
         fullName: String(fullName).trim(),
         email: normalizedEmail,
         password: hashedPassword,
+        termsAcceptedAt: new Date(),
       },
     });
 
