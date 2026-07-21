@@ -68,6 +68,9 @@ model Order {
   packageSize               String        @default("MALA")
   trackingNumber            String?
   trackingCarrier           String?
+  // Dowód akceptacji regulaminu w momencie składania TEGO zamówienia –
+  // niezależnie od tego, czy klient ma konto, czy kupuje jako gość.
+  termsAcceptedAt           DateTime?
   user                      User?         @relation(fields: [userId], references: [id])
   items                     OrderItem[]
 }

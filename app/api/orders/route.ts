@@ -62,7 +62,17 @@ export async function POST(request: Request) {
       paymentMethod,
       shippingMethod,
       shippingPoint,
+      acceptedTerms,
     } = body;
+
+    // Nie ufamy samemu frontowi – regulamin musi być zaakceptowany przy
+    // KAŻDYM zamówieniu, także składanym bez logowania (gość).
+    if (acceptedTerms !== true) {
+      return NextResponse.json(
+        { error: "Musisz zaakceptować regulamin sklepu" },
+        { status: 400 }
+      );
+    }
 
     if (!items || items.length === 0) {
       return NextResponse.json(
@@ -311,6 +321,7 @@ export async function POST(request: Request) {
           packageSize,
           paymentStatus,
           userId,
+          termsAcceptedAt: new Date(),
           items: {
             create: normalizedItems.map((item: any) => ({
               productId: item.id,

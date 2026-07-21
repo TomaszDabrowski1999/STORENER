@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { CheckCircle2, CreditCard, LockKeyhole, MapPin, PackageCheck, Truck } from "lucide-react";
+import { CheckCircle2, CreditCard, LockKeyhole, MapPin, PackageCheck, Truck, UserPlus } from "lucide-react";
 import { getCart, saveCart } from "../../lib/cart";
 import { CartItem } from "../../types/cart";
 import { useForm } from "react-hook-form";
@@ -29,7 +30,7 @@ type SessionUser = {
 };
 
 type Props = {
-  sessionUser: SessionUser;
+  sessionUser: SessionUser | null;
 };
 
 const formatPrice = (value: number) => `${value.toFixed(2).replace(".", ",")} zł`;
@@ -39,6 +40,8 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
   const [serverError, setServerError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [packageSize, setPackageSize] = useState<PackageSize>("MALA");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [termsError, setTermsError] = useState("");
 
   const {
     register,
@@ -50,8 +53,8 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
   } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
-      fullName: sessionUser.fullName,
-      email: sessionUser.email,
+      fullName: sessionUser?.fullName || "",
+      email: sessionUser?.email || "",
       phone: "",
       address: "",
       city: "",
@@ -64,8 +67,10 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
 
   useEffect(() => {
     setCart(getCart());
-    setValue("fullName", sessionUser.fullName);
-    setValue("email", sessionUser.email);
+    if (sessionUser) {
+      setValue("fullName", sessionUser.fullName);
+      setValue("email", sessionUser.email);
+    }
     setValue("paymentMethod", "PRZELEW");
     setValue("shippingMethod", "INPOST_KURIER");
   }, [sessionUser, setValue]);
@@ -121,10 +126,17 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
 
   const onSubmit = async (values: CheckoutFormData) => {
     setServerError("");
+    setTermsError("");
 
     if (cart.length === 0) {
       setServerError("Koszyk jest pusty");
       toast.error("Koszyk jest pusty");
+      return;
+    }
+
+    if (!acceptedTerms) {
+      setTermsError("Musisz zaakceptować regulamin sklepu, aby złożyć zamówienie");
+      toast.error("Zaakceptuj regulamin sklepu");
       return;
     }
 
@@ -140,6 +152,7 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
         },
         body: JSON.stringify({
           items: cart,
+          acceptedTerms,
           ...values,
         }),
       });
@@ -157,10 +170,11 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
       saveCart([]);
       window.dispatchEvent(new Event("storage"));
       setCart([]);
+      setAcceptedTerms(false);
 
       reset({
-        fullName: sessionUser.fullName,
-        email: sessionUser.email,
+        fullName: sessionUser?.fullName || "",
+        email: sessionUser?.email || "",
         phone: "",
         address: "",
         city: "",
@@ -202,6 +216,28 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
             </div>
           </div>
         </div>
+
+        {!sessionUser && (
+          <div className="mb-6 flex flex-col items-start gap-3 rounded-2xl bg-white px-5 py-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                <UserPlus size={18} />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-950">Kupujesz jako gość</p>
+                <p className="text-sm text-gray-500">Możesz złożyć zamówienie bez zakładania konta, albo się zalogować / zarejestrować, aby śledzić zamówienia.</p>
+              </div>
+            </div>
+            <div className="flex shrink-0 gap-2">
+              <Link href="/logowanie?callbackUrl=/checkout" className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:border-gray-400">
+                Zaloguj się
+              </Link>
+              <Link href="/rejestracja" className="rounded-xl bg-[#0a0a0a] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#1a1a1a]">
+                Załóż konto
+              </Link>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_390px]">
           <div className="space-y-5">
@@ -363,7 +399,41 @@ export default function CheckoutClientPage({ sessionUser }: Props) {
                 </div>
               </div>
 
-              <Button type="submit" className="mt-6 w-full rounded-xl py-4 text-sm uppercase tracking-[0.2em]" disabled={isSaving || cart.length === 0}>
+              <label className="mt-5 flex items-start gap-3 text-sm text-gray-600">
+                <input
+                  type="checkbox"
+                  checked={acceptedTerms}
+                  onChange={(e) => {
+                    setAcceptedTerms(e.target.checked);
+                    if (e.target.checked) setTermsError("");
+                  }}
+                  className="mt-0.5 h-4 w-4 shrink-0 rounded border-gray-300 text-black focus:ring-black"
+                />
+                <span>
+                  Akceptuję{" "}
+                  <Link
+                    href="/regulamin"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-gray-950 underline underline-offset-2 transition hover:opacity-70"
+                  >
+                    regulamin sklepu
+                  </Link>{" "}
+                  i zapoznałem/-am się z{" "}
+                  <Link
+                    href="/polityka-prywatnosci"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-gray-950 underline underline-offset-2 transition hover:opacity-70"
+                  >
+                    polityką prywatności
+                  </Link>
+                  .
+                </span>
+              </label>
+              {termsError && <p className="mt-2 text-sm font-medium text-red-600">{termsError}</p>}
+
+              <Button type="submit" className="mt-4 w-full rounded-xl py-4 text-sm uppercase tracking-[0.2em]" disabled={isSaving || cart.length === 0}>
                 {isSaving ? "Tworzenie zamówienia..." : "Złóż zamówienie"}
               </Button>
 
