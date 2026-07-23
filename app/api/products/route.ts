@@ -13,6 +13,10 @@ export async function GET(request: Request) {
     // Number("abc") daje NaN, co przy Prismie kończy się błędem 500 –
     // dlatego każdą wartość sprowadzamy do bezpiecznego zakresu.
     const toPrice = (value: string | null, fallback: number) => {
+      // Number(null) oraz Number("") zwracają 0. Brak parametru maxPrice
+      // nie może więc zostać potraktowany jak maksymalna cena równa 0 zł.
+      if (value === null || value.trim() === "") return fallback;
+
       const parsed = Number(value);
       if (!Number.isFinite(parsed) || parsed < 0) return fallback;
       return Math.min(parsed, 1_000_000_000);
