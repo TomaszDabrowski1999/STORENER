@@ -1,61 +1,89 @@
 import { NextResponse } from "next/server";
-import crypto from "crypto";
 import { Resend } from "resend";
 import { prisma } from "@/lib/prisma";
+import {
+  generateResetToken,
+  hashResetToken,
+  isValidEmail,
+  normalizeEmail,
+} from "@/lib/security";
+import { hit, getClientIp, tooManyRequests } from "@/lib/rate-limit";
+
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+export const runtime = "nodejs";
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const { email } = body;
+// Zawsze ta sama odpowiedź, niezależnie od tego, czy konto istnieje.
+// Inaczej formularz "nie pamiętam hasła" staje się wyszukiwarką
+// zarejestrowanych adresów e-mail.
+const GENERIC_RESPONSE = {
+  success: true,
+  message: "Jeśli konto istnieje, link resetujący został wysłany na podany adres.",
+};
 
-    if (!email) {
+export async function POST(request: Request) {
+  const ip = getClientIp(request);
+
+  // 5 prób na 15 minut z jednego IP – reset hasła wysyła maile,
+  // więc bez limitu jest to gotowe narzędzie do spamowania cudzych skrzynek.
+  const ipLimit = hit(`forgot:ip:${ip}`, 5, 15 * 60 * 1000);
+
+  if (!ipLimit.ok) {
+    return tooManyRequests(ipLimit.retryAfterSeconds);
+  }
+
+  try {
+    const body = await request.json().catch(() => null);
+    const email = normalizeEmail(body?.email);
+
+    if (!isValidEmail(email)) {
       return NextResponse.json(
-        { error: "Podaj email" },
+        { error: "Podaj poprawny adres e-mail" },
         { status: 400 }
       );
     }
 
-    // Rejestracja zapisuje e-maile małymi literami – tutaj też normalizujemy,
-    // inaczej "Jan@X.pl" nie znalazłby konta "jan@x.pl".
-    const normalizedEmail = String(email).trim().toLowerCase();
+    // Drugi licznik – na konkretny adres. Chroni jedną skrzynkę
+    // przed zalewem maili z wielu adresów IP.
+    const emailLimit = hit(`forgot:email:${email}`, 3, 60 * 60 * 1000);
 
-    const user = await prisma.user.findUnique({
-      where: { email: normalizedEmail },
-    });
-
-    if (!user) {
-      return NextResponse.json({
-        success: true,
-        message: "Jeśli konto istnieje, link resetujący został wysłany.",
-      });
+    if (!emailLimit.ok) {
+      return NextResponse.json(GENERIC_RESPONSE);
     }
 
-    const token = crypto.randomBytes(32).toString("hex");
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      return NextResponse.json(GENERIC_RESPONSE);
+    }
+
+    // Token trafia do maila w postaci jawnej, ale do bazy TYLKO jako hash.
+    // Wyciek tabeli PasswordResetToken nie pozwala więc przejąć żadnego konta.
+    const token = generateResetToken();
+    const tokenHash = hashResetToken(token);
     const expiresAt = new Date(Date.now() + 1000 * 60 * 30);
 
     // Poprzednie tokeny dla tego adresu unieważniamy – aktywny powinien być
     // zawsze tylko najnowszy link resetujący.
-    await prisma.passwordResetToken.deleteMany({
-      where: { email: normalizedEmail },
-    });
+    await prisma.passwordResetToken.deleteMany({ where: { email } });
 
     await prisma.passwordResetToken.create({
-      data: {
-        token,
-        email: normalizedEmail,
-        expiresAt,
-      },
+      data: { token: tokenHash, email, expiresAt },
     });
 
-    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+    const baseUrl = (
+      process.env.NEXT_PUBLIC_APP_URL ||
+      process.env.NEXTAUTH_URL ||
+      "http://localhost:3000"
+    ).replace(/\/$/, "");
+
     const resetUrl = `${baseUrl}/reset-hasla/${token}`;
 
     const { error } = await resend.emails.send({
       from: process.env.EMAIL_FROM || "Sklep <onboarding@resend.dev>",
-      to: normalizedEmail,
+      to: email,
       subject: "Reset hasła - sklep",
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6;">
@@ -70,29 +98,24 @@ export async function POST(request: Request) {
           <p>Jeśli przycisk nie działa, skopiuj ten adres:</p>
           <p>${resetUrl}</p>
           <p>Link wygaśnie za 30 minut.</p>
+          <p style="color:#666;font-size:13px;">
+            Jeśli to nie Ty prosiłeś o zmianę hasła, zignoruj tę wiadomość –
+            Twoje hasło pozostanie bez zmian.
+          </p>
         </div>
       `,
     });
 
     if (error) {
+      // Błąd logujemy u siebie, ale na zewnątrz nadal ta sama odpowiedź –
+      // treść błędu nie może zdradzać, czy adres istnieje w bazie.
       console.error("RESEND ERROR:", error);
-
-      return NextResponse.json(
-        { error: "Nie udało się wysłać maila resetującego" },
-        { status: 500 }
-      );
     }
 
-    return NextResponse.json({
-      success: true,
-      message: "Link resetujący został wysłany na email.",
-    });
+    return NextResponse.json(GENERIC_RESPONSE);
   } catch (error) {
     console.error("FORGOT PASSWORD ERROR:", error);
 
-    return NextResponse.json(
-      { error: "Błąd resetu hasła" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Błąd resetu hasła" }, { status: 500 });
   }
 }

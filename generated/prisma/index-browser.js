@@ -125,7 +125,9 @@ exports.Prisma.UserScalarFieldEnum = {
   fullName: 'fullName',
   email: 'email',
   password: 'password',
-  role: 'role'
+  role: 'role',
+  termsAcceptedAt: 'termsAcceptedAt',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.ProductScalarFieldEnum = {
@@ -171,12 +173,14 @@ exports.Prisma.OrderScalarFieldEnum = {
   shippingEstimatedDelivery: 'shippingEstimatedDelivery',
   packageSize: 'packageSize',
   trackingNumber: 'trackingNumber',
-  trackingCarrier: 'trackingCarrier'
+  trackingCarrier: 'trackingCarrier',
+  termsAcceptedAt: 'termsAcceptedAt'
 };
 
 exports.Prisma.OrderItemScalarFieldEnum = {
   id: 'id',
   quantity: 'quantity',
+  price: 'price',
   productId: 'productId',
   orderId: 'orderId'
 };

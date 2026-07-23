@@ -20,5 +20,7 @@ declare module "next-auth/jwt" {
   interface JWT {
     id?: string;
     role?: string | null;
+    // Znacznik ostatniej weryfikacji roli w bazie (sekundy uniksowe).
+    checkedAt?: number;
   }
 }

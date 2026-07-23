@@ -1658,6 +1658,8 @@ export namespace Prisma {
     email: string | null
     password: string | null
     role: $Enums.UserRole | null
+    termsAcceptedAt: Date | null
+    createdAt: Date | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1666,6 +1668,8 @@ export namespace Prisma {
     email: string | null
     password: string | null
     role: $Enums.UserRole | null
+    termsAcceptedAt: Date | null
+    createdAt: Date | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1674,6 +1678,8 @@ export namespace Prisma {
     email: number
     password: number
     role: number
+    termsAcceptedAt: number
+    createdAt: number
     _all: number
   }
 
@@ -1692,6 +1698,8 @@ export namespace Prisma {
     email?: true
     password?: true
     role?: true
+    termsAcceptedAt?: true
+    createdAt?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1700,6 +1708,8 @@ export namespace Prisma {
     email?: true
     password?: true
     role?: true
+    termsAcceptedAt?: true
+    createdAt?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1708,6 +1718,8 @@ export namespace Prisma {
     email?: true
     password?: true
     role?: true
+    termsAcceptedAt?: true
+    createdAt?: true
     _all?: true
   }
 
@@ -1803,6 +1815,8 @@ export namespace Prisma {
     email: string
     password: string
     role: $Enums.UserRole
+    termsAcceptedAt: Date | null
+    createdAt: Date
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -1830,6 +1844,8 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     role?: boolean
+    termsAcceptedAt?: boolean
+    createdAt?: boolean
     orders?: boolean | User$ordersArgs<ExtArgs>
     reviews?: boolean | User$reviewsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1841,6 +1857,8 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     role?: boolean
+    termsAcceptedAt?: boolean
+    createdAt?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1849,6 +1867,8 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     role?: boolean
+    termsAcceptedAt?: boolean
+    createdAt?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1857,9 +1877,11 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     role?: boolean
+    termsAcceptedAt?: boolean
+    createdAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "email" | "password" | "role", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "email" | "password" | "role" | "termsAcceptedAt" | "createdAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orders?: boolean | User$ordersArgs<ExtArgs>
     reviews?: boolean | User$reviewsArgs<ExtArgs>
@@ -1880,6 +1902,8 @@ export namespace Prisma {
       email: string
       password: string
       role: $Enums.UserRole
+      termsAcceptedAt: Date | null
+      createdAt: Date
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2310,6 +2334,8 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'UserRole'>
+    readonly termsAcceptedAt: FieldRef<"User", 'DateTime'>
+    readonly createdAt: FieldRef<"User", 'DateTime'>
   }
     
 
@@ -5173,6 +5199,7 @@ export namespace Prisma {
     packageSize: string | null
     trackingNumber: string | null
     trackingCarrier: string | null
+    termsAcceptedAt: Date | null
   }
 
   export type OrderMaxAggregateOutputType = {
@@ -5197,6 +5224,7 @@ export namespace Prisma {
     packageSize: string | null
     trackingNumber: string | null
     trackingCarrier: string | null
+    termsAcceptedAt: Date | null
   }
 
   export type OrderCountAggregateOutputType = {
@@ -5221,6 +5249,7 @@ export namespace Prisma {
     packageSize: number
     trackingNumber: number
     trackingCarrier: number
+    termsAcceptedAt: number
     _all: number
   }
 
@@ -5261,6 +5290,7 @@ export namespace Prisma {
     packageSize?: true
     trackingNumber?: true
     trackingCarrier?: true
+    termsAcceptedAt?: true
   }
 
   export type OrderMaxAggregateInputType = {
@@ -5285,6 +5315,7 @@ export namespace Prisma {
     packageSize?: true
     trackingNumber?: true
     trackingCarrier?: true
+    termsAcceptedAt?: true
   }
 
   export type OrderCountAggregateInputType = {
@@ -5309,6 +5340,7 @@ export namespace Prisma {
     packageSize?: true
     trackingNumber?: true
     trackingCarrier?: true
+    termsAcceptedAt?: true
     _all?: true
   }
 
@@ -5420,6 +5452,7 @@ export namespace Prisma {
     packageSize: string
     trackingNumber: string | null
     trackingCarrier: string | null
+    termsAcceptedAt: Date | null
     _count: OrderCountAggregateOutputType | null
     _avg: OrderAvgAggregateOutputType | null
     _sum: OrderSumAggregateOutputType | null
@@ -5463,6 +5496,7 @@ export namespace Prisma {
     packageSize?: boolean
     trackingNumber?: boolean
     trackingCarrier?: boolean
+    termsAcceptedAt?: boolean
     user?: boolean | Order$userArgs<ExtArgs>
     items?: boolean | Order$itemsArgs<ExtArgs>
     _count?: boolean | OrderCountOutputTypeDefaultArgs<ExtArgs>
@@ -5490,6 +5524,7 @@ export namespace Prisma {
     packageSize?: boolean
     trackingNumber?: boolean
     trackingCarrier?: boolean
+    termsAcceptedAt?: boolean
     user?: boolean | Order$userArgs<ExtArgs>
   }, ExtArgs["result"]["order"]>
 
@@ -5515,6 +5550,7 @@ export namespace Prisma {
     packageSize?: boolean
     trackingNumber?: boolean
     trackingCarrier?: boolean
+    termsAcceptedAt?: boolean
     user?: boolean | Order$userArgs<ExtArgs>
   }, ExtArgs["result"]["order"]>
 
@@ -5540,9 +5576,10 @@ export namespace Prisma {
     packageSize?: boolean
     trackingNumber?: boolean
     trackingCarrier?: boolean
+    termsAcceptedAt?: boolean
   }
 
-  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "total" | "status" | "fullName" | "email" | "phone" | "address" | "city" | "postalCode" | "paymentMethod" | "paymentStatus" | "userId" | "shippingMethod" | "shippingMethodName" | "shippingPrice" | "shippingPoint" | "shippingEstimatedDelivery" | "packageSize" | "trackingNumber" | "trackingCarrier", ExtArgs["result"]["order"]>
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "total" | "status" | "fullName" | "email" | "phone" | "address" | "city" | "postalCode" | "paymentMethod" | "paymentStatus" | "userId" | "shippingMethod" | "shippingMethodName" | "shippingPrice" | "shippingPoint" | "shippingEstimatedDelivery" | "packageSize" | "trackingNumber" | "trackingCarrier" | "termsAcceptedAt", ExtArgs["result"]["order"]>
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Order$userArgs<ExtArgs>
     items?: boolean | Order$itemsArgs<ExtArgs>
@@ -5583,6 +5620,7 @@ export namespace Prisma {
       packageSize: string
       trackingNumber: string | null
       trackingCarrier: string | null
+      termsAcceptedAt: Date | null
     }, ExtArgs["result"]["order"]>
     composites: {}
   }
@@ -6029,6 +6067,7 @@ export namespace Prisma {
     readonly packageSize: FieldRef<"Order", 'String'>
     readonly trackingNumber: FieldRef<"Order", 'String'>
     readonly trackingCarrier: FieldRef<"Order", 'String'>
+    readonly termsAcceptedAt: FieldRef<"Order", 'DateTime'>
   }
     
 
@@ -6506,6 +6545,7 @@ export namespace Prisma {
   export type OrderItemAvgAggregateOutputType = {
     id: number | null
     quantity: number | null
+    price: number | null
     productId: number | null
     orderId: number | null
   }
@@ -6513,6 +6553,7 @@ export namespace Prisma {
   export type OrderItemSumAggregateOutputType = {
     id: number | null
     quantity: number | null
+    price: number | null
     productId: number | null
     orderId: number | null
   }
@@ -6520,6 +6561,7 @@ export namespace Prisma {
   export type OrderItemMinAggregateOutputType = {
     id: number | null
     quantity: number | null
+    price: number | null
     productId: number | null
     orderId: number | null
   }
@@ -6527,6 +6569,7 @@ export namespace Prisma {
   export type OrderItemMaxAggregateOutputType = {
     id: number | null
     quantity: number | null
+    price: number | null
     productId: number | null
     orderId: number | null
   }
@@ -6534,6 +6577,7 @@ export namespace Prisma {
   export type OrderItemCountAggregateOutputType = {
     id: number
     quantity: number
+    price: number
     productId: number
     orderId: number
     _all: number
@@ -6543,6 +6587,7 @@ export namespace Prisma {
   export type OrderItemAvgAggregateInputType = {
     id?: true
     quantity?: true
+    price?: true
     productId?: true
     orderId?: true
   }
@@ -6550,6 +6595,7 @@ export namespace Prisma {
   export type OrderItemSumAggregateInputType = {
     id?: true
     quantity?: true
+    price?: true
     productId?: true
     orderId?: true
   }
@@ -6557,6 +6603,7 @@ export namespace Prisma {
   export type OrderItemMinAggregateInputType = {
     id?: true
     quantity?: true
+    price?: true
     productId?: true
     orderId?: true
   }
@@ -6564,6 +6611,7 @@ export namespace Prisma {
   export type OrderItemMaxAggregateInputType = {
     id?: true
     quantity?: true
+    price?: true
     productId?: true
     orderId?: true
   }
@@ -6571,6 +6619,7 @@ export namespace Prisma {
   export type OrderItemCountAggregateInputType = {
     id?: true
     quantity?: true
+    price?: true
     productId?: true
     orderId?: true
     _all?: true
@@ -6665,6 +6714,7 @@ export namespace Prisma {
   export type OrderItemGroupByOutputType = {
     id: number
     quantity: number
+    price: number
     productId: number
     orderId: number
     _count: OrderItemCountAggregateOutputType | null
@@ -6691,6 +6741,7 @@ export namespace Prisma {
   export type OrderItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     quantity?: boolean
+    price?: boolean
     productId?: boolean
     orderId?: boolean
     order?: boolean | OrderDefaultArgs<ExtArgs>
@@ -6700,6 +6751,7 @@ export namespace Prisma {
   export type OrderItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     quantity?: boolean
+    price?: boolean
     productId?: boolean
     orderId?: boolean
     order?: boolean | OrderDefaultArgs<ExtArgs>
@@ -6709,6 +6761,7 @@ export namespace Prisma {
   export type OrderItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     quantity?: boolean
+    price?: boolean
     productId?: boolean
     orderId?: boolean
     order?: boolean | OrderDefaultArgs<ExtArgs>
@@ -6718,11 +6771,12 @@ export namespace Prisma {
   export type OrderItemSelectScalar = {
     id?: boolean
     quantity?: boolean
+    price?: boolean
     productId?: boolean
     orderId?: boolean
   }
 
-  export type OrderItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "quantity" | "productId" | "orderId", ExtArgs["result"]["orderItem"]>
+  export type OrderItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "quantity" | "price" | "productId" | "orderId", ExtArgs["result"]["orderItem"]>
   export type OrderItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     order?: boolean | OrderDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -6745,6 +6799,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       quantity: number
+      price: number
       productId: number
       orderId: number
     }, ExtArgs["result"]["orderItem"]>
@@ -7174,6 +7229,7 @@ export namespace Prisma {
   interface OrderItemFieldRefs {
     readonly id: FieldRef<"OrderItem", 'Int'>
     readonly quantity: FieldRef<"OrderItem", 'Int'>
+    readonly price: FieldRef<"OrderItem", 'Float'>
     readonly productId: FieldRef<"OrderItem", 'Int'>
     readonly orderId: FieldRef<"OrderItem", 'Int'>
   }
@@ -9791,7 +9847,9 @@ export namespace Prisma {
     fullName: 'fullName',
     email: 'email',
     password: 'password',
-    role: 'role'
+    role: 'role',
+    termsAcceptedAt: 'termsAcceptedAt',
+    createdAt: 'createdAt'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -9846,7 +9904,8 @@ export namespace Prisma {
     shippingEstimatedDelivery: 'shippingEstimatedDelivery',
     packageSize: 'packageSize',
     trackingNumber: 'trackingNumber',
-    trackingCarrier: 'trackingCarrier'
+    trackingCarrier: 'trackingCarrier',
+    termsAcceptedAt: 'termsAcceptedAt'
   };
 
   export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
@@ -9855,6 +9914,7 @@ export namespace Prisma {
   export const OrderItemScalarFieldEnum: {
     id: 'id',
     quantity: 'quantity',
+    price: 'price',
     productId: 'productId',
     orderId: 'orderId'
   };
@@ -9958,6 +10018,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'DateTime'
+   */
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime[]'
+   */
+  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -10021,20 +10095,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'DateTime'
-   */
-  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-  /**
-   * Reference to a field of type 'DateTime[]'
-   */
-  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
    * Reference to a field of type 'OrderStatus'
    */
   export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus'>
@@ -10088,6 +10148,8 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    termsAcceptedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    createdAt?: DateTimeFilter<"User"> | Date | string
     orders?: OrderListRelationFilter
     reviews?: ProductReviewListRelationFilter
   }
@@ -10098,6 +10160,8 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    termsAcceptedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
     orders?: OrderOrderByRelationAggregateInput
     reviews?: ProductReviewOrderByRelationAggregateInput
   }
@@ -10111,6 +10175,8 @@ export namespace Prisma {
     fullName?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    termsAcceptedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    createdAt?: DateTimeFilter<"User"> | Date | string
     orders?: OrderListRelationFilter
     reviews?: ProductReviewListRelationFilter
   }, "id" | "email">
@@ -10121,6 +10187,8 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    termsAcceptedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -10137,6 +10205,8 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
     role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
+    termsAcceptedAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
   export type ProductWhereInput = {
@@ -10314,6 +10384,7 @@ export namespace Prisma {
     packageSize?: StringFilter<"Order"> | string
     trackingNumber?: StringNullableFilter<"Order"> | string | null
     trackingCarrier?: StringNullableFilter<"Order"> | string | null
+    termsAcceptedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     items?: OrderItemListRelationFilter
   }
@@ -10340,6 +10411,7 @@ export namespace Prisma {
     packageSize?: SortOrder
     trackingNumber?: SortOrderInput | SortOrder
     trackingCarrier?: SortOrderInput | SortOrder
+    termsAcceptedAt?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
     items?: OrderItemOrderByRelationAggregateInput
   }
@@ -10369,6 +10441,7 @@ export namespace Prisma {
     packageSize?: StringFilter<"Order"> | string
     trackingNumber?: StringNullableFilter<"Order"> | string | null
     trackingCarrier?: StringNullableFilter<"Order"> | string | null
+    termsAcceptedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     items?: OrderItemListRelationFilter
   }, "id">
@@ -10395,6 +10468,7 @@ export namespace Prisma {
     packageSize?: SortOrder
     trackingNumber?: SortOrderInput | SortOrder
     trackingCarrier?: SortOrderInput | SortOrder
+    termsAcceptedAt?: SortOrderInput | SortOrder
     _count?: OrderCountOrderByAggregateInput
     _avg?: OrderAvgOrderByAggregateInput
     _max?: OrderMaxOrderByAggregateInput
@@ -10427,6 +10501,7 @@ export namespace Prisma {
     packageSize?: StringWithAggregatesFilter<"Order"> | string
     trackingNumber?: StringNullableWithAggregatesFilter<"Order"> | string | null
     trackingCarrier?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    termsAcceptedAt?: DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
   }
 
   export type OrderItemWhereInput = {
@@ -10435,6 +10510,7 @@ export namespace Prisma {
     NOT?: OrderItemWhereInput | OrderItemWhereInput[]
     id?: IntFilter<"OrderItem"> | number
     quantity?: IntFilter<"OrderItem"> | number
+    price?: FloatFilter<"OrderItem"> | number
     productId?: IntFilter<"OrderItem"> | number
     orderId?: IntFilter<"OrderItem"> | number
     order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
@@ -10444,6 +10520,7 @@ export namespace Prisma {
   export type OrderItemOrderByWithRelationInput = {
     id?: SortOrder
     quantity?: SortOrder
+    price?: SortOrder
     productId?: SortOrder
     orderId?: SortOrder
     order?: OrderOrderByWithRelationInput
@@ -10456,6 +10533,7 @@ export namespace Prisma {
     OR?: OrderItemWhereInput[]
     NOT?: OrderItemWhereInput | OrderItemWhereInput[]
     quantity?: IntFilter<"OrderItem"> | number
+    price?: FloatFilter<"OrderItem"> | number
     productId?: IntFilter<"OrderItem"> | number
     orderId?: IntFilter<"OrderItem"> | number
     order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
@@ -10465,6 +10543,7 @@ export namespace Prisma {
   export type OrderItemOrderByWithAggregationInput = {
     id?: SortOrder
     quantity?: SortOrder
+    price?: SortOrder
     productId?: SortOrder
     orderId?: SortOrder
     _count?: OrderItemCountOrderByAggregateInput
@@ -10480,6 +10559,7 @@ export namespace Prisma {
     NOT?: OrderItemScalarWhereWithAggregatesInput | OrderItemScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"OrderItem"> | number
     quantity?: IntWithAggregatesFilter<"OrderItem"> | number
+    price?: FloatWithAggregatesFilter<"OrderItem"> | number
     productId?: IntWithAggregatesFilter<"OrderItem"> | number
     orderId?: IntWithAggregatesFilter<"OrderItem"> | number
   }
@@ -10613,6 +10693,8 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.UserRole
+    termsAcceptedAt?: Date | string | null
+    createdAt?: Date | string
     orders?: OrderCreateNestedManyWithoutUserInput
     reviews?: ProductReviewCreateNestedManyWithoutUserInput
   }
@@ -10623,6 +10705,8 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.UserRole
+    termsAcceptedAt?: Date | string | null
+    createdAt?: Date | string
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
     reviews?: ProductReviewUncheckedCreateNestedManyWithoutUserInput
   }
@@ -10632,6 +10716,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orders?: OrderUpdateManyWithoutUserNestedInput
     reviews?: ProductReviewUpdateManyWithoutUserNestedInput
   }
@@ -10642,6 +10728,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
     reviews?: ProductReviewUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -10652,6 +10740,8 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.UserRole
+    termsAcceptedAt?: Date | string | null
+    createdAt?: Date | string
   }
 
   export type UserUpdateManyMutationInput = {
@@ -10659,6 +10749,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -10667,6 +10759,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProductCreateInput = {
@@ -10848,6 +10942,7 @@ export namespace Prisma {
     packageSize?: string
     trackingNumber?: string | null
     trackingCarrier?: string | null
+    termsAcceptedAt?: Date | string | null
     user?: UserCreateNestedOneWithoutOrdersInput
     items?: OrderItemCreateNestedManyWithoutOrderInput
   }
@@ -10874,6 +10969,7 @@ export namespace Prisma {
     packageSize?: string
     trackingNumber?: string | null
     trackingCarrier?: string | null
+    termsAcceptedAt?: Date | string | null
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -10897,6 +10993,7 @@ export namespace Prisma {
     packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneWithoutOrdersNestedInput
     items?: OrderItemUpdateManyWithoutOrderNestedInput
   }
@@ -10923,6 +11020,7 @@ export namespace Prisma {
     packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -10948,6 +11046,7 @@ export namespace Prisma {
     packageSize?: string
     trackingNumber?: string | null
     trackingCarrier?: string | null
+    termsAcceptedAt?: Date | string | null
   }
 
   export type OrderUpdateManyMutationInput = {
@@ -10970,6 +11069,7 @@ export namespace Prisma {
     packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type OrderUncheckedUpdateManyInput = {
@@ -10994,10 +11094,12 @@ export namespace Prisma {
     packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type OrderItemCreateInput = {
     quantity: number
+    price?: number
     order: OrderCreateNestedOneWithoutItemsInput
     product: ProductCreateNestedOneWithoutOrderItemsInput
   }
@@ -11005,12 +11107,14 @@ export namespace Prisma {
   export type OrderItemUncheckedCreateInput = {
     id?: number
     quantity: number
+    price?: number
     productId: number
     orderId: number
   }
 
   export type OrderItemUpdateInput = {
     quantity?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
     order?: OrderUpdateOneRequiredWithoutItemsNestedInput
     product?: ProductUpdateOneRequiredWithoutOrderItemsNestedInput
   }
@@ -11018,6 +11122,7 @@ export namespace Prisma {
   export type OrderItemUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
     productId?: IntFieldUpdateOperationsInput | number
     orderId?: IntFieldUpdateOperationsInput | number
   }
@@ -11025,17 +11130,20 @@ export namespace Prisma {
   export type OrderItemCreateManyInput = {
     id?: number
     quantity: number
+    price?: number
     productId: number
     orderId: number
   }
 
   export type OrderItemUpdateManyMutationInput = {
     quantity?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
   }
 
   export type OrderItemUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
     productId?: IntFieldUpdateOperationsInput | number
     orderId?: IntFieldUpdateOperationsInput | number
   }
@@ -11191,6 +11299,28 @@ export namespace Prisma {
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
   export type OrderListRelationFilter = {
     every?: OrderWhereInput
     some?: OrderWhereInput
@@ -11201,6 +11331,11 @@ export namespace Prisma {
     every?: ProductReviewWhereInput
     some?: ProductReviewWhereInput
     none?: ProductReviewWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
   export type OrderOrderByRelationAggregateInput = {
@@ -11217,6 +11352,8 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    termsAcceptedAt?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -11229,6 +11366,8 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    termsAcceptedAt?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -11237,6 +11376,8 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    termsAcceptedAt?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -11285,6 +11426,34 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserRoleFilter<$PrismaModel>
     _max?: NestedEnumUserRoleFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type FloatFilter<$PrismaModel = never> = {
@@ -11349,11 +11518,6 @@ export namespace Prisma {
     every?: ProductImageWhereInput
     some?: ProductImageWhereInput
     none?: ProductImageWhereInput
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type OrderItemOrderByRelationAggregateInput = {
@@ -11531,17 +11695,6 @@ export namespace Prisma {
     productId?: SortOrder
   }
 
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
   export type EnumOrderStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
     in?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
@@ -11601,6 +11754,7 @@ export namespace Prisma {
     packageSize?: SortOrder
     trackingNumber?: SortOrder
     trackingCarrier?: SortOrder
+    termsAcceptedAt?: SortOrder
   }
 
   export type OrderAvgOrderByAggregateInput = {
@@ -11632,6 +11786,7 @@ export namespace Prisma {
     packageSize?: SortOrder
     trackingNumber?: SortOrder
     trackingCarrier?: SortOrder
+    termsAcceptedAt?: SortOrder
   }
 
   export type OrderMinOrderByAggregateInput = {
@@ -11656,6 +11811,7 @@ export namespace Prisma {
     packageSize?: SortOrder
     trackingNumber?: SortOrder
     trackingCarrier?: SortOrder
+    termsAcceptedAt?: SortOrder
   }
 
   export type OrderSumOrderByAggregateInput = {
@@ -11663,20 +11819,6 @@ export namespace Prisma {
     total?: SortOrder
     userId?: SortOrder
     shippingPrice?: SortOrder
-  }
-
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type EnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -11733,6 +11875,7 @@ export namespace Prisma {
   export type OrderItemCountOrderByAggregateInput = {
     id?: SortOrder
     quantity?: SortOrder
+    price?: SortOrder
     productId?: SortOrder
     orderId?: SortOrder
   }
@@ -11740,6 +11883,7 @@ export namespace Prisma {
   export type OrderItemAvgOrderByAggregateInput = {
     id?: SortOrder
     quantity?: SortOrder
+    price?: SortOrder
     productId?: SortOrder
     orderId?: SortOrder
   }
@@ -11747,6 +11891,7 @@ export namespace Prisma {
   export type OrderItemMaxOrderByAggregateInput = {
     id?: SortOrder
     quantity?: SortOrder
+    price?: SortOrder
     productId?: SortOrder
     orderId?: SortOrder
   }
@@ -11754,6 +11899,7 @@ export namespace Prisma {
   export type OrderItemMinOrderByAggregateInput = {
     id?: SortOrder
     quantity?: SortOrder
+    price?: SortOrder
     productId?: SortOrder
     orderId?: SortOrder
   }
@@ -11761,6 +11907,7 @@ export namespace Prisma {
   export type OrderItemSumOrderByAggregateInput = {
     id?: SortOrder
     quantity?: SortOrder
+    price?: SortOrder
     productId?: SortOrder
     orderId?: SortOrder
   }
@@ -11880,6 +12027,14 @@ export namespace Prisma {
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
     set?: $Enums.UserRole
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
   }
 
   export type OrderUpdateManyWithoutUserNestedInput = {
@@ -12134,10 +12289,6 @@ export namespace Prisma {
     connect?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[]
   }
 
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
-  }
-
   export type EnumOrderStatusFieldUpdateOperationsInput = {
     set?: $Enums.OrderStatus
   }
@@ -12284,6 +12435,28 @@ export namespace Prisma {
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -12336,6 +12509,45 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserRoleFilter<$PrismaModel>
     _max?: NestedEnumUserRoleFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
@@ -12449,28 +12661,6 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
   export type NestedEnumOrderStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
     in?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
@@ -12490,20 +12680,6 @@ export namespace Prisma {
     in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
-  }
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -12583,6 +12759,7 @@ export namespace Prisma {
     packageSize?: string
     trackingNumber?: string | null
     trackingCarrier?: string | null
+    termsAcceptedAt?: Date | string | null
     items?: OrderItemCreateNestedManyWithoutOrderInput
   }
 
@@ -12607,6 +12784,7 @@ export namespace Prisma {
     packageSize?: string
     trackingNumber?: string | null
     trackingCarrier?: string | null
+    termsAcceptedAt?: Date | string | null
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -12688,6 +12866,7 @@ export namespace Prisma {
     packageSize?: StringFilter<"Order"> | string
     trackingNumber?: StringNullableFilter<"Order"> | string | null
     trackingCarrier?: StringNullableFilter<"Order"> | string | null
+    termsAcceptedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
   }
 
   export type ProductReviewUpsertWithWhereUniqueWithoutUserInput = {
@@ -12721,12 +12900,14 @@ export namespace Prisma {
 
   export type OrderItemCreateWithoutProductInput = {
     quantity: number
+    price?: number
     order: OrderCreateNestedOneWithoutItemsInput
   }
 
   export type OrderItemUncheckedCreateWithoutProductInput = {
     id?: number
     quantity: number
+    price?: number
     orderId: number
   }
 
@@ -12810,6 +12991,7 @@ export namespace Prisma {
     NOT?: OrderItemScalarWhereInput | OrderItemScalarWhereInput[]
     id?: IntFilter<"OrderItem"> | number
     quantity?: IntFilter<"OrderItem"> | number
+    price?: FloatFilter<"OrderItem"> | number
     productId?: IntFilter<"OrderItem"> | number
     orderId?: IntFilter<"OrderItem"> | number
   }
@@ -12943,6 +13125,8 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.UserRole
+    termsAcceptedAt?: Date | string | null
+    createdAt?: Date | string
     reviews?: ProductReviewCreateNestedManyWithoutUserInput
   }
 
@@ -12952,6 +13136,8 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.UserRole
+    termsAcceptedAt?: Date | string | null
+    createdAt?: Date | string
     reviews?: ProductReviewUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -12962,12 +13148,14 @@ export namespace Prisma {
 
   export type OrderItemCreateWithoutOrderInput = {
     quantity: number
+    price?: number
     product: ProductCreateNestedOneWithoutOrderItemsInput
   }
 
   export type OrderItemUncheckedCreateWithoutOrderInput = {
     id?: number
     quantity: number
+    price?: number
     productId: number
   }
 
@@ -12997,6 +13185,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviews?: ProductReviewUpdateManyWithoutUserNestedInput
   }
 
@@ -13006,6 +13196,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviews?: ProductReviewUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -13045,6 +13237,7 @@ export namespace Prisma {
     packageSize?: string
     trackingNumber?: string | null
     trackingCarrier?: string | null
+    termsAcceptedAt?: Date | string | null
     user?: UserCreateNestedOneWithoutOrdersInput
   }
 
@@ -13070,6 +13263,7 @@ export namespace Prisma {
     packageSize?: string
     trackingNumber?: string | null
     trackingCarrier?: string | null
+    termsAcceptedAt?: Date | string | null
   }
 
   export type OrderCreateOrConnectWithoutItemsInput = {
@@ -13146,6 +13340,7 @@ export namespace Prisma {
     packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneWithoutOrdersNestedInput
   }
 
@@ -13171,6 +13366,7 @@ export namespace Prisma {
     packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ProductUpsertWithoutOrderItemsInput = {
@@ -13260,6 +13456,8 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.UserRole
+    termsAcceptedAt?: Date | string | null
+    createdAt?: Date | string
     orders?: OrderCreateNestedManyWithoutUserInput
   }
 
@@ -13269,6 +13467,8 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.UserRole
+    termsAcceptedAt?: Date | string | null
+    createdAt?: Date | string
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -13337,6 +13537,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orders?: OrderUpdateManyWithoutUserNestedInput
   }
 
@@ -13346,6 +13548,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -13370,6 +13574,7 @@ export namespace Prisma {
     packageSize?: string
     trackingNumber?: string | null
     trackingCarrier?: string | null
+    termsAcceptedAt?: Date | string | null
   }
 
   export type ProductReviewCreateManyUserInput = {
@@ -13401,6 +13606,7 @@ export namespace Prisma {
     packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     items?: OrderItemUpdateManyWithoutOrderNestedInput
   }
 
@@ -13425,6 +13631,7 @@ export namespace Prisma {
     packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -13449,6 +13656,7 @@ export namespace Prisma {
     packageSize?: StringFieldUpdateOperationsInput | string
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trackingCarrier?: NullableStringFieldUpdateOperationsInput | string | null
+    termsAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ProductReviewUpdateWithoutUserInput = {
@@ -13480,6 +13688,7 @@ export namespace Prisma {
   export type OrderItemCreateManyProductInput = {
     id?: number
     quantity: number
+    price?: number
     orderId: number
   }
 
@@ -13500,18 +13709,21 @@ export namespace Prisma {
 
   export type OrderItemUpdateWithoutProductInput = {
     quantity?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
     order?: OrderUpdateOneRequiredWithoutItemsNestedInput
   }
 
   export type OrderItemUncheckedUpdateWithoutProductInput = {
     id?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
     orderId?: IntFieldUpdateOperationsInput | number
   }
 
   export type OrderItemUncheckedUpdateManyWithoutProductInput = {
     id?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
     orderId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -13561,23 +13773,27 @@ export namespace Prisma {
   export type OrderItemCreateManyOrderInput = {
     id?: number
     quantity: number
+    price?: number
     productId: number
   }
 
   export type OrderItemUpdateWithoutOrderInput = {
     quantity?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
     product?: ProductUpdateOneRequiredWithoutOrderItemsNestedInput
   }
 
   export type OrderItemUncheckedUpdateWithoutOrderInput = {
     id?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
     productId?: IntFieldUpdateOperationsInput | number
   }
 
   export type OrderItemUncheckedUpdateManyWithoutOrderInput = {
     id?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
     productId?: IntFieldUpdateOperationsInput | number
   }
 

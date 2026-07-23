@@ -14,6 +14,10 @@ export default function EditProfilePage() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  // Zmiana adresu e-mail = zmiana loginu, dlatego serwer wymaga
+  // potwierdzenia obecnym hasłem. Pole pokazujemy tylko wtedy, gdy
+  // użytkownik faktycznie edytuje e-mail.
+  const [currentPassword, setCurrentPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -30,13 +34,23 @@ export default function EditProfilePage() {
     e.preventDefault();
     setMessage(""); setError("");
     if (!fullName.trim() || !email.trim()) { toast.error("Uzupełnij wszystkie pola"); return; }
+
+    const isEmailChanging =
+      email.trim().toLowerCase() !== (profile?.email || "").toLowerCase();
+
+    if (isEmailChanging && !currentPassword) {
+      setError("Aby zmienić adres e-mail, podaj swoje obecne hasło");
+      toast.error("Podaj obecne hasło");
+      return;
+    }
     const tid = toast.loading("Zapisywanie…");
     try {
       setIsSaving(true);
-      const res = await fetch("/api/me", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ fullName: fullName.trim(), email: email.trim() }) });
+      const res = await fetch("/api/me", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ fullName: fullName.trim(), email: email.trim(), currentPassword: isEmailChanging ? currentPassword : undefined }) });
       const d = await res.json();
       if (!res.ok) { setError(d.error || "Błąd"); toast.error(d.error, { id: tid }); return; }
       setProfile(d);
+      setCurrentPassword("");
       setMessage("Dane zaktualizowane");
       toast.success("Dane zostały zapisane ✓", { id: tid });
       router.refresh();
@@ -96,6 +110,25 @@ export default function EditProfilePage() {
                       <label className="mb-1.5 block text-xs font-semibold text-gray-600">Adres e-mail</label>
                       <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="jan@example.pl" className="input-field" />
                     </div>
+
+                    {email.trim().toLowerCase() !== (profile?.email || "").toLowerCase() && (
+                      <div className="rounded-xl border border-amber-100 bg-amber-50 p-4">
+                        <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold text-amber-800">
+                          <Lock className="h-3.5 w-3.5" /> Potwierdź obecnym hasłem
+                        </label>
+                        <input
+                          type="password"
+                          value={currentPassword}
+                          onChange={e => setCurrentPassword(e.target.value)}
+                          autoComplete="current-password"
+                          placeholder="Twoje obecne hasło"
+                          className="input-field"
+                        />
+                        <p className="mt-2 text-xs text-amber-700">
+                          Zmieniasz adres logowania — dla bezpieczeństwa musimy potwierdzić, że to Ty.
+                        </p>
+                      </div>
+                    )}
 
                     {message && (
                       <div className="flex items-center gap-2 rounded-xl border border-green-100 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { safeCompare } from "@/lib/security";
 import type { Prisma } from "@/generated/prisma";
 import {
   normalizePackageSize,
@@ -15,11 +16,14 @@ type RouteContext = { params: Promise<{ id: string }> };
 // Furgonetka sends tracking info to this endpoint when shipment is created
 // POST /api/furgonetka/orders/{id}  (opcja "Wysyłaj informacje o przesyłce")
 export async function POST(request: Request, context: RouteContext) {
+  // Porównanie odporne na atak czasowy – zwykłe "!==" przerywa na pierwszym
+  // różnym znaku, co przy pomiarze czasu odpowiedzi pozwala odgadywać token
+  // znak po znaku. Wymagamy też minimalnej długości sekretu.
   const authHeader = request.headers.get("authorization");
   const token = authHeader?.replace("Bearer ", "") || "";
   const expectedToken = process.env.FURGONETKA_WEBHOOK_TOKEN;
 
-  if (!expectedToken || token !== expectedToken) {
+  if (!expectedToken || expectedToken.length < 24 || !safeCompare(token, expectedToken)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -88,11 +92,14 @@ export async function POST(request: Request, context: RouteContext) {
 
 // GET single order details
 export async function GET(request: Request, context: RouteContext) {
+  // Porównanie odporne na atak czasowy – zwykłe "!==" przerywa na pierwszym
+  // różnym znaku, co przy pomiarze czasu odpowiedzi pozwala odgadywać token
+  // znak po znaku. Wymagamy też minimalnej długości sekretu.
   const authHeader = request.headers.get("authorization");
   const token = authHeader?.replace("Bearer ", "") || "";
   const expectedToken = process.env.FURGONETKA_WEBHOOK_TOKEN;
 
-  if (!expectedToken || token !== expectedToken) {
+  if (!expectedToken || expectedToken.length < 24 || !safeCompare(token, expectedToken)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

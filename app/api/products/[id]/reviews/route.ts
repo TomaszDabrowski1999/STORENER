@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "../../../../../auth";
 import { prisma } from "@/lib/prisma";
+import { hit, getClientIp, tooManyRequests } from "@/lib/rate-limit";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -21,6 +22,15 @@ export async function GET() {
 export async function POST(request: Request, context: RouteContext) {
   try {
     const session = await auth();
+
+    // Limit: 10 opinii na godzinę z jednego IP – blokuje zalewanie
+    // sklepu wygenerowanymi recenzjami.
+    const ip = getClientIp(request);
+    const limit = hit(`review:${ip}`, 10, 60 * 60 * 1000);
+
+    if (!limit.ok) {
+      return tooManyRequests(limit.retryAfterSeconds);
+    }
 
     if (!session?.user?.email) {
       return NextResponse.json(

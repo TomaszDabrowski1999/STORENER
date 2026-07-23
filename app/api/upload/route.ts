@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin-session";
 import { v2 as cloudinary } from "cloudinary";
+import { validateImageFile } from "@/lib/upload-validation";
+import { hit, getClientIp, tooManyRequests } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
@@ -17,35 +19,55 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
   }
 
+  // Limit również dla admina – przejęte konto administratora nie powinno
+  // móc w minutę wyczerpać limitu Cloudinary ani zapchać dysku.
+  const ip = getClientIp(request);
+  const limit = hit(`upload:${ip}`, 60, 10 * 60 * 1000);
+
+  if (!limit.ok) {
+    return tooManyRequests(limit.retryAfterSeconds);
+  }
+
   try {
     const formData = await request.formData();
-    const file = formData.get("file") as File;
+    const validation = await validateImageFile(formData.get("file"));
 
-    if (!file) {
-      return NextResponse.json({ error: "Brak pliku" }, { status: 400 });
+    if (!validation.ok) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    const result = await new Promise<any>((resolve, reject) => {
+    const result = await new Promise<{ secure_url?: string }>((resolve, reject) => {
       cloudinary.uploader
-        .upload_stream({ folder: "produkty" }, (err, res) => {
-          if (err) reject(err);
-          else resolve(res);
-        })
-        .end(buffer);
+        .upload_stream(
+          {
+            folder: "produkty",
+            // resource_type: "image" wymusza po stronie Cloudinary
+            // przetworzenie pliku jako obrazu – dodatkowa warstwa kontroli.
+            resource_type: "image",
+          },
+          (err, res) => {
+            if (err) reject(err);
+            else resolve(res as { secure_url?: string });
+          }
+        )
+        .end(validation.buffer);
     });
 
-    return NextResponse.json({
-      success: true,
-      imageUrl: result.secure_url,
-    });
-  } catch (err: any) {
-    console.error("UPLOAD ERROR:", err);
+    if (!result?.secure_url) {
+      return NextResponse.json(
+        { error: "Nie udało się przesłać zdjęcia" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ success: true, imageUrl: result.secure_url });
+  } catch (error) {
+    // Surowy komunikat błędu może zdradzać konfigurację Cloudinary –
+    // szczegóły trafiają wyłącznie do logów serwera.
+    console.error("UPLOAD ERROR:", error);
 
     return NextResponse.json(
-      { error: err.message || "Upload error" },
+      { error: "Nie udało się przesłać zdjęcia" },
       { status: 500 }
     );
   }

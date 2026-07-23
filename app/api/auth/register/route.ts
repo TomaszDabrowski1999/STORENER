@@ -1,12 +1,38 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import {
+  BCRYPT_ROUNDS,
+  isValidEmail,
+  normalizeEmail,
+  validatePassword,
+} from "@/lib/security";
+import { hit, getClientIp, tooManyRequests } from "@/lib/rate-limit";
+
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export async function POST(request: Request) {
+  // Limit: 5 rejestracji z jednego IP na godzinę. Blokuje masowe zakładanie
+  // kont (spam opiniami, zapychanie bazy, testowanie wykradzionych e-maili).
+  const ip = getClientIp(request);
+  const limit = hit(`register:${ip}`, 5, 60 * 60 * 1000);
+
+  if (!limit.ok) {
+    return tooManyRequests(
+      limit.retryAfterSeconds,
+      "Zbyt wiele prób rejestracji z tego adresu. Spróbuj ponownie później."
+    );
+  }
+
   try {
-    const body = await request.json();
+    const body = await request.json().catch(() => null);
+
+    if (!body || typeof body !== "object") {
+      return NextResponse.json({ error: "Nieprawidłowe dane" }, { status: 400 });
+    }
+
     const { fullName, email, password, acceptedTerms } = body;
 
     if (!fullName || !email || !password) {
@@ -25,35 +51,24 @@ export async function POST(request: Request) {
       );
     }
 
-    if (String(password).length < 8) {
+    const passwordError = validatePassword(password);
+
+    if (passwordError) {
+      return NextResponse.json({ error: passwordError }, { status: 400 });
+    }
+
+    const trimmedName = String(fullName).trim();
+
+    if (trimmedName.length < 3 || trimmedName.length > 120) {
       return NextResponse.json(
-        { error: "Hasło musi mieć co najmniej 8 znaków" },
+        { error: "Imię i nazwisko musi mieć od 3 do 120 znaków" },
         { status: 400 }
       );
     }
 
-    // bcrypt uwzględnia tylko pierwsze 72 bajty hasła – dłuższe odrzucamy,
-    // żeby nie tworzyć fałszywego poczucia bezpieczeństwa.
-    if (String(password).length > 72) {
-      return NextResponse.json(
-        { error: "Hasło może mieć maksymalnie 72 znaki" },
-        { status: 400 }
-      );
-    }
+    const normalizedEmail = normalizeEmail(email);
 
-    if (String(fullName).trim().length > 120) {
-      return NextResponse.json(
-        { error: "Imię i nazwisko jest zbyt długie" },
-        { status: 400 }
-      );
-    }
-
-    const normalizedEmail = String(email).trim().toLowerCase();
-
-    if (
-      normalizedEmail.length > 200 ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(normalizedEmail)
-    ) {
+    if (!isValidEmail(normalizedEmail)) {
       return NextResponse.json(
         { error: "Podaj poprawny adres e-mail" },
         { status: 400 }
@@ -62,6 +77,7 @@ export async function POST(request: Request) {
 
     const existingUser = await prisma.user.findFirst({
       where: { email: { equals: normalizedEmail, mode: "insensitive" } },
+      select: { id: true },
     });
 
     if (existingUser) {
@@ -71,28 +87,25 @@ export async function POST(request: Request) {
       );
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(String(password), BCRYPT_ROUNDS);
 
+    // Pola wypisane jawnie – żaden dodatkowy klucz z body (np. "role":"ADMIN")
+    // nie ma szansy trafić do bazy.
     const user = await prisma.user.create({
       data: {
-        fullName: String(fullName).trim(),
+        fullName: trimmedName,
         email: normalizedEmail,
         password: hashedPassword,
+        role: "USER",
         termsAcceptedAt: new Date(),
       },
+      select: { id: true, fullName: true, email: true },
     });
 
-    return NextResponse.json({
-      id: user.id,
-      fullName: user.fullName,
-      email: user.email,
-    });
+    return NextResponse.json(user);
   } catch (error) {
     console.error("REGISTER ERROR:", error);
 
-    return NextResponse.json(
-      { error: "Błąd rejestracji" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Błąd rejestracji" }, { status: 500 });
   }
 }

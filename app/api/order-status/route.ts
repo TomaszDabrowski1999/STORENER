@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { hit, getClientIp, tooManyRequests } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -9,6 +10,15 @@ export const revalidate = 0;
 // żeby nie dało się podejrzeć cudzego zamówienia po samym numerze.
 // GET /api/order-status?id=123&email=adres@email.pl
 export async function GET(request: Request) {
+  // Bez limitu ten endpoint pozwala metodą siłową sprawdzać pary
+  // "numer zamówienia + e-mail", aż trafi się na istniejącą kombinację.
+  const ip = getClientIp(request);
+  const limit = hit(`order-status:${ip}`, 20, 10 * 60 * 1000);
+
+  if (!limit.ok) {
+    return tooManyRequests(limit.retryAfterSeconds);
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const idRaw = searchParams.get("id") || "";

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { safeCompare } from "@/lib/security";
 import {
   normalizePackageSize,
   formatPackageSize,
@@ -17,11 +18,14 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   // Verify Furgonetka token
+  // Porównanie odporne na atak czasowy – zwykłe "!==" przerywa na pierwszym
+  // różnym znaku, co przy pomiarze czasu odpowiedzi pozwala odgadywać token
+  // znak po znaku. Wymagamy też minimalnej długości sekretu.
   const authHeader = request.headers.get("authorization");
   const token = authHeader?.replace("Bearer ", "") || "";
   const expectedToken = process.env.FURGONETKA_WEBHOOK_TOKEN;
 
-  if (!expectedToken || token !== expectedToken) {
+  if (!expectedToken || expectedToken.length < 24 || !safeCompare(token, expectedToken)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

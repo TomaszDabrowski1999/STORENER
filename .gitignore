@@ -31,6 +31,12 @@ pnpm-debug.log*
 .env.*
 !.env.example
 
+# lokalna baza SQLite - moze zawierac dane osobowe klientow (RODO)
+prisma/dev.db
+prisma/dev.db-journal
+*.sqlite
+*.sqlite3
+
 # OS / editor
 .DS_Store
 *.pem

@@ -39,20 +39,81 @@ function escapeHtml(value: string): string {
     .replace(/'/g, "&#039;");
 }
 
-// Prosta sanityzacja HTML z panelu admina przed dangerouslySetInnerHTML:
-// usuwa niebezpieczne tagi, atrybuty zdarzeń (onclick itd.) i URL-e javascript:.
+// ===========================================================================
+// SANITYZACJA HTML OPISU PRODUKTU
+// ===========================================================================
+// Opis produktu trafia na stronę przez dangerouslySetInnerHTML, więc jest to
+// realny punkt wstrzyknięcia skryptu (stored XSS). Poprzednia wersja usuwała
+// tylko wybrane tagi – dało się ją obejść np. przez zagnieżdżenie
+// (<scr<script>ipt>) albo atrybut zdarzenia bez cudzysłowów.
+//
+// Nowe podejście to LISTA DOZWOLONYCH (allowlist): przepuszczamy wyłącznie
+// znane, bezpieczne tagi formatujące, a WSZYSTKO inne jest escapowane.
+// To odwrócenie logiki – nie trzeba przewidzieć każdej sztuczki atakującego,
+// wystarczy wymienić to, co wolno.
+//
+// Uwaga: opisy dodaje wyłącznie administrator, ale przejęte konto admina
+// nie powinno móc uruchomić skryptu w przeglądarce każdego klienta.
+// ===========================================================================
+
+const ALLOWED_TAGS = new Set([
+  "p", "br", "strong", "b", "em", "i", "u", "s",
+  "ul", "ol", "li", "h2", "h3", "h4",
+  "blockquote", "table", "thead", "tbody", "tr", "td", "th", "span", "div",
+]);
+
 function sanitizeHtml(html: string): string {
-  return html
-    // całe bloki niebezpiecznych tagów
-    .replace(/<(script|style|iframe|object|embed|form)\b[\s\S]*?<\/\1>/gi, "")
-    // samotne tagi otwierające/zamykające tych elementów
-    .replace(/<\/?(script|style|iframe|object|embed|form|meta|link|base)\b[^>]*>/gi, "")
-    // atrybuty zdarzeń: onclick="...", onerror='...', onload=...
-    .replace(/\son\w+\s*=\s*"[^"]*"/gi, "")
-    .replace(/\son\w+\s*=\s*'[^']*'/gi, "")
-    .replace(/\son\w+\s*=\s*[^\s>]+/gi, "")
-    // javascript: / vbscript: / data:text/html w href i src
-    .replace(/\s(href|src)\s*=\s*(["']?)\s*(javascript|vbscript|data:text\/html)[^"'\s>]*\2/gi, "");
+  // Krok 1: usuwamy w całości elementy, których zawartość też jest groźna.
+  let output = html.replace(
+    /<(script|style|iframe|object|embed|form|svg|math|template)\b[\s\S]*?(?:<\/\1\s*>|$)/gi,
+    ""
+  );
+
+  // Krok 2: przetwarzamy każdy pozostały tag.
+  output = output.replace(/<\/?([a-zA-Z0-9]+)((?:[^>"']|"[^"]*"|'[^']*')*)>/g, (match, rawName, rawAttrs) => {
+    const tag = String(rawName).toLowerCase();
+
+    // Tag spoza listy dozwolonych → pokazujemy go jako zwykły tekst.
+    if (!ALLOWED_TAGS.has(tag)) {
+      return escapeHtml(match);
+    }
+
+    // Tag zamykający nie ma atrybutów – jest bezpieczny.
+    if (match.startsWith("</")) return `</${tag}>`;
+
+    // Krok 3: z atrybutów zostawiamy wyłącznie kilka nieszkodliwych.
+    // Wszystkie "on*" (onclick, onerror, onload...), style, href i src
+    // odpadają automatycznie, bo nie ma ich na liście.
+    const allowedAttrs = ["colspan", "rowspan", "align"];
+    const keptAttrs: string[] = [];
+
+    const attrRegex = /([a-zA-Z-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g;
+    let attrMatch: RegExpExecArray | null;
+
+    while ((attrMatch = attrRegex.exec(String(rawAttrs))) !== null) {
+      const name = attrMatch[1].toLowerCase();
+      const value = attrMatch[2] ?? attrMatch[3] ?? attrMatch[4] ?? "";
+
+      if (allowedAttrs.includes(name) && /^[a-zA-Z0-9 _-]{1,20}$/.test(value)) {
+        keptAttrs.push(`${name}="${escapeHtml(value)}"`);
+      }
+    }
+
+    const attrs = keptAttrs.length > 0 ? ` ${keptAttrs.join(" ")}` : "";
+    return `<${tag}${attrs}>`;
+  });
+
+  // Krok 4: po powyższych operacjach mogą zostać "sieroce" znaki "<"
+  // (np. z celowo popsutego wejścia typu <scr<script>ipt>). Każdy znak "<",
+  // który nie zaczyna już poprawnego, dozwolonego tagu, zamieniamy na tekst –
+  // dzięki temu nic nie zostanie sklejone w działający tag.
+  const allowedPattern = Array.from(ALLOWED_TAGS).join("|");
+  const strayLessThan = new RegExp(
+    `<(?!/?(?:${allowedPattern})(?:\\s[^<>]*)?>)`,
+    "g"
+  );
+
+  return output.replace(strayLessThan, "&lt;");
 }
 
 export function formatDescriptionHtml(raw: string | null | undefined): string {
